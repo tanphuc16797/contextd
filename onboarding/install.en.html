@@ -66,6 +66,10 @@
   .os-tab:hover:not(.active){color:#1f2328}
   .os-panel{display:none;padding:16px 0}
   .os-panel.active{display:block}
+  .cmd-wrap{position:relative}
+  .copy-btn{position:absolute;top:8px;right:8px;border:1px solid #30363d;background:#161b22;color:#e6edf3;border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer}
+  .copy-btn:hover{background:#21262d}
+  .copy-btn.copied{border-color:#1a7f37;color:#3fb950}
   @media (max-width:768px){
     .container{padding:12px}
     header.hero{padding:32px 16px}
@@ -148,14 +152,14 @@
   <!-- ============ DOWNLOAD ZIP ============ -->
   <section class="block" id="download">
     <h2>📥 Easiest way: One command install (release URL via env)</h2>
-    <p class="lead">If your GitLab CI publishes release files, run one command to download + extract + install automatically.</p>
+    <p class="lead">Run one command to download + extract + install automatically from the latest GitHub release.</p>
 
     <div class="callout tip">
       <strong>Linux / macOS one-liner</strong>
-      <pre><code>curl -fsSL https://github.com/tanphuc16797/workspace-wiki/releases/download/&lt;tag&gt;/install.sh | sh</code></pre>
+      <div class="cmd-wrap"><button class="copy-btn" onclick="copyCommand(this)">Copy</button><pre><code>curl -fsSL https://github.com/tanphuc16797/workspace-wiki/releases/latest/download/install.sh | sh</code></pre></div>
       <strong>Windows PowerShell one-liner</strong>
-      <pre><code>iwr https://github.com/tanphuc16797/workspace-wiki/releases/download/&lt;tag&gt;/install.ps1 -UseBasicParsing | iex</code></pre>
-      <p style="margin-top:8px">Installer scripts are generated per release and already point to the matching release artifact.</p>
+      <div class="cmd-wrap"><button class="copy-btn" onclick="copyCommand(this)">Copy</button><pre><code>iwr https://github.com/tanphuc16797/workspace-wiki/releases/latest/download/install.ps1 -UseBasicParsing | iex</code></pre></div>
+      <p style="margin-top:8px">These URLs always point to the latest published installer assets.</p>
     </div>
 
     <p class="lead">Or download the zip manually if needed, then run the installer.</p>
@@ -422,6 +426,37 @@ bash scripts/install-to-claude.sh   # idempotent — updates everything</code></
 </div>
 
 <script>
+  async function copyCommand(btn){
+    const code = btn.nextElementSibling.querySelector('code');
+    if (!code) return;
+    const text = code.textContent;
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+      const old = btn.textContent;
+      btn.textContent = 'Copied';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = old;
+        btn.classList.remove('copied');
+      }, 1200);
+    } catch (_) {
+      btn.textContent = 'Failed';
+      setTimeout(() => { btn.textContent = 'Copy'; }, 1200);
+    }
+  }
+
   function showOS(btn, os){
     const tabs = btn.parentElement.querySelectorAll('.os-tab');
     const panels = btn.parentElement.parentElement.querySelectorAll('.os-panel');

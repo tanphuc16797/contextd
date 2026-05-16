@@ -30,21 +30,10 @@ jobs:
             echo "value=manual-${GITHUB_RUN_NUMBER}" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Normalize docs placeholders for release
-        run: |
-          TAG="${{ steps.tag.outputs.value }}"
-          REPO="${{ github.repository }}"
-          GH_URL="https://github.com/${REPO}"
-          RELEASE_URL="${GH_URL}/releases/download/${TAG}"
-
-          perl -pi -e "s#https://github\.com/<owner>/<repo>#${GH_URL}#g" README.md onboarding/*.html
-          perl -pi -e "s#https://github\.com/&lt;org&gt;/&lt;repo&gt;/releases/download/&lt;tag&gt;#${RELEASE_URL}#g" onboarding/*.html
-          perl -pi -e "s#https://github\.com/<owner>/<repo>/releases/download/<tag>#${RELEASE_URL}#g" README.md
-
       - name: Fail if placeholders remain
         run: |
           if grep -RInE '<owner>|<repo>|<tag>|&lt;org&gt;|&lt;repo&gt;|&lt;tag&gt;' README.md onboarding/*.html; then
-            echo "ERROR: Placeholder tokens remain after normalization." >&2
+            echo "ERROR: Placeholder tokens are not allowed in docs." >&2
             exit 1
           fi
 
@@ -85,7 +74,19 @@ jobs:
           fi
 
           (cd "$repo_root" && sh scripts/install-to-claude.sh)
+          claude_dir="${HOME}/.claude"
+          mkdir -p "$claude_dir"
+          cat > "$claude_dir/wiki-install-meta.json" <<META
+          {
+            "repo": "${{ github.repository }}",
+            "release_tag": "${TAG}",
+            "installed_at_utc": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "installer": "install.sh"
+          }
+          META
           echo "Done. Verify: cat ~/.claude/wiki-global.json"
+          echo "Version meta: cat ~/.claude/wiki-install-meta.json"
+          echo "Installed tag: ${TAG}"
           EOF
 
           cat > release/install.ps1 <<EOF
@@ -106,7 +107,21 @@ jobs:
             if (-not $bashCmd) { throw "bash not found. Install Git Bash or WSL, then run again." }
             Push-Location $repoRoot
             try { & bash "scripts/install-to-claude.sh" } finally { Pop-Location }
+
+            $claudeDir = Join-Path $env:USERPROFILE ".claude"
+            New-Item -ItemType Directory -Path $claudeDir -Force | Out-Null
+            $metaPath = Join-Path $claudeDir "wiki-install-meta.json"
+            $meta = [ordered]@{
+              repo = '${{ github.repository }}'
+              release_tag = '${TAG}'
+              installed_at_utc = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
+              installer = 'install.ps1'
+            }
+            $meta | ConvertTo-Json | Set-Content -Path $metaPath -Encoding UTF8
+
             Write-Host "Done. Verify: type $env:USERPROFILE\.claude\wiki-global.json"
+            Write-Host "Version meta: type $env:USERPROFILE\.claude\wiki-install-meta.json"
+            Write-Host "Installed tag: ${TAG}"
           } finally {
             if (Test-Path $tmpDir) { Remove-Item -Recurse -Force $tmpDir }
           }
