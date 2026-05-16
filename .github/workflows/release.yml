@@ -43,7 +43,7 @@ jobs:
           BASE_URL="https://github.com/${{ github.repository }}/releases/download/${TAG}"
           ZIP_URL="${BASE_URL}/wiki-template-latest.zip"
 
-          cat > release/install.sh <<EOF
+          cat > release/install.sh <<'EOF'
           #!/usr/bin/env sh
           set -eu
           tmpdir="$(mktemp -d 2>/dev/null || mktemp -d -t wiki-install)"
@@ -53,9 +53,9 @@ jobs:
           mkdir -p "$extract_dir"
 
           if command -v curl >/dev/null 2>&1; then
-            curl -fL --retry 3 --connect-timeout 15 "$ZIP_URL" -o "$zip_path"
+            curl -fL --retry 3 --connect-timeout 15 "__ZIP_URL__" -o "$zip_path"
           elif command -v wget >/dev/null 2>&1; then
-            wget -O "$zip_path" "$ZIP_URL"
+            wget -O "$zip_path" "__ZIP_URL__"
           else
             echo "ERROR: need curl or wget" >&2
             exit 1
@@ -78,16 +78,17 @@ jobs:
           mkdir -p "$claude_dir"
           cat > "$claude_dir/wiki-install-meta.json" <<META
           {
-            "repo": "${{ github.repository }}",
-            "release_tag": "${TAG}",
+            "repo": "__REPO__",
+            "release_tag": "__TAG__",
             "installed_at_utc": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
             "installer": "install.sh"
           }
           META
           echo "Done. Verify: cat ~/.claude/wiki-global.json"
           echo "Version meta: cat ~/.claude/wiki-install-meta.json"
-          echo "Installed tag: ${TAG}"
+          echo "Installed tag: __TAG__"
           EOF
+          perl -pi -e "s#__ZIP_URL__#${ZIP_URL}#g; s#__REPO__#${{ github.repository }}#g; s#__TAG__#${TAG}#g" release/install.sh
 
           cat > release/install.ps1 <<EOF
           $ErrorActionPreference = 'Stop'
