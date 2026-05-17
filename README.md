@@ -19,8 +19,6 @@ If Claude starts mixing context between repos, this setup gives you deterministi
 3) Start task     → /use-wiki "your task"
 ```
 
-Details are in [QUICKSTART.md](QUICKSTART.md).
-
 ## Thesis (non-negotiables)
 
 1. **Workspace isolation is mandatory**  
@@ -38,44 +36,26 @@ Details are in [QUICKSTART.md](QUICKSTART.md).
 5. **Deterministic knowledge priority**  
    Contracts > Platform Patterns > Project Documentation > Domain Knowledge.
 
-Within this model: Engine defines shared invariants, Packs provide stack/use-case cognition, and Workspace carries company/project-specific knowledge.
-
-See [packs/README.md](packs/README.md) for the active pack catalog.
-
-## Purpose
-
-A single source of truth for system knowledge, consumed by both developers and Claude Code agents, organized by workspace for users operating across multiple companies/projects.
-
 ## Who This Is For
 
 - Teams using Claude Code across multiple projects/companies and needing strict workspace-level isolation.
 - Engineers/tech leads who want reusable patterns + commands so agent output is consistent.
 - Product/ops/domain teams who need structured knowledge that agents can execute against.
+- Also useful for solo builders and platform/documentation owners who want repeatable AI-assisted workflows.
 
 Not a good fit if you only need a static human-readable wiki without agent workflows.
 
-## Current Support Scope
+## Support & Compatibility
 
-This plugin currently supports **Claude Code only** (CLI and IDE extension). Other agent/tooling runtimes are not officially supported yet.
+- **Runtime support**: Claude Code only (CLI and IDE extension).
+- macOS/Linux: `bash` required.
+- Windows: PowerShell + Git Bash or WSL recommended for shell installer execution.
+- Write access to `~/.claude/` required.
+- Release installer prerequisites: `curl` or `wget`, plus `unzip`.
 
 If broader runtime support is needed later, maintain a clear compatibility matrix per runtime.
 
-## Prerequisites / Compatibility
-
-- Claude Code is installed and runs locally.
-- macOS/Linux: `bash` is required. Windows: PowerShell + Git Bash or WSL for shell installer execution.
-- Write access to the user home directory for `~/.claude/`.
-- For release installer usage: `curl` or `wget`, plus `unzip`.
-
-## Quick Start Paths
-
-- Fastest path: [QUICKSTART.md](QUICKSTART.md)
-- Visual onboarding (EN): [onboarding/index.en.html](onboarding/index.en.html)
-- Step-by-step install (EN): [onboarding/install.en.html](onboarding/install.en.html)
-
 ## Mental Model
-
-> AI agents consume this wiki as **runtime context**, not static docs. Each workspace is an isolated knowledge sandbox and must never leak into another workspace.
 
 Wiki = **engine** (shared) + **N workspaces** (independent sandboxes).
 
@@ -91,9 +71,9 @@ wiki-template/
 # (there is no global pointer file inside wiki-template)
 ```
 
-## Packs (Stack-specific Knowledge)
+For complete setup and onboarding flows, use [QUICKSTART.md](QUICKSTART.md) and [onboarding/install.en.html](onboarding/install.en.html).
 
-Packs are not just stack templates. They act as reusable reasoning modules that shape how tasks are framed, validated, and executed.
+## Packs (Stack-specific Knowledge)
 
 Packs are stack/use-case knowledge layers between engine and workspace:
 
@@ -101,37 +81,17 @@ Packs are stack/use-case knowledge layers between engine and workspace:
 - Packs: stack-specific rules/patterns/contracts (web-api, event-driven, frontend, agentic, product, ...).
 - Workspace: company/project-specific domain and implementation knowledge.
 
-How to enable packs:
+Enable packs via:
 
-- Workspace default: declare packs in `workspaces/{ws}/workspace.md` under `## Packs`.
-- Per-codebase override: set `<cwd>/.claude/wiki.json` field `packs` (replace semantics).
+- Workspace default: `workspaces/{ws}/workspace.md` → `## Packs`
+- Per-codebase override: `<cwd>/.claude/wiki.json` → `packs` (replace semantics)
 
-See current catalog at [packs/README.md](packs/README.md).
+See [packs/README.md](packs/README.md) for the full catalog.
 
-## Engine — Folder Reference
+## Engine & Workspace Reference
 
-| Folder | Purpose |
-|--------|---------|
-| [agents/](agents/) | System prompt, coding rules, constraints, pipeline (intent → retrieval → filter → validate). Engine defaults apply to all workspaces; a workspace may override via `{ws}/agents/`. |
-| [templates/](templates/) | Templates for new workspace docs ([workspace.md](templates/workspace.md), [service.md](templates/service.md), [adr.md](templates/adr.md), [runbook.md](templates/runbook.md)) |
-| [.claude/commands/](.claude/commands/) | Slash commands for Claude Code |
-
-## Workspaces — Folder Reference
-
-See [workspaces/README.md](workspaces/README.md) for workspace structure, active pointer behavior, and overrides.
-
-Each workspace includes:
-
-| Folder | Purpose |
-|--------|---------|
-| `platform/` | Shared technical knowledge for a company/project: patterns, contracts, architecture, infrastructure |
-| `domains/` | Business domain rules and workflows |
-| `projects/` | Per-system implementation knowledge |
-| `runbooks/` | Incident handling procedures |
-| `decisions/` | Workspace-level ADRs |
-| `patterns-index.md` | Quick lookup for workspace patterns/contracts |
-| `workspace.md` | Metadata: company, role, period, stack |
-| `agents/` (optional) | Workspace overrides for constraints/validator rules |
+- Engine folders: [agents/](agents/), [templates/](templates/), [.claude/commands/](.claude/commands/)
+- Workspace structure and overrides: [workspaces/README.md](workspaces/README.md)
 
 ## How to Use
 
@@ -150,8 +110,6 @@ iwr https://github.com/tanphuc16797/workspace-wiki/releases/latest/download/inst
 ```
 
 ### Secure install (verify SHA256 before run)
-
-Download installer + checksum file from release assets, verify SHA256, then run.
 
 ```bash
 TAG="vX.Y.Z"
@@ -175,62 +133,38 @@ if ($actual -ne $expected.ToLower()) { throw "SHA256 mismatch for install.ps1" }
 .\install.ps1
 ```
 
-Or install from source in the current repository (developer/local flow):
+Or install from source in this repository (developer/local flow):
 
 ```bash
-bash scripts/install-to-claude.sh             # sync everything
-bash scripts/install-to-claude.sh --dry-run   # preview only
-bash scripts/install-to-claude.sh --force     # overwrite global config if needed
+bash scripts/install-to-claude.sh
+bash scripts/install-to-claude.sh --dry-run
+bash scripts/install-to-claude.sh --force
 ```
-
-Re-run after each `git pull` to sync latest commands/agents. The script is idempotent and does not touch user-created files under `~/.claude/commands/`.
 
 ### Start a session (inside a codebase)
 
 ```text
-/list-workspaces                    # list available workspaces and current mapping for this codebase
-/switch-workspace {name}            # switch workspace for this codebase (writes <cwd>/.claude/wiki.json)
+/list-workspaces
+/switch-workspace {name}
 ```
-
-> Each codebase declares its workspace in `.claude/wiki.json`. Run `/wiki-setup` once to create it.
 
 ### When you receive a task
 
 ```text
-/use-wiki "Add Kafka consumer..."   # parse intent → retrieve {ws}/... → write .claude/context/current-task.md
+/use-wiki "Add Kafka consumer..."
 ```
-
-Use this at the start of a new task; expected output is a correctly mapped context file for the active workspace.
 
 ### After coding
 
 ```text
-/update-wiki                        # sync wiki with code changes (active workspace only)
+/update-wiki
+/rebase-wiki
 ```
 
-Use this when logic/code changes materially; expected output is updated pattern/contract/service docs.
-
-### Onboard a new project or validate stale wiki
+### Create a new workspace
 
 ```text
-/rebase-wiki                        # verify wiki vs codebase in active workspace
-```
-
-Use this to reconcile drift between code and knowledge; expected output is a gap list with update recommendations.
-
-### Promote Obsidian notes to evidence pipeline
-
-```text
-/obsidian-ingest                    # scan vault RAW/, dedupe, ingest ready items → {ws}/evidence/sources/
-/obsidian-ingest --dry-run          # preview only
-```
-
-> Requires `obsidian.vault_path` in `~/.claude/wiki-global.json` (see [templates/wiki-global.json](templates/wiki-global.json)).
-
-### Create a new workspace (new company/project)
-
-```text
-/new-workspace {name}               # scaffold from templates/workspace.md
+/new-workspace {name}
 ```
 
 ## Priority Order (for AI agents)
@@ -239,59 +173,39 @@ Use this to reconcile drift between code and knowledge; expected output is a gap
 Contracts > Platform Patterns > Project Documentation > Domain Knowledge
 ```
 
-This priority applies **within the active workspace scope only** — never mix knowledge across workspaces.
-
-## Maintenance Rules
-
-- **Single source of truth per workspace**: keep patterns in `{ws}/platform/patterns/`; do not duplicate across workspaces.
-- **Link, don’t duplicate**: cross-reference using relative links within the same workspace.
-- **Rebase continuously**: run `/update-wiki` when code changes.
-- **Agent-first design**: write for machine retrieval, not just human reading.
-- **Workspace isolation is sacred**: global rules go to engine; workspace-specific rules stay in `{ws}/agents/`.
+This priority applies only within the active workspace scope.
 
 ## Deploy GitHub Pages
 
-This repo uses workflow [deploy-pages.yml](.github/workflows/deploy-pages.yml):
+Workflow: [deploy-pages.yml](.github/workflows/deploy-pages.yml)
 
 - Trigger:
-  - `push` to `main` when files under `onboarding/**` change
+  - `push` to `main` when `onboarding/**` changes
   - manual `workflow_dispatch`
 - Build flow:
-  1. run `bash scripts/package-release.sh`
-  2. collect `onboarding/` and `release/` for Pages artifact
-  3. deploy to `github-pages` environment
-- Published paths:
-  - `https://tanphuc16797.github.io/workspace-wiki/onboarding/...`
-  - `https://tanphuc16797.github.io/workspace-wiki/release/...`
-
-Enable Pages via **Settings → Pages → Build and deployment → Source: GitHub Actions**.
+  1. `bash scripts/package-release.sh`
+  2. collect `onboarding/` and `release/`
+  3. deploy to `github-pages`
 
 ## Release
 
-This repo uses workflow [release.yml](.github/workflows/release.yml):
+Workflow: [release.yml](.github/workflows/release.yml)
 
 - Trigger:
-  - semver tag push `v*.*.*` (example: `v1.2.0`)
+  - semver tag push `v*.*.*`
   - manual `workflow_dispatch`
-- Workflow runs `scripts/package-release.sh`, then creates a GitHub Release and uploads release assets.
-
-Recommended tag flow:
-
-```bash
-git tag v1.2.0
-git push origin v1.2.0
-```
+- Flow: package release artifacts, then publish GitHub Release assets.
 
 ## Troubleshooting
 
-- **Slash commands not visible after install**: run `bash scripts/install-to-claude.sh` again, then restart Claude Code session.
-- **Missing `.claude/wiki.json` in a codebase**: run `/wiki-setup` or `/switch-workspace`.
-- **Commands run but context is empty/wrong workspace**: verify `workspace` in `<cwd>/.claude/wiki.json` matches the current repo.
+- Slash commands not visible: re-run `bash scripts/install-to-claude.sh` and restart Claude Code.
+- Missing `.claude/wiki.json`: run `/wiki-setup` or `/switch-workspace`.
+- Wrong workspace context: verify `workspace` in `<cwd>/.claude/wiki.json`.
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution workflow, PR guidelines, and wiki quality expectations.
+See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
-This repository is released under the [MIT](LICENSE) license.
+[MIT](LICENSE)
