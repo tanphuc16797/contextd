@@ -108,6 +108,31 @@ done
 shopt -u nullglob
 echo ""
 
+# --- 1b. migrate legacy wiki-*.md commands (pre-contextd rename) ---
+
+LEGACY_CMDS=(
+  wiki-backup wiki-detect wiki-eval wiki-explain wiki-report
+  wiki-restore wiki-setup wiki-trace wiki-upgrade wiki-version wiki-viz
+)
+LEGACY_FOUND=0
+for legacy in "${LEGACY_CMDS[@]}"; do
+  legacy_path="$GLOBAL_COMMANDS/${legacy}.md"
+  if [[ -f "$legacy_path" ]]; then
+    LEGACY_FOUND=1
+    echo "  [REMOVED]   ${legacy}.md  (renamed → contextd-${legacy#wiki-}.md)"
+    run rm -f "$legacy_path"
+  fi
+done
+if [[ $LEGACY_FOUND -eq 1 ]]; then
+  echo ""
+  echo "  ⚠ Migration notice:"
+  echo "    Slash commands /wiki-* đã đổi tên thành /contextd-*."
+  echo "    Workspace mẫu 'wiki' đã đổi tên thành 'default'."
+  echo "    Nếu codebase nào có .claude/wiki.json với \"workspace\": \"wiki\","
+  echo "    cập nhật thành \"workspace\": \"default\" (hoặc chạy lại /switch-workspace)."
+  echo ""
+fi
+
 # --- 2. sync subagents ---
 
 echo "── Subagents → $GLOBAL_AGENTS"

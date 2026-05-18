@@ -41,7 +41,9 @@ jobs:
         run: |
           TAG="${{ steps.tag.outputs.value }}"
           BASE_URL="https://github.com/${{ github.repository }}/releases/download/${TAG}"
-          ZIP_URL="${BASE_URL}/wiki-template-latest.zip"
+          # Canonical asset name. Legacy `wiki-template-latest.zip` is also
+          # uploaded as an alias by package-release.sh for the migration window.
+          ZIP_URL="${BASE_URL}/contextd-latest.zip"
 
           cat > release/install.sh <<'EOF'
           #!/usr/bin/env sh
@@ -137,7 +139,7 @@ jobs:
 
       - name: Generate checksums
         run: |
-          sha256sum release/wiki-template-*.zip release/install.sh release/install.ps1 > release/SHA256SUMS.txt
+          sha256sum release/contextd-*.zip release/wiki-template-*.zip release/install.sh release/install.ps1 > release/SHA256SUMS.txt
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -145,6 +147,7 @@ jobs:
           tag_name: ${{ steps.tag.outputs.value }}
           name: Release ${{ steps.tag.outputs.value }}
           files: |
+            release/contextd-*.zip
             release/wiki-template-*.zip
             release/install.sh
             release/install.ps1

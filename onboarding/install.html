@@ -165,9 +165,9 @@
     <p class="lead">Hoặc tải zip thủ công nếu cần, rồi chạy installer như cũ.</p>
 
     <div style="text-align:center;margin:24px 0">
-      <a href="../release/wiki-template-latest.zip" download
+      <a href="../release/contextd-latest.zip" download
          style="display:inline-block;padding:14px 28px;background:#1a7f37;color:#fff;border-radius:8px;font-weight:600;font-size:16px;text-decoration:none">
-        ⬇️ Download wiki-template-latest.zip
+        ⬇️ Download contextd-latest.zip
       </a>
       <p style="font-size:12px;color:#57606a;margin-top:8px">
         Link này hoạt động khi bạn mở file trên máy hoặc host thư mục có chứa <code>release/</code>.
@@ -186,19 +186,19 @@
         </div>
 
         <div class="os-panel active" data-os="extract-linux">
-          <pre><code>mkdir -p ~/wiki && unzip wiki-template-latest.zip -d ~/wiki
+          <pre><code>mkdir -p ~/wiki && unzip contextd-latest.zip -d ~/wiki
 # Zip chứa folder gốc 'wiki-template' → unzip sẽ tạo ~/wiki/wiki-template/
 cd ~/wiki/wiki-template</code></pre>
         </div>
 
         <div class="os-panel" data-os="extract-windows">
           <pre><code># PowerShell
-Expand-Archive -Path wiki-template-latest.zip -DestinationPath D:\tool
+Expand-Archive -Path contextd-latest.zip -DestinationPath D:\tool
 # Tạo D:\tool\wiki-template\
 cd D:\tool\wiki-template
 
 # Hoặc Git Bash
-unzip wiki-template-latest.zip -d /d/tool</code></pre>
+unzip contextd-latest.zip -d /d/tool</code></pre>
           <p style="font-size:13px;color:#57606a">Hoặc click chuột phải file zip → "Extract All..." trong File Explorer.</p>
         </div>
       </div>
@@ -227,7 +227,7 @@ unzip wiki-template-latest.zip -d /d/tool</code></pre>
     </div>
 
     <div class="callout tip">
-      <strong>💡 Cho quản trị:</strong> tạo zip mới bằng <code>bash scripts/package-release.sh</code>. Output ghi vào <code>release/wiki-template-{version}.zip</code> + <code>release/wiki-template-latest.zip</code>. Auto-exclude <code>.git/</code>, evidence raw, workspaces khác <code>wiki/</code>, runs/cache/log files. Xem <code>scripts/package-release.sh --help</code>.
+      <strong>💡 Cho quản trị:</strong> tạo zip mới bằng <code>bash scripts/package-release.sh</code>. Output ghi vào <code>release/wiki-template-{version}.zip</code> + <code>release/contextd-latest.zip</code>. Auto-exclude <code>.git/</code>, evidence raw, workspaces khác <code>wiki/</code>, runs/cache/log files. Xem <code>scripts/package-release.sh --help</code>.
     </div>
   </section>
 

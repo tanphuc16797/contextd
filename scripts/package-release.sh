@@ -3,7 +3,9 @@
 # package-release.sh
 #
 # Package wiki-template thành 1 file zip để distribute cho user không có Git.
-# Output: release/wiki-template-{version}.zip + release/wiki-template-latest.zip
+# Output (both names emitted in parallel for migration window):
+#   - release/contextd-{version}.zip       + release/contextd-latest.zip     (canonical)
+#   - release/wiki-template-{version}.zip  + release/wiki-template-latest.zip (legacy alias)
 #
 # EXCLUDE:
 #   - .git/, .github/, .gitattributes
@@ -75,9 +77,12 @@ fi
 RELEASE_DIR="$REPO_ROOT/release"
 mkdir -p "$RELEASE_DIR"
 
-OUT_NAME="wiki-template-${VERSION}.zip"
+OUT_NAME="contextd-${VERSION}.zip"
 OUT_PATH="$RELEASE_DIR/$OUT_NAME"
-LATEST_PATH="$RELEASE_DIR/wiki-template-latest.zip"
+LATEST_PATH="$RELEASE_DIR/contextd-latest.zip"
+# Legacy aliases (same content) for migration window
+LEGACY_OUT_PATH="$RELEASE_DIR/wiki-template-${VERSION}.zip"
+LEGACY_LATEST_PATH="$RELEASE_DIR/wiki-template-latest.zip"
 
 # ---------- staging area ----------
 STAGE_DIR="$(mktemp -d 2>/dev/null || mktemp -d -t wiki-pkg)"
@@ -187,18 +192,24 @@ echo ""
 echo "🗜️  Creating zip..."
 ( cd "$STAGE_DIR" && zip -rq "$OUT_PATH" "wiki-template" )
 
-# ---------- update latest pointer ----------
+# ---------- update latest pointer + legacy aliases ----------
 cp "$OUT_PATH" "$LATEST_PATH"
+cp "$OUT_PATH" "$LEGACY_OUT_PATH"
+cp "$OUT_PATH" "$LEGACY_LATEST_PATH"
 
 ZIP_SIZE=$(du -h "$OUT_PATH" | cut -f1)
 
 echo ""
-echo "✅ Release packaged:"
-echo "   $OUT_PATH ($ZIP_SIZE)"
-echo "   $LATEST_PATH (copy of latest)"
+echo "✅ Release packaged ($ZIP_SIZE each):"
+echo "   Canonical:"
+echo "     $OUT_PATH"
+echo "     $LATEST_PATH"
+echo "   Legacy alias (migration window):"
+echo "     $LEGACY_OUT_PATH"
+echo "     $LEGACY_LATEST_PATH"
 echo ""
 echo "📤 Distribute:"
 echo "   - Upload to GitHub Releases / S3 / file server"
 echo "   - Or share file trực tiếp với user"
 echo ""
-echo "💡 install.html section 'Download không cần Git' link tới release/wiki-template-latest.zip"
+echo "💡 install.html section 'Download không cần Git' link tới release/contextd-latest.zip"

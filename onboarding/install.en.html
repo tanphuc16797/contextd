@@ -165,9 +165,9 @@
     <p class="lead">Or download the zip manually if needed, then run the installer.</p>
 
     <div style="text-align:center;margin:24px 0">
-      <a href="../release/wiki-template-latest.zip" download
+      <a href="../release/contextd-latest.zip" download
          style="display:inline-block;padding:14px 28px;background:#1a7f37;color:#fff;border-radius:8px;font-weight:600;font-size:16px;text-decoration:none">
-        ⬇️ Download wiki-template-latest.zip
+        ⬇️ Download contextd-latest.zip
       </a>
       <p style="font-size:12px;color:#57606a;margin-top:8px">
         This link works when opening files locally or when hosting a directory that includes <code>release/</code>.
@@ -186,19 +186,19 @@
         </div>
 
         <div class="os-panel active" data-os="extract-linux">
-          <pre><code>mkdir -p ~/wiki && unzip wiki-template-latest.zip -d ~/wiki
+          <pre><code>mkdir -p ~/wiki && unzip contextd-latest.zip -d ~/wiki
 # The zip contains root folder 'wiki-template' → unzip creates ~/wiki/wiki-template/
 cd ~/wiki/wiki-template</code></pre>
         </div>
 
         <div class="os-panel" data-os="extract-windows">
           <pre><code># PowerShell
-Expand-Archive -Path wiki-template-latest.zip -DestinationPath D:\tool
+Expand-Archive -Path contextd-latest.zip -DestinationPath D:\tool
 # Creates D:\tool\wiki-template\
 cd D:\tool\wiki-template
 
 # Or Git Bash
-unzip wiki-template-latest.zip -d /d/tool</code></pre>
+unzip contextd-latest.zip -d /d/tool</code></pre>
           <p style="font-size:13px;color:#57606a">Or right-click the zip file and choose "Extract All..." in File Explorer.</p>
         </div>
       </div>
@@ -227,7 +227,7 @@ unzip wiki-template-latest.zip -d /d/tool</code></pre>
     </div>
 
     <div class="callout tip">
-      <strong>💡 For maintainers:</strong> create a new zip with <code>bash scripts/package-release.sh</code>. Output is written to <code>release/wiki-template-{version}.zip</code> + <code>release/wiki-template-latest.zip</code>. It automatically excludes <code>.git/</code>, raw evidence, workspaces other than <code>wiki/</code>, and runs/cache/log files. See <code>scripts/package-release.sh --help</code>.
+      <strong>💡 For maintainers:</strong> create a new zip with <code>bash scripts/package-release.sh</code>. Output is written to <code>release/wiki-template-{version}.zip</code> + <code>release/contextd-latest.zip</code>. It automatically excludes <code>.git/</code>, raw evidence, workspaces other than <code>wiki/</code>, and runs/cache/log files. See <code>scripts/package-release.sh --help</code>.
     </div>
   </section>
 

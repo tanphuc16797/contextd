@@ -154,6 +154,30 @@ def main() -> None:
         args.dry_run,
     )
 
+    # 1b. Migrate legacy wiki-*.md commands (pre-contextd rename)
+    legacy_cmds = [
+        "wiki-backup", "wiki-detect", "wiki-eval", "wiki-explain", "wiki-report",
+        "wiki-restore", "wiki-setup", "wiki-trace", "wiki-upgrade",
+        "wiki-version", "wiki-viz",
+    ]
+    legacy_found = False
+    for legacy in legacy_cmds:
+        legacy_path = global_commands / f"{legacy}.md"
+        if legacy_path.exists():
+            legacy_found = True
+            new_name = "contextd-" + legacy[len("wiki-"):]
+            print(f"  [REMOVED]   {legacy}.md  (renamed → {new_name}.md)")
+            if not args.dry_run:
+                legacy_path.unlink()
+    if legacy_found:
+        print()
+        print("  ⚠ Migration notice:")
+        print("    Slash commands /wiki-* đã đổi tên thành /contextd-*.")
+        print("    Workspace mẫu 'wiki' đã đổi tên thành 'default'.")
+        print("    Nếu codebase nào có .claude/wiki.json với \"workspace\": \"wiki\",")
+        print("    cập nhật thành \"workspace\": \"default\" (hoặc chạy lại /switch-workspace).")
+        print()
+
     # 2. Subagents
     sync_dir(
         wiki_root / ".claude" / "agents",
