@@ -437,7 +437,7 @@ code_repo_path: ...
 ### 12.7 Citation rule
 
 Giống Section 5 — `({path}:L<start>-L<end>)` relative tới repo root. Path sample điển hình:
-- `(.claude/commands/wiki-setup.md:L42-L58)` — slash command
+- `(.claude/commands/contextd-setup.md:L42-L58)` — slash command
 - `(agents/pipeline/task-to-docs-map.md:L1-L20)` — pipeline stage
 - `(templates/service.md:L1-L80)` — template
 - `(settings.json:L5-L12)` — hook config

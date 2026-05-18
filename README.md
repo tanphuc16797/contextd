@@ -192,7 +192,7 @@ Workflow: [release.yml](.github/workflows/release.yml)
 ## Troubleshooting
 
 - Slash commands not visible: re-run `bash scripts/install-to-claude.sh` and restart Claude Code.
-- Missing `.claude/wiki.json`: run `/wiki-setup` or `/switch-workspace`.
+- Missing `.claude/wiki.json`: run `/contextd-setup` or `/switch-workspace`.
 - Wrong workspace context: verify `workspace` in `<cwd>/.claude/wiki.json`.
 
 ## Contributing

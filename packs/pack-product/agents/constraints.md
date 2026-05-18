@@ -1,6 +1,6 @@
 # pack-product — Constraints
 
-Hard rules cho product/business documentation. Additive trên engine constraints. Áp dụng cho mọi file trong `{ws}/product/` và mọi output của `/product-brief`, `/business-view`, `/wiki-explain`.
+Hard rules cho product/business documentation. Additive trên engine constraints. Áp dụng cho mọi file trong `{ws}/product/` và mọi output của `/product-brief`, `/business-view`, `/contextd-explain`.
 
 ## Brief Completeness
 

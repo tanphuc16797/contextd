@@ -132,15 +132,15 @@ CORE-AGENTIC dispatch tới wiki target giống CORE-CODE (`{ws}/platform/patter
 
 ## Entry-points (N total)
 
-### E-001 — /wiki-setup  [NEW | EXISTS:{path}]
+### E-001 — /contextd-setup  [NEW | EXISTS:{path}]
 - **type**: slash-command
 - **purpose**: ...
 - **inputs**: ...
 - **outputs**:
-  - creates `.claude/wiki.json` `(.claude/commands/wiki-setup.md:L..)`
+  - creates `.claude/wiki.json` `(.claude/commands/contextd-setup.md:L..)`
   - creates `workspaces/{ws}/workspace.md`
 - **calls**:
-  - template `templates/workspace.md` `(.claude/commands/wiki-setup.md:L..)`
+  - template `templates/workspace.md` `(.claude/commands/contextd-setup.md:L..)`
   - agent `agents/system-prompt.md` (referenced) `(...)`
 - **called_by**:
   - (none — top-level user entry)
@@ -200,7 +200,7 @@ CORE-AGENTIC dispatch tới wiki target giống CORE-CODE (`{ws}/platform/patter
 ### Occurrences
 - `/code-analyze` Step 0 `(.claude/commands/code-analyze.md:L26-L36)`
 - `/evidence-ingest` Step 0 `(.claude/commands/evidence-ingest.md:L..)`
-- `/wiki-setup` Step 0 `(.claude/commands/wiki-setup.md:L..)`
+- `/contextd-setup` Step 0 `(.claude/commands/contextd-setup.md:L..)`
 
 ### Canonical structure
 1. Tìm `.claude/wiki.json` từ cwd đi lên parent

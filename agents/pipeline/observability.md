@@ -13,7 +13,7 @@ Cơ chế: mỗi subagent **output 1 fenced ```json block** ở cuối response.
 
 Builder (main agent, không phải subagent) vẫn tự ghi `04-builder.json` qua Write tool — không có hook cho main agent.
 
-Slash command `/wiki-eval` aggregate runs. Slash command `/wiki-trace` view 1 run cụ thể.
+Slash command `/contextd-eval` aggregate runs. Slash command `/contextd-trace` view 1 run cụ thể.
 
 > Đây là **lớp đo lường tách rời** — pipeline chính (`/use-wiki`) vẫn chạy bình thường nếu trace fail. Hook timeout sau 5s, lỗi parse → log stderr, KHÔNG block pipeline.
 
@@ -107,13 +107,13 @@ Path tới definition trong schema: `#/oneOf/{n}` (theo thứ tự dưới đây
 
 ### `run.json` (roll-up) → schema oneOf[5]
 
-**Purpose:** Index cho 1 run. Planner ghi khi bắt đầu; `/wiki-trace` cập nhật khi view.
+**Purpose:** Index cho 1 run. Planner ghi khi bắt đầu; `/contextd-trace` cập nhật khi view.
 
 **Key fields:** `ts_start`, `ts_end`, `user_task`, `stages_completed[]`, `final_verdict` (`APPROVED|BLOCKED|VIOLATIONS|INCOMPLETE`), `totals` (counts cho unverified/gaps/violations/hallucinations).
 
 ---
 
-## Aggregation rules cho `/wiki-eval`
+## Aggregation rules cho `/contextd-eval`
 
 Đọc tất cả `{project_dir}/.claude/runs/*/`. Lọc theo `workspace_at_run == workspace_active` (workspace isolation).
 
@@ -131,7 +131,7 @@ Metrics output:
 | Top violation rules | flatten `05-review.violations[].rule` | top-N |
 | Context utilization | `04-builder.used_docs.length / 02-context.referenced_docs.length` | mean |
 
-Output: `{ws}/reports/wiki-eval-{YYYY-MM-DD}.md` — markdown bảng.
+Output: `{ws}/reports/contextd-eval-{YYYY-MM-DD}.md` — markdown bảng.
 
 ---
 
@@ -211,7 +211,7 @@ Comment block `hooks` trong `settings.json` (hoặc xoá file). Pipeline vẫn c
 - **Trace KHÔNG đọc file ngoài project_dir + effective_wiki_root.** Workspace lock vẫn bắt buộc.
 - **Một run = một workspace.** Nếu user `/switch-workspace` giữa pipeline → run abort (out of scope).
 - **Run dir append-only** trong session. KHÔNG sửa file đã ghi của stage trước.
-- **`/wiki-eval` chỉ đọc**, không sửa runs/.
+- **`/contextd-eval` chỉ đọc**, không sửa runs/.
 - **Run ID không leak ra ngoài project_dir** — không gắn vào commit message, không log lên external service.
 
 ---
@@ -221,9 +221,9 @@ Comment block `hooks` trong `settings.json` (hoặc xoá file). Pipeline vẫn c
 - [concurrency-notes.md](concurrency-notes.md) — atomic write + advisory lock cho `run.json` (xử lý concurrent hook calls).
 - [run-trace.schema.json](../../templates/run-trace.schema.json) — JSONSchema for trace files
 - [task-scorecard.md](../../templates/task-scorecard.md) — manual rubric for A/B
-- [.claude/commands/wiki-eval.md](../../.claude/commands/wiki-eval.md) — aggregator command (Markdown)
-- [.claude/commands/wiki-trace.md](../../.claude/commands/wiki-trace.md) — single-run viewer (Markdown)
-- [.claude/commands/wiki-viz.md](../../.claude/commands/wiki-viz.md) — HTML viewer + run browser + live watch
+- [.claude/commands/contextd-eval.md](../../.claude/commands/contextd-eval.md) — aggregator command (Markdown)
+- [.claude/commands/contextd-trace.md](../../.claude/commands/contextd-trace.md) — single-run viewer (Markdown)
+- [.claude/commands/contextd-viz.md](../../.claude/commands/contextd-viz.md) — HTML viewer + run browser + live watch
 - [PIPELINE-VISUAL.md](PIPELINE-VISUAL.md) — Mermaid diagram giải thích pipeline cho human
 - [scripts/render_trace.py](../../scripts/render_trace.py) — Python renderer (stdlib only)
 - `{ws}/eval/golden-tasks/README.md` — fixture catalog (per-workspace)

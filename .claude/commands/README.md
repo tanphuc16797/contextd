@@ -13,8 +13,8 @@ Quy tắc chung:
 
 | Command | Purpose | When to use |
 |---------|---------|-------------|
-| [`/wiki-setup`](wiki-setup.md) | Tạo `.claude/wiki.json` cho codebase hiện tại; detect project name + components và pre-fill config | Lần đầu tích hợp wiki vào codebase mới, hoặc đổi workspace |
-| [`/wiki-detect`](wiki-detect.md) | Validate `.claude/wiki.json` của codebase + check workspace tồn tại + scan dependency để propose update | Sanity check sau khi setup, hoặc khi `/use-wiki` lỗi resolve |
+| [`/contextd-setup`](contextd-setup.md) | Tạo `.claude/wiki.json` cho codebase hiện tại; detect project name + components và pre-fill config | Lần đầu tích hợp wiki vào codebase mới, hoặc đổi workspace |
+| [`/contextd-detect`](contextd-detect.md) | Validate `.claude/wiki.json` của codebase + check workspace tồn tại + scan dependency để propose update | Sanity check sau khi setup, hoặc khi `/use-wiki` lỗi resolve |
 | [`/switch-workspace`](switch-workspace.md) `{name}` | Đổi `workspace` field trong `<cwd>/.claude/wiki.json` sang workspace khác | Khi cùng codebase phục vụ nhiều domain workspace, hoặc khi clone codebase nội bộ |
 | [`/new-workspace`](new-workspace.md) `{name}` | Scaffold workspace mới trong `{wiki_root}/workspaces/{name}/` từ template | Khi join công ty/dự án mới, cần knowledge sandbox riêng |
 | [`/list-workspaces`](list-workspaces.md) | In bảng mọi workspace + đánh dấu workspace của codebase hiện tại | Khám phá workspace nào có sẵn trước khi `/switch-workspace` |
@@ -46,7 +46,7 @@ Quy tắc chung:
 
 | Command | Purpose | When to use |
 |---------|---------|-------------|
-| [`/wiki-report`](wiki-report.md) | Sinh 1 file HTML self-contained tổng hợp toàn workspace (Overview / Architecture / Contracts / Patterns / Domains / ADRs / Runbooks) với citation về file nguồn | Share knowledge cho người không quen wiki; onboarding member mới; snapshot quarterly; audit gap content (`nodata` cho biết section nào thiếu) |
+| [`/contextd-report`](contextd-report.md) | Sinh 1 file HTML self-contained tổng hợp toàn workspace (Overview / Architecture / Contracts / Patterns / Domains / ADRs / Runbooks) với citation về file nguồn | Share knowledge cho người không quen wiki; onboarding member mới; snapshot quarterly; audit gap content (`nodata` cho biết section nào thiếu) |
 
 > Output là tài liệu trình bày — KHÔNG phải input cho code generation (đó là `/use-wiki`). Self-contained: mở browser xem ngay, không cần server/dependency.
 
@@ -60,9 +60,9 @@ Dành cho PM, product owner, business stakeholder — đóng góp wiki mà khôn
 |---------|---------|-------------|
 | [`/product-brief`](product-brief.md) `[title]` | Wizard tạo product brief mới (Problem / Target User / Success Metric / Acceptance Criteria) — chỉ hỏi business questions, không hỏi tech | PM tạo brief mới trước khi handoff engineering |
 | [`/business-view`](business-view.md) `{target}` | Dịch 1 service/contract/pattern kỹ thuật sang góc nhìn business — output document persistent trong `{ws}/product/views/` | Khi cần share capability của hệ thống với PM/exec/sales/CS mà không expose jargon |
-| [`/wiki-explain`](wiki-explain.md) `{topic} [--depth tldr\|short\|deep]` | On-the-fly explainer plain-language cho 1 pattern/contract/ADR/term — in console, không ghi file | Khi non-tech reader gặp 1 thuật ngữ wiki và cần hiểu nhanh trong 2 phút |
+| [`/contextd-explain`](contextd-explain.md) `{topic} [--depth tldr\|short\|deep]` | On-the-fly explainer plain-language cho 1 pattern/contract/ADR/term — in console, không ghi file | Khi non-tech reader gặp 1 thuật ngữ wiki và cần hiểu nhanh trong 2 phút |
 
-> Khác biệt: `/wiki-report` (technical, toàn workspace, HTML), `/business-view` (persistent document, 1 target, audience-cụ-thể), `/wiki-explain` (ephemeral, 1 topic, plain language).
+> Khác biệt: `/contextd-report` (technical, toàn workspace, HTML), `/business-view` (persistent document, 1 target, audience-cụ-thể), `/contextd-explain` (ephemeral, 1 topic, plain language).
 
 ---
 
@@ -84,8 +84,8 @@ Dành cho **chuyên gia ngành khác** (cơ khí, kế toán, y tế, luật, gi
 
 | Command | Purpose | When to use |
 |---------|---------|-------------|
-| [`/wiki-trace`](wiki-trace.md) `{run_id}` | Render Markdown timeline 1 run pipeline (5 stage) từ trace JSON dưới `.claude/runs/{run_id}/` | Khi output `/use-wiki` sai — debug stage nào divergence |
-| [`/wiki-eval`](wiki-eval.md) | Aggregate trace nhiều run → báo cáo Markdown: hallucination rate, top knowledge gaps, plan-block rate, violation hotspots | Định kỳ review hiệu quả wiki, sau update wiki lớn, hoặc khi nghi pattern không được follow |
+| [`/contextd-trace`](contextd-trace.md) `{run_id}` | Render Markdown timeline 1 run pipeline (5 stage) từ trace JSON dưới `.claude/runs/{run_id}/` | Khi output `/use-wiki` sai — debug stage nào divergence |
+| [`/contextd-eval`](contextd-eval.md) | Aggregate trace nhiều run → báo cáo Markdown: hallucination rate, top knowledge gaps, plan-block rate, violation hotspots | Định kỳ review hiệu quả wiki, sau update wiki lớn, hoặc khi nghi pattern không được follow |
 
 > Schema + design: [observability.md](../../agents/pipeline/observability.md). Manual A/B đánh giá: `{ws}/eval/golden-tasks/README.md` (per-workspace) + [task-scorecard template](../../templates/task-scorecard.md).
 

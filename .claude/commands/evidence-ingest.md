@@ -180,7 +180,7 @@ Next:
 
 | Error                          | Fix                                                            |
 |--------------------------------|----------------------------------------------------------------|
-| `.claude/wiki.json missing`     | `/switch-workspace {name}` hoặc `/wiki-setup`                  |
+| `.claude/wiki.json missing`     | `/switch-workspace {name}` hoặc `/contextd-setup`                  |
 | Duplicate sha256               | Skip ingest, dùng evid-id cũ                                   |
 | MCP tool not active            | Enable MCP server hoặc fallback `--source paste`               |
 | Raw size > 1MB                 | Chunk trước khi ingest hoặc `--source paste` với extract phần liên quan |

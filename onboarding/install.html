@@ -218,7 +218,7 @@ unzip wiki-template-latest.zip -d /d/tool</code></pre>
       <div class="step-num-bubble">3</div>
       <div class="step-content">
         <h4>Setup codebase</h4>
-        <p>Giống <a href="#step3">Step 3</a> bên dưới — gõ <code>/wiki-setup</code> trong codebase.</p>
+        <p>Giống <a href="#step3">Step 3</a> bên dưới — gõ <code>/contextd-setup</code> trong codebase.</p>
       </div>
     </div>
 
@@ -308,7 +308,7 @@ cat ~/.claude/wiki-global.json</code></pre>
   "obsidian": { ... }
 }</code></pre>
 
-        <p>Mở Claude Code, gõ <code>/wiki-setup</code> → nếu slash command hiện ra trong autocomplete = OK.</p>
+        <p>Mở Claude Code, gõ <code>/contextd-setup</code> → nếu slash command hiện ra trong autocomplete = OK.</p>
       </div>
     </div>
   </section>
@@ -320,7 +320,7 @@ cat ~/.claude/wiki-global.json</code></pre>
       <div class="step-content">
         <h2 style="margin-top:4px">Kết nối vào dự án đầu tiên</h2>
         <p>Vào thư mục codebase bạn muốn dùng wiki, mở Claude Code (hoặc IDE extension) tại đó, gõ:</p>
-        <pre><code>/wiki-setup</code></pre>
+        <pre><code>/contextd-setup</code></pre>
 
         <p>Hệ thống sẽ hướng dẫn bạn từng bước:</p>
         <ul>
@@ -365,7 +365,7 @@ xcopy /E /I /Y agents %USERPROFILE%\.claude\agents</pre>
 
     <h3 style="margin-top:24px;font-size:17px">Lệnh không hiện trong Claude Code</h3>
     <ul>
-      <li>Check folder <code>~/.claude/commands/</code> có file <code>.md</code> không (vd <code>wiki-setup.md</code>)</li>
+      <li>Check folder <code>~/.claude/commands/</code> có file <code>.md</code> không (vd <code>contextd-setup.md</code>)</li>
       <li>Restart Claude Code (CLI: gõ <code>/exit</code> rồi mở lại; IDE: reload window)</li>
       <li>Re-run installer: <code>bash scripts/install-to-claude.sh</code></li>
       <li>Check log Claude Code có error nào không (CLI: stderr; IDE: Output panel)</li>
@@ -378,7 +378,7 @@ xcopy /E /I /Y agents %USERPROFILE%\.claude\agents</pre>
       <li>Verify path tồn tại: <code>ls "$(jq -r .wiki_root ~/.claude/wiki-global.json)"</code></li>
     </ul>
 
-    <h3 style="margin-top:24px;font-size:17px"><code>/wiki-setup</code> báo "workspace not found"</h3>
+    <h3 style="margin-top:24px;font-size:17px"><code>/contextd-setup</code> báo "workspace not found"</h3>
     <ul>
       <li>Chưa có workspace nào — chạy <code>/new-workspace {name}</code> trước (vd <code>/new-workspace acme-corp</code>)</li>
       <li>Hoặc list workspaces có sẵn: <code>/list-workspaces</code></li>

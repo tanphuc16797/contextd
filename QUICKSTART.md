@@ -134,13 +134,13 @@ Sync wiki with your code changes:
 - **All commands + when to use**: [.claude/commands/README.md](.claude/commands/README.md).
 - **Pack catalog** (stack-specific bundles): [packs/README.md](packs/README.md).
 - **Cross-cutting principles** (rules spanning multiple packs): [agents/cross-cutting-principles.md](agents/cross-cutting-principles.md).
-- **Pipeline debugging/observability**: [agents/pipeline/observability.md](agents/pipeline/observability.md) — `/wiki-trace`, `/wiki-viz`, `/wiki-eval`.
+- **Pipeline debugging/observability**: [agents/pipeline/observability.md](agents/pipeline/observability.md) — `/contextd-trace`, `/contextd-viz`, `/contextd-eval`.
 
 ## If You Get Stuck
 
 | Symptom | Fix |
 |---|---|
-| `/use-wiki` returns "no workspace" | Run `/switch-workspace` or `/wiki-setup`. |
+| `/use-wiki` returns "no workspace" | Run `/switch-workspace` or `/contextd-setup`. |
 | Slash commands do not appear | Re-run `bash scripts/install-to-claude.sh`. |
 | Pattern not found | Run `/find <keyword>` to confirm; workspace may not have that pattern yet. |
 | Wiki references files renamed in code | Run `/rebase-wiki` to resync. |

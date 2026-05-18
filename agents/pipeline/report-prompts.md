@@ -1,6 +1,6 @@
 # Report Prompts — Wiki → Technical Report (HTML)
 
-Hướng dẫn cho main agent khi sinh **technical report HTML** từ wiki của workspace active. Áp dụng cho `/wiki-report`. Output là 1 file HTML self-contained.
+Hướng dẫn cho main agent khi sinh **technical report HTML** từ wiki của workspace active. Áp dụng cho `/contextd-report`. Output là 1 file HTML self-contained.
 
 **Templates** (đọc trước khi compose, đảm bảo agent KHÔNG tự design HTML từ đầu):
 - [`templates/report-html-skeleton.html`](../../templates/report-html-skeleton.html) — outer shell (CSS + JS + 7 placeholder section + `<dialog>` markdown preview)
@@ -287,7 +287,7 @@ Engine validator [validator-rules.md](validator-rules.md) có thêm rule `report
 | File `.md` parse lỗi (broken markdown) | render best-effort, ghi note `<!-- parse warning: {file} -->` trong HTML |
 | Folder section trống (vd no contracts) | `<p class="nodata">No data in this workspace.</p>` |
 | Cùng ngày chạy 2 lần | filename suffix `-{HHMMSS}` để không ghi đè |
-| Workspace không có `workspace.md` | STOP với guide chạy `/wiki-setup` hoặc `/new-workspace` |
+| Workspace không có `workspace.md` | STOP với guide chạy `/contextd-setup` hoặc `/new-workspace` |
 | File quá lớn (1 file > 100KB) | render đầy đủ, KHÔNG truncate (user muốn full report); nếu tổng output > 5MB thì WARN |
 | File có `<script>` inline (vd embed JS demo) | escape thành `&lt;script&gt;` — không exec |
 
@@ -295,7 +295,7 @@ Engine validator [validator-rules.md](validator-rules.md) có thêm rule `report
 
 ## Related
 
-- [`/wiki-report` command](../../.claude/commands/wiki-report.md)
+- [`/contextd-report` command](../../.claude/commands/contextd-report.md)
 - [HTML skeleton](../../templates/report-html-skeleton.html)
 - [Validator rules](validator-rules.md) (rules `report-html-*`)
 - [Context retrieval map](task-to-docs-map.md) — cùng convention path scope

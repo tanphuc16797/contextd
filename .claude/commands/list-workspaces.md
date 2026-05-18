@@ -36,5 +36,5 @@ Cuối output, in:
 ```
 Switch (this codebase): /switch-workspace {name}
 Create new           : /new-workspace {name}
-Setup full config    : /wiki-setup
+Setup full config    : /contextd-setup
 ```

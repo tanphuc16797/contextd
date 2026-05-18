@@ -1,7 +1,7 @@
 {
   "_comment": "Config khi chạy slash commands TRONG wiki-template repo. wiki_root='.' resolve relative TỚI directory chứa file này (= wiki-template root), KHÔNG phải cwd — xem agents/system-prompt.md#wiki_root-resolution-rule. Đổi 'workspace' nếu muốn curate wiki của workspace khác.",
   "project": "wiki-template",
-  "workspace": "wiki",
+  "workspace": "default",
   "wiki_root": ".",
   "knowledge_map": null,
   "domain": null

@@ -164,7 +164,7 @@ Mỗi subagent **output 1 fenced ```json block** ở cuối response. **PostTool
 
 Trace **KHÔNG block pipeline**: hook timeout 5s, parse fail → exit 0, log stderr. Trace là lớp đo lường tách rời.
 
-Aggregate qua nhiều run: `/wiki-eval`. View 1 run: `/wiki-trace {run_id}`. Chi tiết: [observability.md](observability.md).
+Aggregate qua nhiều run: `/contextd-eval`. View 1 run: `/contextd-trace {run_id}`. Chi tiết: [observability.md](observability.md).
 
 ---
 
@@ -205,4 +205,4 @@ Khuyến nghị model:
 - [context-filter.md](context-filter.md) — Rank + slice rules
 - [prompt-template.md](prompt-template.md) — Builder prompt structure
 - [validator-rules.md](validator-rules.md) — Rule-based + self-check rules cho Reviewer
-- [observability.md](observability.md) — Trace schema, run-id convention, /wiki-eval & /wiki-trace
+- [observability.md](observability.md) — Trace schema, run-id convention, /contextd-eval & /contextd-trace

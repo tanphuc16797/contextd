@@ -251,10 +251,10 @@
         <div class="step-num-bubble">2</div>
         <div class="step-content">
           <h4>Need a simple explanation for technical terms?</h4>
-          <p>If you see a term you do not know, run <code>/wiki-explain topic</code>.
+          <p>If you see a term you do not know, run <code>/contextd-explain topic</code>.
             You will get a simple explanation with examples.</p>
-          <pre><code>/wiki-explain circuit-breaker --depth tldr
-/wiki-explain mqtt-topic-contract --depth short</code></pre>
+          <pre><code>/contextd-explain circuit-breaker --depth tldr
+/contextd-explain mqtt-topic-contract --depth short</code></pre>
         </div>
       </div>
 
@@ -285,7 +285,7 @@
           <h4>Connect the wiki to your current codebase</h4>
           <p>First time in a new codebase: this command detects project name + tech stack and creates
             <code>.claude/wiki.json</code> connected to your workspace.</p>
-          <pre><code>/wiki-setup</code></pre>
+          <pre><code>/contextd-setup</code></pre>
           <p>If the workspace does not exist yet, run <code>/new-workspace project-name</code> to create one.</p>
         </div>
       </div>
@@ -349,13 +349,13 @@
           <h4>Generate an overview report for the team</h4>
           <p>A self-contained HTML file covering the full workspace
             (Overview / Architecture / Contracts / Patterns / Domains / ADRs / Runbooks).</p>
-          <pre><code>/wiki-report</code></pre>
+          <pre><code>/contextd-report</code></pre>
           <p>Open the HTML file directly in a browser — no server required.</p>
         </div>
       </div>
 
       <div class="callout tip">
-        <strong>💡 Next:</strong> Run <code>/wiki-eval</code> periodically to measure wiki quality
+        <strong>💡 Next:</strong> Run <code>/contextd-eval</code> periodically to measure wiki quality
         (hallucination rate, knowledge gaps, plan-block rate). If you suspect drift, run <code>/rebase-wiki</code>.
       </div>
     </div>
@@ -370,7 +370,7 @@
         <div class="step-content">
           <h4>Enable Solo Builder mode</h4>
           <p><strong>Easiest way</strong>: run <code>/tool-design</code> directly — the system asks setup questions and enables the pack for you.</p>
-          <p><strong>Manual way</strong>: run <code>/wiki-setup</code> → in pack selection, tick <code>pack-solo-builder</code>.</p>
+          <p><strong>Manual way</strong>: run <code>/contextd-setup</code> → in pack selection, tick <code>pack-solo-builder</code>.</p>
           <p>To apply this for <strong>all projects</strong> in the workspace, edit <code>workspace.md</code> under <code>## Packs</code>:</p>
           <pre><code>## Packs
 
@@ -417,7 +417,7 @@
       <dd>Each company/project gets its own workspace folder. Knowledge is never mixed across workspaces, because each organization has different rules. The active workspace is defined in <code>.claude/wiki.json</code>.</dd>
 
       <dt>Pack (technology-specific knowledge bundle)</dt>
-      <dd>Wiki-template is stack-agnostic. Specialized knowledge (Kafka, REST, React, AI app, product, etc.) lives in <code>packs</code>. Enable/disable packs in <code>/wiki-setup</code> pack selection, or edit <code>workspace.md</code>. There are currently 14 packs (see section below).</dd>
+      <dd>Wiki-template is stack-agnostic. Specialized knowledge (Kafka, REST, React, AI app, product, etc.) lives in <code>packs</code>. Enable/disable packs in <code>/contextd-setup</code> pack selection, or edit <code>workspace.md</code>. There are currently 14 packs (see section below).</dd>
 
       <dt>Contract vs Pattern</dt>
       <dd>Priority order: <strong>Contract &gt; Pattern &gt; Project docs &gt; Domain knowledge</strong>.
@@ -445,8 +445,8 @@
       <table class="cmd-table">
         <thead><tr><th>Command</th><th>Purpose</th><th>When to use</th></tr></thead>
         <tbody>
-          <tr><td class="cmd-name">/wiki-setup<span class="cmd-tag tech">tech</span></td><td>Create <code>.claude/wiki.json</code> for the codebase, detect project name + components</td><td>First time using wiki with a codebase</td></tr>
-          <tr><td class="cmd-name">/wiki-detect<span class="cmd-tag tech">tech</span></td><td>Validate <code>wiki.json</code>, scan dependency, propose update</td><td>After setup, or when troubleshooting</td></tr>
+          <tr><td class="cmd-name">/contextd-setup<span class="cmd-tag tech">tech</span></td><td>Create <code>.claude/wiki.json</code> for the codebase, detect project name + components</td><td>First time using wiki with a codebase</td></tr>
+          <tr><td class="cmd-name">/contextd-detect<span class="cmd-tag tech">tech</span></td><td>Validate <code>wiki.json</code>, scan dependency, propose update</td><td>After setup, or when troubleshooting</td></tr>
           <tr><td class="cmd-name">/switch-workspace name<span class="cmd-tag tech">tech</span></td><td>Switch the active workspace for the current codebase</td><td>One codebase serving multiple domains</td></tr>
           <tr><td class="cmd-name">/new-workspace project-name<span class="cmd-tag maintainer">maint</span></td><td>Create a new workspace from template</td><td>Joining a new company/project</td></tr>
           <tr><td class="cmd-name">/list-workspaces<span class="cmd-tag nontech">nontech</span><span class="cmd-tag tech">tech</span></td><td>List all workspaces and highlight active one</td><td>Check which workspaces exist</td></tr>
@@ -474,11 +474,11 @@
         <tbody>
           <tr><td class="cmd-name">/product-brief [title]<span class="cmd-tag nontech">nontech</span></td><td>Guide to create product brief: Problem / Users / Success metrics / Acceptance criteria</td><td>When PM creates a new brief before handing off to engineering</td></tr>
           <tr><td class="cmd-name">/business-view {target}<span class="cmd-tag nontech">nontech</span></td><td>Translate technical docs into plain business language</td><td>Explain features to leadership/business/support</td></tr>
-          <tr><td class="cmd-name">/wiki-explain topic<span class="cmd-tag nontech">nontech</span></td><td>Explain a term/rule in plain language</td><td>When you hit unfamiliar terms while reading wiki</td></tr>
+          <tr><td class="cmd-name">/contextd-explain topic<span class="cmd-tag nontech">nontech</span></td><td>Explain a term/rule in plain language</td><td>When you hit unfamiliar terms while reading wiki</td></tr>
         </tbody>
       </table>
       <div class="callout info">
-        <strong>Requirement:</strong> Workspace must enable <code>pack-product</code> — easiest path: run <code>/wiki-setup</code> Step 4.5 and tick <code>pack-product</code>. Or run <code>/product-brief</code> and let it guide enabling.
+        <strong>Requirement:</strong> Workspace must enable <code>pack-product</code> — easiest path: run <code>/contextd-setup</code> Step 4.5 and tick <code>pack-product</code>. Or run <code>/product-brief</code> and let it guide enabling.
       </div>
     </div>
 
@@ -502,7 +502,7 @@
       <table class="cmd-table">
         <thead><tr><th>Command</th><th>Purpose</th><th>When to use</th></tr></thead>
         <tbody>
-          <tr><td class="cmd-name">/wiki-report<span class="cmd-tag maintainer">maint</span></td><td>Single standalone HTML file — Overview / Architecture / Contracts / Patterns / Runbooks</td><td>Onboard new members, periodic reporting, gap review</td></tr>
+          <tr><td class="cmd-name">/contextd-report<span class="cmd-tag maintainer">maint</span></td><td>Single standalone HTML file — Overview / Architecture / Contracts / Patterns / Runbooks</td><td>Onboard new members, periodic reporting, gap review</td></tr>
         </tbody>
       </table>
     </div>
@@ -527,9 +527,9 @@
       <table class="cmd-table">
         <thead><tr><th>Command</th><th>Purpose</th><th>When to use</th></tr></thead>
         <tbody>
-          <tr><td class="cmd-name">/wiki-trace {run_id}<span class="cmd-tag maintainer">maint</span></td><td>Render Markdown timeline 1 run pipeline (5 stage)</td><td>When <code>/use-wiki</code> output is wrong — debug stage divergence</td></tr>
-          <tr><td class="cmd-name">/wiki-eval<span class="cmd-tag maintainer">maint</span></td><td>Metrics: hallucination rate, knowledge gaps, violation score</td><td>Periodic wiki quality check</td></tr>
-          <tr><td class="cmd-name">/wiki-viz<span class="cmd-tag maintainer">maint</span></td><td>HTML viewer + live trace watch</td><td>Visual inspection</td></tr>
+          <tr><td class="cmd-name">/contextd-trace {run_id}<span class="cmd-tag maintainer">maint</span></td><td>Render Markdown timeline 1 run pipeline (5 stage)</td><td>When <code>/use-wiki</code> output is wrong — debug stage divergence</td></tr>
+          <tr><td class="cmd-name">/contextd-eval<span class="cmd-tag maintainer">maint</span></td><td>Metrics: hallucination rate, knowledge gaps, violation score</td><td>Periodic wiki quality check</td></tr>
+          <tr><td class="cmd-name">/contextd-viz<span class="cmd-tag maintainer">maint</span></td><td>HTML viewer + live trace watch</td><td>Visual inspection</td></tr>
         </tbody>
       </table>
     </div>
@@ -538,7 +538,7 @@
   <!-- ============ PACKS ============ -->
   <section class="block" id="packs">
     <h2><span class="step-num">4</span>Available packs</h2>
-    <p class="lead">Enable packs via <code>/wiki-setup</code> Step 4.5 (per-codebase checkbox UI, saved in <code>wiki.json#packs</code>) — or edit <code>workspaces/{ws}/workspace.md</code> under <code>## Packs</code> (workspace-wide default).</p>
+    <p class="lead">Enable packs via <code>/contextd-setup</code> Step 4.5 (per-codebase checkbox UI, saved in <code>wiki.json#packs</code>) — or edit <code>workspaces/{ws}/workspace.md</code> under <code>## Packs</code> (workspace-wide default).</p>
 
     <table class="cmd-table">
       <thead><tr><th>Pack</th><th>Status</th><th>Use for</th></tr></thead>
@@ -579,7 +579,7 @@
         <ul>
           <li><code>/product-brief</code> — create a new brief</li>
           <li><code>/business-view {service}</code> — read service docs in business language</li>
-          <li><code>/wiki-explain topic</code> — explain technical terms</li>
+          <li><code>/contextd-explain topic</code> — explain technical terms</li>
         </ul>
         <p><strong>If you are a domain expert</strong> (mechanical, accounting, healthcare, ... ) building your own tools: enable <code>pack-solo-builder</code>, then use:</p>
         <ul>
@@ -607,14 +607,14 @@
           <li><code>/update-wiki</code> — run after each merge</li>
           <li><code>/rebase-wiki</code> — run regularly for a full check</li>
         </ul>
-        <p>Use <code>/wiki-eval</code> to see quality metrics and missing knowledge.</p>
+        <p>Use <code>/contextd-eval</code> to see quality metrics and missing knowledge.</p>
       </div>
     </details>
 
     <details>
       <summary>When should I use packs (and when not)?</summary>
       <div class="faq-body">
-        <p><strong>Use packs</strong> for stack-specific knowledge (e.g. Kafka rules, React hooks rules). Enable via <code>/wiki-setup</code> Step 4.5.</p>
+        <p><strong>Use packs</strong> for stack-specific knowledge (e.g. Kafka rules, React hooks rules). Enable via <code>/contextd-setup</code> Step 4.5.</p>
         <p><strong>Do NOT use packs</strong> for rules specific to your workspace — write them in
           <code>workspaces/{ws}/agents/constraints.md</code> with prefix <code>ws-</code>.</p>
         <p><strong>Engine-wide rules</strong> (all workspaces, stack-agnostic) belong in <code>agents/constraints.md</code>.</p>
@@ -631,7 +631,7 @@
           <li>Backend codebase (no override) → effective packs = workspace default</li>
         </ul>
         <p><strong>Replace semantics</strong>, not additive. <code>null</code>/missing field follows workspace default. Array fully overrides.</p>
-        <p>Easiest way: run <code>/wiki-setup</code> in the codebase → Step 4.5 shows all pack checkboxes and writes <code>wiki.json</code> automatically.</p>
+        <p>Easiest way: run <code>/contextd-setup</code> in the codebase → Step 4.5 shows all pack checkboxes and writes <code>wiki.json</code> automatically.</p>
       </div>
     </details>
 
@@ -641,8 +641,8 @@
         <p>No. Most people only need 3-4 commands:</p>
         <ul>
           <li><strong>Daily engineering</strong>: <code>/use-wiki</code>, <code>/find</code>, <code>/update-wiki</code></li>
-          <li><strong>Daily non-tech</strong>: <code>/product-brief</code>, <code>/business-view</code>, <code>/wiki-explain</code></li>
-          <li><strong>One-time setup</strong>: <code>/wiki-setup</code> or <code>/new-workspace</code></li>
+          <li><strong>Daily non-tech</strong>: <code>/product-brief</code>, <code>/business-view</code>, <code>/contextd-explain</code></li>
+          <li><strong>One-time setup</strong>: <code>/contextd-setup</code> or <code>/new-workspace</code></li>
         </ul>
         <p>Learn the others only when you need them.</p>
       </div>
@@ -661,7 +661,7 @@
       <div class="faq-body">
         <p>The system enforces strict rules: if knowledge is missing, AI must report assumptions or constraint conflicts, not invent facts.
           A validator (<code>scripts/validate.py</code>) checks common violation patterns.
-          For monitoring: <code>/wiki-eval</code> reports hallucination rate per run.</p>
+          For monitoring: <code>/contextd-eval</code> reports hallucination rate per run.</p>
       </div>
     </details>
 

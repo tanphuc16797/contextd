@@ -139,7 +139,7 @@ Output:
 - `APPROVED` → chuyển user
 - `Violations Found` → append vào cuối `current-task.md` dưới section `## Violations`, báo user trước khi commit. KHÔNG tự sửa khi user chưa duyệt.
 
-Sau Bước 5, có thể chạy `/wiki-trace {run_id}` để xem toàn bộ pipeline đã chạy thế nào, hoặc `/wiki-eval` để aggregate metric qua nhiều run.
+Sau Bước 5, có thể chạy `/contextd-trace {run_id}` để xem toàn bộ pipeline đã chạy thế nào, hoặc `/contextd-eval` để aggregate metric qua nhiều run.
 
 **Bỏ qua Bước 5 khi**: task chỉ là `design`/`review` không sinh code, hoặc fix bug 1 dòng quá nhỏ.
 

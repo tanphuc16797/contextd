@@ -68,7 +68,7 @@
 
 ## Action items (sau scoring)
 
-- [ ] Gap nào trong A xuất hiện cũng trong top-3 `/wiki-eval` Top Gaps? → Ưu tiên `/evidence-ingest`.
+- [ ] Gap nào trong A xuất hiện cũng trong top-3 `/contextd-eval` Top Gaps? → Ưu tiên `/evidence-ingest`.
 - [ ] Pattern nào dùng được mà builder bỏ qua? → Bổ sung vào `patterns-index.md` với "When to use" rõ hơn.
 - [ ] Contract nào bị vi phạm trong B mà A pass? → Quote contract trong service docs.
 - [ ] Nếu Δ < 3 lặp lại nhiều task → review structure wiki, có thể context-filter.md ranking sai.

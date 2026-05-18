@@ -48,7 +48,7 @@ Slash commands resolve workspace **theo cwd** khi chạy:
 | 1 | `<cwd>/.claude/wiki.json` field `workspace` |
 | 2 | `~/.claude/wiki-global.json` field `default_workspace` |
 | 3 | Nếu chỉ có 1 workspace trong `workspaces/` → dùng nó |
-| 4 | STOP và yêu cầu user `/switch-workspace` hoặc `/wiki-setup` |
+| 4 | STOP và yêu cầu user `/switch-workspace` hoặc `/contextd-setup` |
 
 > KHÔNG còn file `workspaces/.active` global. Active workspace là per-codebase, không phải per-wiki-repo. Lý do: cùng một wiki-template phục vụ nhiều codebase, mỗi codebase có thể thuộc workspace khác nhau — chạy `/use-wiki` ở 2 codebase khác nhau phải retrieve 2 workspace khác nhau, không phụ thuộc lần `/switch-workspace` gần nhất.
 
@@ -81,4 +81,4 @@ Xem [`../packs/README.md`](../packs/README.md) cho catalog và cơ chế.
 - `/list-workspaces` — bảng tất cả workspace + đánh dấu workspace của codebase hiện tại.
 - `/switch-workspace {name}` — đổi `workspace` field trong `<cwd>/.claude/wiki.json` (tạo file nếu chưa có).
 - `/new-workspace {name}` — scaffold workspace mới từ `templates/workspace.md`; tuỳ chọn point `<cwd>/.claude/wiki.json` về workspace mới.
-- `/wiki-setup` — tạo `<cwd>/.claude/wiki.json` đầy đủ (project + workspace + patterns + contracts + services).
+- `/contextd-setup` — tạo `<cwd>/.claude/wiki.json` đầy đủ (project + workspace + patterns + contracts + services).

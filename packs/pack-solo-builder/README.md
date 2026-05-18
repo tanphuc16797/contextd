@@ -87,7 +87,7 @@ workspaces/{ws}/
 
 ## Bật pack
 
-**Cách 1 — Per-codebase (recommend cho non-tech)**: chạy `/wiki-setup` trong codebase, ở Bước 4.5 tick checkbox `pack-solo-builder`. UI tự ghi vào `<cwd>/.claude/wiki.json#packs` — không cần edit markdown.
+**Cách 1 — Per-codebase (recommend cho non-tech)**: chạy `/contextd-setup` trong codebase, ở Bước 4.5 tick checkbox `pack-solo-builder`. UI tự ghi vào `<cwd>/.claude/wiki.json#packs` — không cần edit markdown.
 
 **Cách 2 — Workspace-wide**: edit `workspaces/{ws}/workspace.md` section `## Packs`:
 

@@ -218,7 +218,7 @@ unzip wiki-template-latest.zip -d /d/tool</code></pre>
       <div class="step-num-bubble">3</div>
       <div class="step-content">
         <h4>Setup codebase</h4>
-        <p>Same as <a href="#step3">Step 3</a> below — run <code>/wiki-setup</code> in your codebase.</p>
+        <p>Same as <a href="#step3">Step 3</a> below — run <code>/contextd-setup</code> in your codebase.</p>
       </div>
     </div>
 
@@ -308,7 +308,7 @@ cat ~/.claude/wiki-global.json</code></pre>
   "obsidian": { ... }
 }</code></pre>
 
-        <p>Open Claude Code and run <code>/wiki-setup</code> → if the slash command appears in autocomplete, setup is successful.</p>
+        <p>Open Claude Code and run <code>/contextd-setup</code> → if the slash command appears in autocomplete, setup is successful.</p>
       </div>
     </div>
   </section>
@@ -320,7 +320,7 @@ cat ~/.claude/wiki-global.json</code></pre>
       <div class="step-content">
         <h2 style="margin-top:4px">Connect your first project</h2>
         <p>Go to the codebase folder where you want to use the wiki, open Claude Code (or the IDE extension) there, and run:</p>
-        <pre><code>/wiki-setup</code></pre>
+        <pre><code>/contextd-setup</code></pre>
 
         <p>The setup flow guides you step by step:</p>
         <ul>
@@ -365,7 +365,7 @@ xcopy /E /I /Y agents %USERPROFILE%\.claude\agents</pre>
 
     <h3 style="margin-top:24px;font-size:17px">Commands do not appear in Claude Code</h3>
     <ul>
-      <li>Check whether <code>~/.claude/commands/</code> contains <code>.md</code> files (e.g. <code>wiki-setup.md</code>)</li>
+      <li>Check whether <code>~/.claude/commands/</code> contains <code>.md</code> files (e.g. <code>contextd-setup.md</code>)</li>
       <li>Restart Claude Code (CLI: run <code>/exit</code> then reopen; IDE: reload window)</li>
       <li>Re-run installer: <code>bash scripts/install-to-claude.sh</code></li>
       <li>Check Claude Code logs for errors (CLI: stderr; IDE: Output panel)</li>
@@ -378,7 +378,7 @@ xcopy /E /I /Y agents %USERPROFILE%\.claude\agents</pre>
       <li>Verify the path exists: <code>ls "$(jq -r .wiki_root ~/.claude/wiki-global.json)"</code></li>
     </ul>
 
-    <h3 style="margin-top:24px;font-size:17px"><code>/wiki-setup</code> shows "workspace not found"</h3>
+    <h3 style="margin-top:24px;font-size:17px"><code>/contextd-setup</code> shows "workspace not found"</h3>
     <ul>
       <li>No workspace exists yet — run <code>/new-workspace {name}</code> first (e.g. <code>/new-workspace acme-corp</code>)</li>
       <li>Or list available workspaces: <code>/list-workspaces</code></li>

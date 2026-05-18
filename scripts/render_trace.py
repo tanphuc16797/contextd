@@ -452,7 +452,7 @@ def render_diff_panel(run: dict) -> str:
 
 
 def render_divergence(run: dict) -> str:
-    """Auto-heuristic divergence detection — copies wiki-trace.md heuristic."""
+    """Auto-heuristic divergence detection — copies contextd-trace.md heuristic."""
     notes = []
     planner = run.get("01-planner") or {}
     ctx = run.get("02-context") or {}

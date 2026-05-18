@@ -4,7 +4,7 @@
 Layer 1 validator for the wiki-template knowledge engine.
 
 Engine baseline: stack-agnostic rules (domain workflow, hardcoded config,
-constructor injection, /wiki-report HTML hygiene). Stack-specific rules
+constructor injection, /contextd-report HTML hygiene). Stack-specific rules
 (Kafka/MQTT/REST/frontend/...) live in packs and are loaded dynamically
 via `scripts/pack_loader.py` based on the workspace's `## Packs` section.
 

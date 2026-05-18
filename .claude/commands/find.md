@@ -115,5 +115,5 @@ Next steps:
 
 Không nên dùng:
 - Task implement code (dùng `/use-wiki`).
-- Audit toàn bộ wiki (dùng `/wiki-eval`).
+- Audit toàn bộ wiki (dùng `/contextd-eval`).
 - Tìm theo intent có domain logic phức tạp (`/use-wiki` planner sẽ tốt hơn).

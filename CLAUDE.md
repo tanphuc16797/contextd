@@ -15,7 +15,7 @@ User làm việc ở **nhiều công ty/dự án khác nhau**. Wiki được chi
 
 1. **Đầu mỗi task**: resolve workspace từ `<cwd>/.claude/wiki.json` field `workspace` (fallback `~/.claude/wiki-global.json.default_workspace`). Set `{ws} = {wiki_root}/workspaces/{workspace}/`.
 2. **Mọi knowledge retrieval scope CHỈ trong `{ws}/`** — KHÔNG đọc, copy, hay reference file của workspace khác.
-3. Nếu `<cwd>/.claude/wiki.json` thiếu hoặc `.workspace` rỗng → STOP, yêu cầu user `/switch-workspace` hoặc `/wiki-setup`.
+3. Nếu `<cwd>/.claude/wiki.json` thiếu hoặc `.workspace` rỗng → STOP, yêu cầu user `/switch-workspace` hoặc `/contextd-setup`.
 4. Nếu user task có vẻ thuộc workspace khác (vd code path, repo name không khớp) → cảnh báo, yêu cầu confirm hoặc `/switch-workspace`.
 5. Khi update wiki: chỉ ghi vào `{ws}/...` hoặc engine files (`agents/*`, `templates/*`). KHÔNG ghi vào workspace khác.
 
@@ -42,7 +42,7 @@ Engine core **stack-agnostic**. Knowledge đặc thù theo stack sống trong `p
 - pack-web-api
 ```
 
-**Per-codebase override**: 1 workspace có thể có nhiều codebase với pack needs khác nhau. Mỗi codebase có thể override packs qua field `packs` trong `<cwd>/.claude/wiki.json` — replace semantics, ignore workspace.md cho codebase đó. Quản lý qua `/wiki-setup` Bước 4.5 (UI checkbox, không cần edit md). Resolution: `effective_packs = wiki.json#packs IF array ELSE workspace.md ## Packs`. Xem [`workspace-resolution.md#effective-packs-resolution`](agents/pipeline/workspace-resolution.md#effective-packs-resolution).
+**Per-codebase override**: 1 workspace có thể có nhiều codebase với pack needs khác nhau. Mỗi codebase có thể override packs qua field `packs` trong `<cwd>/.claude/wiki.json` — replace semantics, ignore workspace.md cho codebase đó. Quản lý qua `/contextd-setup` Bước 4.5 (UI checkbox, không cần edit md). Resolution: `effective_packs = wiki.json#packs IF array ELSE workspace.md ## Packs`. Xem [`workspace-resolution.md#effective-packs-resolution`](agents/pipeline/workspace-resolution.md#effective-packs-resolution).
 
 Catalog: `pack-event-driven` (Kafka/MQTT/DLQ), `pack-web-api` (REST/GraphQL/gRPC), `pack-frontend-react` (React/Next.js), `pack-ai-app` (LLM apps), `pack-agentic` (agent loops/tool use/MCP), `pack-claude-plugin-dev` (build Claude Code plugins), `pack-product` (briefs/OKR/roadmap/personas — cho non-tech PM/business), `pack-solo-builder` (tool design coach + tech recipe library cross-platform — cho non-tech expert ngành khác dùng Claude Code làm no-code IDE). Roadmap: `pack-mobile-*`, `pack-data-engineering`, `pack-ml-training`. Xem [`packs/README.md`](packs/README.md).
 
@@ -114,7 +114,7 @@ workspaces/
   - Absolute path → dùng nguyên
   - Relative (`"."`, `"./..."`) → resolve relative TỚI `project_root` (= parent của `.claude/`), KHÔNG phải `.claude/` literal, KHÔNG phải cwd
   - `null`/empty → fallback `~/.claude/wiki-global.json#wiki_root`
-- STOP nếu file thiếu hoặc `.workspace` rỗng → yêu cầu `/switch-workspace` hoặc `/wiki-setup`.
+- STOP nếu file thiếu hoặc `.workspace` rỗng → yêu cầu `/switch-workspace` hoặc `/contextd-setup`.
 - Set `{ws} = {effective_wiki_root}/workspaces/{workspace}/`.
 
 ### Step 1 — Map the task
@@ -250,7 +250,7 @@ Use the templates in `templates/` for new docs.
 | Validator rules | `agents/pipeline/validator-rules.md` (+ workspace override) |
 | Multi-agent pipeline | `agents/pipeline/multi-agent-pipeline.md` |
 | Pipeline visual (Mermaid + cheat sheet) | `agents/pipeline/PIPELINE-VISUAL.md` |
-| Pipeline observability (debug + A/B eval) | `agents/pipeline/observability.md`, `.claude/commands/wiki-eval.md`, `.claude/commands/wiki-trace.md`, `.claude/commands/wiki-viz.md` (HTML viewer + live watch), `scripts/render_trace.py`, `{ws}/eval/golden-tasks/` (per-workspace) |
+| Pipeline observability (debug + A/B eval) | `agents/pipeline/observability.md`, `.claude/commands/contextd-eval.md`, `.claude/commands/contextd-trace.md`, `.claude/commands/contextd-viz.md` (HTML viewer + live watch), `scripts/render_trace.py`, `{ws}/eval/golden-tasks/` (per-workspace) |
 | Repetition detector (UserPromptSubmit hook) | `agents/pipeline/repetition-detection.md`, `scripts/detect_repetition.py`, `scripts/lib/repetition.py`, `.claude/commands/suggest-automation.md`, `.claude/commands/observations-clear.md` |
 | Evidence ingestion (raw → wiki) | `agents/pipeline/critical-analysis-prompts.md`, `agents/pipeline/qa-batching.md`, `agents/pipeline/evidence-lifecycle.md` |
 | Code analysis (codebase → wiki) | `agents/pipeline/code-snapshot-conventions.md`, `agents/pipeline/code-analysis-prompts.md`, `.claude/commands/code-analyze.md` |

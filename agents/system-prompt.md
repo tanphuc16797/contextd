@@ -26,7 +26,7 @@ Ví dụ: nếu file `D:/myrepo/.claude/wiki.json` có `"wiki_root": "."` thì `
 
 Lưu ý implementation: `project_root = wiki_json_path.parent.parent` (vì `wiki_json_path` luôn là `<root>/.claude/wiki.json` → `.parent` = `<root>/.claude/` → `.parent.parent` = `<root>`).
 
-Nếu cả `wiki.json#wiki_root` lẫn `~/.claude/wiki-global.json#wiki_root` đều thiếu → STOP, yêu cầu user chạy `bash {wiki-template-path}/scripts/install-to-claude.sh` hoặc `/wiki-setup`.
+Nếu cả `wiki.json#wiki_root` lẫn `~/.claude/wiki-global.json#wiki_root` đều thiếu → STOP, yêu cầu user chạy `bash {wiki-template-path}/scripts/install-to-claude.sh` hoặc `/contextd-setup`.
 
 ## Knowledge Priority Order
 

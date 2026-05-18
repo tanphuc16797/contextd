@@ -11,7 +11,7 @@
 
 ## Cross-pack retrieval (khi feature span product ↔ engineering)
 
-Khi `/business-view` hoặc `/wiki-explain` được gọi, retrieval CÓ THỂ kéo từ các path engineering nhưng **chỉ để summarize, không expose jargon**:
+Khi `/business-view` hoặc `/contextd-explain` được gọi, retrieval CÓ THỂ kéo từ các path engineering nhưng **chỉ để summarize, không expose jargon**:
 
 | Source | Use |
 |--------|-----|

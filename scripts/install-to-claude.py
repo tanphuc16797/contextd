@@ -169,7 +169,7 @@ def main() -> None:
     print()
     print("Test thử:")
     print("  cd /path/to/your/codebase")
-    print("  /wiki-setup           # tạo .claude/wiki.json cho codebase đó")
+    print("  /contextd-setup           # tạo .claude/wiki.json cho codebase đó")
     print("  /list-workspaces      # xem có workspace nào trong wiki-template")
     print('  /use-wiki "...task..."  # dùng pipeline với context từ workspace active')
 

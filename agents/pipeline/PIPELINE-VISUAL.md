@@ -150,19 +150,19 @@ flowchart TD
    - Terminal B: `ls -la .claude/runs/$(ls -t .claude/runs/ | head -1)/` — refresh để thấy file JSON drop dần
 
 2. **Sau khi run xong** — debug:
-   - `/wiki-trace --last` → Markdown timeline 1 run
-   - `/wiki-viz --last` → HTML viewer (Phase 2 — nếu đã setup) với side-by-side retrieved-vs-used, hallucination panel
+   - `/contextd-trace --last` → Markdown timeline 1 run
+   - `/contextd-viz --last` → HTML viewer (Phase 2 — nếu đã setup) với side-by-side retrieved-vs-used, hallucination panel
    - `cat .claude/runs/{run_id}/05-review.json | jq .hallucinated_refs` → xem hallucination thô
 
 3. **Aggregate nhiều runs**:
-   - `/wiki-eval` → Markdown report: hallucination rate, top gaps, block rate
-   - `/wiki-viz --all` → HTML browser (Phase 2) với filter
+   - `/contextd-eval` → Markdown report: hallucination rate, top gaps, block rate
+   - `/contextd-viz --all` → HTML browser (Phase 2) với filter
 
 ---
 
 ## Khi nào pipeline KHÔNG chạy
 
-- Task không có wiki (`.claude/wiki.json` thiếu) → main agent yêu cầu `/wiki-setup`
+- Task không có wiki (`.claude/wiki.json` thiếu) → main agent yêu cầu `/contextd-setup`
 - Task user explicitly bypass: "no pipeline", "quick fix", typo fix
 - Task `design`/`review` không sinh code → có thể skip Stage 5
 
@@ -177,6 +177,6 @@ Xem [multi-agent-pipeline.md#L171-L181](multi-agent-pipeline.md#L171-L181) cho e
 - [observability.md](observability.md) — trace schema + hook contract
 - [run-trace.schema.json](../../templates/run-trace.schema.json) — JSON schema cho mọi trace file
 - [.claude/commands/use-wiki.md](../../.claude/commands/use-wiki.md) — execution flow chính thức
-- [.claude/commands/wiki-trace.md](../../.claude/commands/wiki-trace.md) — Markdown 1-run viewer
-- [.claude/commands/wiki-eval.md](../../.claude/commands/wiki-eval.md) — Markdown aggregate
-- `.claude/commands/wiki-viz.md` — HTML viewer (Phase 2, nếu đã add)
+- [.claude/commands/contextd-trace.md](../../.claude/commands/contextd-trace.md) — Markdown 1-run viewer
+- [.claude/commands/contextd-eval.md](../../.claude/commands/contextd-eval.md) — Markdown aggregate
+- `.claude/commands/contextd-viz.md` — HTML viewer (Phase 2, nếu đã add)

@@ -62,7 +62,7 @@ Citation: `({path}:L..-L..)`
 
 | Name | Purpose (1 line) | Inputs (args) | Outputs (state/file changes) | Mode | Citation |
 |------|------------------|---------------|------------------------------|------|----------|
-| `/wiki-setup` | Initialize wiki structure for new project | none | creates `.claude/wiki.json` + workspace skeleton | interactive | `(.claude/commands/wiki-setup.md:L1-L20)` |
+| `/contextd-setup` | Initialize wiki structure for new project | none | creates `.claude/wiki.json` + workspace skeleton | interactive | `(.claude/commands/contextd-setup.md:L1-L20)` |
 
 ---
 

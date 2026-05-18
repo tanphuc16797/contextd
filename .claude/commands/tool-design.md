@@ -19,7 +19,7 @@ Coach **non-tech expert** thiết kế 1 tool từ ý tưởng mơ hồ → spec
 ## Bước 0 — Workspace & pack check
 
 1. Resolve workspace theo [system-prompt.md](../../agents/system-prompt.md). Set `{ws}`.
-2. STOP nếu workspace chưa init → guide `/new-workspace` hoặc `/wiki-setup`.
+2. STOP nếu workspace chưa init → guide `/new-workspace` hoặc `/contextd-setup`.
 3. Đọc `{ws}/workspace.md` section `## Packs`. Nếu KHÔNG có `pack-solo-builder`:
    - Hỏi (AskUserQuestion): "Workspace chưa bật `pack-solo-builder`. Bật giúp bạn không?" — Yes / No / Cancel.
    - Yes → append `- pack-solo-builder` vào section `## Packs`.

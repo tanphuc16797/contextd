@@ -70,13 +70,13 @@ Tạo `<cwd>/.claude/wiki.json` minimal:
 }
 ```
 
-In cảnh báo nổi bật và **chặn flow `/use-wiki`** cho tới khi user chạy `/wiki-setup`:
+In cảnh báo nổi bật và **chặn flow `/use-wiki`** cho tới khi user chạy `/contextd-setup`:
 
 ```
 ⚠ Đã tạo .claude/wiki.json minimal. Pipeline /use-wiki sẽ KHÔNG hoạt động đúng cho tới khi
   các field knowledge_map / domain được fill.
 
-  Bước tiếp theo BẮT BUỘC: /wiki-setup
+  Bước tiếp theo BẮT BUỘC: /contextd-setup
 ```
 
 Chỉ chuyển sang Bước 4 sau khi in cảnh báo này.

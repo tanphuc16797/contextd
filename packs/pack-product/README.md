@@ -46,7 +46,7 @@ Product / business knowledge pack — dành cho **người non-tech** (PM, produ
 
 - `/product-brief` — wizard tạo product brief mới (cho PM/business, không cần biết code)
 - `/business-view {feature|service}` — dịch service/contract kỹ thuật sang góc nhìn business
-- `/wiki-explain {topic}` — giải thích pattern/contract bằng plain language
+- `/contextd-explain {topic}` — giải thích pattern/contract bằng plain language
 
 ## Cấu trúc khuyến nghị trong workspace
 

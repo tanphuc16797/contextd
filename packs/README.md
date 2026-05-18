@@ -78,7 +78,7 @@ This generates all 8 files (pack.yaml, README, 5 agent docs, scripts/rules.py wi
 | [pack-ai-app](pack-ai-app/) | stable (v1.0) | LLM apps — prompt caching, structured output, eval harness, no PII leak |
 | [pack-agentic](pack-agentic/) | stable (v1.0) | Agent loops, tool use, MCP, multi-agent — bounded steps, idempotent tools, human-in-the-loop |
 | [pack-claude-plugin-dev](pack-claude-plugin-dev/) | stable (v1.0) | Build Claude Code plugins — plugin manifest, slash commands, subagents, skills, hooks, MCP servers per Anthropic standards |
-| [pack-product](pack-product/) | beta (v0.1) | Product/business knowledge — briefs, OKRs, roadmap, personas, journeys, metrics. For **non-technical contributors** (PM, business). Pairs with `/product-brief`, `/business-view`, `/wiki-explain` |
+| [pack-product](pack-product/) | beta (v0.1) | Product/business knowledge — briefs, OKRs, roadmap, personas, journeys, metrics. For **non-technical contributors** (PM, business). Pairs with `/product-brief`, `/business-view`, `/contextd-explain` |
 | [pack-qc](pack-qc/) | beta (v0.1) | Quality control knowledge — test case design, test execution, defect triage, regression & release quality gates. For **QC/Tester** users needing evidence-driven quality workflows |
 | [pack-ba](pack-ba/) | beta (v0.1) | Business analysis knowledge — requirements modeling, acceptance criteria, process mapping, stakeholder alignment. For **BA** users needing requirement clarity/testability |
 | [pack-pentest](pack-pentest/) | beta (v0.1) | Authorized pentest knowledge — scope boundaries, evidence-based findings, risk rating, remediation reporting. Reduces false positives and missing evidence |

@@ -7,7 +7,7 @@
 #
 # EXCLUDE:
 #   - .git/, .github/, .gitattributes
-#   - workspaces/* TRỪ workspaces/wiki/ và workspaces/README.md
+#   - workspaces/* TRỪ workspaces/default/ và workspaces/README.md
 #   - .claude/runs/, .claude/context/, .claude/settings.local.json
 #   - evidence/ trong mọi workspace
 #   - .observations/prompts.jsonl, *.lock
@@ -16,7 +16,7 @@
 #
 # INCLUDE:
 #   - agents/, packs/, templates/, scripts/, .claude/commands/, .claude/agents/, .claude/settings.json
-#   - workspaces/wiki/, workspaces/README.md
+#   - workspaces/default/, workspaces/README.md
 #   - README.md, QUICKSTART.md, CLAUDE.md, install.html, onboarding.html, .gitignore
 #
 # Usage:
@@ -119,10 +119,10 @@ if command -v rsync > /dev/null 2>&1; then
     echo "📤 Copying files (rsync)..."
     rsync -a "${EXCLUDES[@]}" \
         --exclude="workspaces/*/" \
-        --include="workspaces/wiki/***" \
+        --include="workspaces/default/***" \
         --include="workspaces/README.md" \
         "$REPO_ROOT/" "$STAGE_ROOT/"
-    # Note: workspaces/*/ exclude blocks all subdirs, but include workspaces/wiki/*** brings it back
+    # Note: workspaces/*/ exclude blocks all subdirs, but include workspaces/default/*** brings it back
 else
     echo "⚠️  rsync not found — falling back to cp + manual cleanup (slower)."
     cp -r "$REPO_ROOT/." "$STAGE_ROOT/"
@@ -136,11 +136,11 @@ else
     find "$STAGE_ROOT" -type d -name ".idea" -prune -exec rm -rf {} + 2>/dev/null || true
     find "$STAGE_ROOT" -type d -name ".vscode" -prune -exec rm -rf {} + 2>/dev/null || true
     find "$STAGE_ROOT" -type f \( -name "*.pyc" -o -name ".DS_Store" -o -name "Thumbs.db" -o -name "*.swp" \) -delete 2>/dev/null || true
-    # Workspaces: keep only wiki/ + README.md
+    # Workspaces: keep only default/ + README.md
     if [[ -d "$STAGE_ROOT/workspaces" ]]; then
         for d in "$STAGE_ROOT/workspaces"/*/; do
             name=$(basename "$d")
-            if [[ "$name" != "wiki" ]]; then
+            if [[ "$name" != "default" ]]; then
                 rm -rf "$d"
             fi
         done
