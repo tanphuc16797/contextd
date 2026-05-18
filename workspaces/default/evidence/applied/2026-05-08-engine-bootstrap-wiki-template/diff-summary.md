@@ -2,7 +2,7 @@
 
 ### Mode
 
-`update` (inline mode — main agent direct edit, curator delegation skipped because workspace `wiki` is engine bootstrap and wiki-curator subagent itself being documented).
+`update` (inline mode — main agent direct edit, curator delegation skipped because workspace `wiki` is engine bootstrap and contextd-curator subagent itself being documented).
 
 ### Summary
 
@@ -73,7 +73,7 @@ _(none — all 22 in-scope facts applied)_
 - ⚠ **No `templates/knowledge-map.md` exists** — `projects/engine/knowledge-map.md` constructed inline. **Action item**: consider adding template.
 - ⚠ **F-007 user override** — verified `multi-stage-subagent-pipeline` row trong `patterns-index.md` ở alphabetical position (NOT top), `workspace.md` NOT edited.
 - ⚠ **F-008 v1 confidence note** — pattern doc includes inline note "single instance — pattern shape may evolve khi variant thứ 3 được introduce".
-- ⚠ **Inline apply mode** — wiki-curator delegation skipped (engine workspace bootstrap; curator subagent itself being documented). Main agent verified each path inside `{ws}/` before write. Documented in `manifest.yaml#inline_apply: true`.
+- ⚠ **Inline apply mode** — contextd-curator delegation skipped (engine workspace bootstrap; curator subagent itself being documented). Main agent verified each path inside `{ws}/` before write. Documented in `manifest.yaml#inline_apply: true`.
 
 ### Deferred (P2/P3 — informational)
 

@@ -15,26 +15,26 @@ User Task
    ↓
 [Stage 0] Main agent              → resolve workspace + wiki_root
    ↓                                (apply pattern workspace-resolve-step0)
-[Stage 1] wiki-planner            → parse intent → intent JSON
+[Stage 1] contextd-planner            → parse intent → intent JSON
    ↓                                (sub-agent A-001)
-[Stage 2] wiki-context-selector   → retrieve + filter + slice
+[Stage 2] contextd-context-selector   → retrieve + filter + slice
    ↓                                → ghi {project_dir}/.claude/context/current-task.md
    ↓                                (sub-agent A-002)
-[Stage 2.5] wiki-plan-reviewer    → APPROVED / BLOCK gate
+[Stage 2.5] contextd-plan-reviewer    → APPROVED / BLOCK gate
    ↓                                (sub-agent A-003 — blocking gate)
 [Stage 3] Main agent (Builder)    → đọc current-task.md, code theo prompt-template.md
    ↓                                (no subagent — main agent)
-[Stage 4] wiki-reviewer (optional)→ check code vs context theo validator-rules.md
+[Stage 4] contextd-reviewer (optional)→ check code vs context theo validator-rules.md
    ↓                                (sub-agent A-005 — read-only review)
 Output
 ```
 
 1. **Stage 0**: main agent applies pattern `workspace-resolve-step0.md` — establish workspace context.
-2. **Stage 1**: invoke `wiki-planner` subagent với task description. Output: intent JSON theo `agents/pipeline/task-to-docs-map.md` schema.
-3. **Stage 2**: invoke `wiki-context-selector` với intent JSON + `agents/pipeline/task-to-docs-map.md` rules. Output: `{project_dir}/.claude/context/current-task.md` (sliced wiki context).
-4. **Stage 2.5**: invoke `wiki-plan-reviewer` với intent + current-task.md. Output: APPROVED / BLOCK + reasons.
+2. **Stage 1**: invoke `contextd-planner` subagent với task description. Output: intent JSON theo `agents/pipeline/task-to-docs-map.md` schema.
+3. **Stage 2**: invoke `contextd-context-selector` với intent JSON + `agents/pipeline/task-to-docs-map.md` rules. Output: `{project_dir}/.claude/context/current-task.md` (sliced wiki context).
+4. **Stage 2.5**: invoke `contextd-plan-reviewer` với intent + current-task.md. Output: APPROVED / BLOCK + reasons.
 5. **Stage 3**: main agent (Builder) — đọc current-task.md, code theo `agents/pipeline/prompt-template.md`. KHÔNG subagent (main agent có full file edit capability).
-6. **Stage 4** (optional): invoke `wiki-reviewer` — check code vs context theo `validator-rules.md`. Output: violation report (read-only, KHÔNG sửa code).
+6. **Stage 4** (optional): invoke `contextd-reviewer` — check code vs context theo `validator-rules.md`. Output: violation report (read-only, KHÔNG sửa code).
 
 On Stage 2.5 BLOCK: STOP, KHÔNG tiếp tục Stage 3. User phải fix gap (vd add evidence, update wiki) rồi retry.
 

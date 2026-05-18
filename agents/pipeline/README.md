@@ -18,7 +18,7 @@ Mô tả cách feed knowledge từ wiki cho LLM agent mà không bị hallucinat
 | [task-to-docs-map.md](task-to-docs-map.md) | Map intent type/component → file wiki cụ thể (input cho Stage 2) |
 | [context-filter.md](context-filter.md) | Rank + slice + budget rules (input cho Stage 2) |
 | [prompt-template.md](prompt-template.md) | Output template main agent dùng ở Stage 3 |
-| [validator-rules.md](validator-rules.md) | Rules cho Stage 4 (wiki-reviewer) — engine defaults + workspace override |
+| [validator-rules.md](validator-rules.md) | Rules cho Stage 4 (contextd-reviewer) — engine defaults + workspace override |
 
 `contextd-use.md` định nghĩa **how**; các file pipeline này định nghĩa **what** từng stage cần.
 
@@ -31,16 +31,16 @@ User Task
    ↓
 [Stage 0] Main agent              → resolve workspace + wiki_root
    ↓
-[Stage 1] wiki-planner            → parse intent (xem task-to-docs-map.md)
+[Stage 1] contextd-planner            → parse intent (xem task-to-docs-map.md)
    ↓
-[Stage 2] wiki-context-selector   → retrieve + filter + slice (xem task-to-docs-map.md, context-filter.md)
+[Stage 2] contextd-context-selector   → retrieve + filter + slice (xem task-to-docs-map.md, context-filter.md)
                                   → ghi {project_dir}/.claude/context/current-task.md
    ↓
-[Stage 2.5] wiki-plan-reviewer    → APPROVED / BLOCK
+[Stage 2.5] contextd-plan-reviewer    → APPROVED / BLOCK
    ↓
 [Stage 3] Main agent (Builder)    → đọc current-task.md, code theo prompt-template.md
    ↓
-[Stage 4] wiki-reviewer (optional)→ check code vs context theo validator-rules.md
+[Stage 4] contextd-reviewer (optional)→ check code vs context theo validator-rules.md
    ↓
 Output
 ```

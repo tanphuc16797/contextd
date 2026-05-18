@@ -1,4 +1,4 @@
-# Wiki Trace
+# /contextd-trace — Inspect Pipeline Trace
 
 View 1 run cụ thể của pipeline đã chạy (qua `/contextd-use`). Đọc các trace JSON dưới `{project_dir}/.claude/runs/{run_id}/` → render Markdown timeline để debug nhanh.
 

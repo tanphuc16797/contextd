@@ -1,4 +1,4 @@
-# Wiki Setup
+# /contextd-setup — Setup contextd for a Codebase
 
 Tạo hoặc cập nhật file `.claude/wiki.json` cho dự án (codebase) hiện tại.
 Chạy một lần khi bắt đầu tích hợp wiki vào một dự án mới — hoặc lại khi đổi workspace.

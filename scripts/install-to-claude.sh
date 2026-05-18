@@ -160,6 +160,21 @@ done
 shopt -u nullglob
 echo ""
 
+# --- 2b. migrate legacy wiki-* subagents (pre-contextd rename) ---
+
+LEGACY_AGENTS=(
+  wiki-planner wiki-context-selector wiki-plan-reviewer wiki-curator wiki-reviewer
+)
+for legacy in "${LEGACY_AGENTS[@]}"; do
+  legacy_path="$GLOBAL_AGENTS/${legacy}.md"
+  if [[ -f "$legacy_path" ]]; then
+    new_name="contextd-${legacy#wiki-}"
+    echo "  [REMOVED]   ${legacy}.md  (renamed → ${new_name}.md)"
+    run rm -f "$legacy_path"
+  fi
+done
+echo ""
+
 # --- 3. wiki-global.json ---
 
 echo "── Global config → $GLOBAL_CONFIG"

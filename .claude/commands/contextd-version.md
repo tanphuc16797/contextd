@@ -1,4 +1,4 @@
-# Wiki Version
+# /contextd-version — Show Installed Version
 
 Hiển thị phiên bản contextd đang cài trên máy user, đọc từ metadata local do installer ghi.
 

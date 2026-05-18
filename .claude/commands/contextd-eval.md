@@ -1,4 +1,4 @@
-# Wiki Eval
+# /contextd-eval — Evaluate Pipeline Effectiveness
 
 Aggregate trace JSON từ nhiều run dưới `{project_dir}/.claude/runs/` → 1 báo cáo Markdown đo **hiệu quả wiki**: coverage, hallucination rate, top knowledge gaps, plan-reviewer block rate, violation hotspots.
 

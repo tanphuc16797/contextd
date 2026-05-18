@@ -10,7 +10,7 @@
     "run_id": {
       "type": "string",
       "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9]{6}-[a-z0-9-]{1,40}$",
-      "description": "Sinh bởi wiki-planner: {YYYY-MM-DD}-{HHMMSS}-{slug}"
+      "description": "Sinh bởi contextd-planner: {YYYY-MM-DD}-{HHMMSS}-{slug}"
     },
     "stage": {
       "type": "string",
@@ -34,7 +34,7 @@
 
   "oneOf": [
     {
-      "$comment": "Stage 1 — wiki-planner",
+      "$comment": "Stage 1 — contextd-planner",
       "properties": {
         "stage": { "const": "01-planner" },
         "intent": {
@@ -82,7 +82,7 @@
     },
 
     {
-      "$comment": "Stage 2 — wiki-context-selector",
+      "$comment": "Stage 2 — contextd-context-selector",
       "properties": {
         "stage": { "const": "02-context" },
         "context_file": { "type": "string" },
@@ -118,7 +118,7 @@
     },
 
     {
-      "$comment": "Stage 3 — wiki-plan-reviewer",
+      "$comment": "Stage 3 — contextd-plan-reviewer",
       "properties": {
         "stage": { "const": "03-plan-review" },
         "verdict": { "enum": ["APPROVED", "BLOCK"] },
@@ -174,7 +174,7 @@
     },
 
     {
-      "$comment": "Stage 5 — wiki-reviewer",
+      "$comment": "Stage 5 — contextd-reviewer",
       "properties": {
         "stage": { "const": "05-review" },
         "verdict": { "enum": ["APPROVED", "VIOLATIONS", "INSUFFICIENT_CONTEXT"] },

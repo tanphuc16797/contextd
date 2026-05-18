@@ -8,11 +8,11 @@ Catalog 5 sub-agents định nghĩa trong `.claude/agents/` của engine. Mỗi 
 
 | Name | Role | Tools | Model | Invoked by | Source |
 |------|------|-------|-------|------------|--------|
-| `wiki-planner` | Phân tích task, xác định patterns/contracts/domain/components cần áp dụng | Read, Glob, Grep | sonnet | `/contextd-use` Stage 1 | `.claude/agents/wiki-planner.md` |
-| `wiki-context-selector` | Map intent JSON → file wiki cụ thể, slice section, ghi `current-task.md` | Read, Glob, Grep, Write | sonnet | `/contextd-use` Stage 2 | `.claude/agents/wiki-context-selector.md` |
-| `wiki-plan-reviewer` | Review intent + context retrieved, APPROVED/BLOCK gate | Read, Grep, Glob | sonnet | `/contextd-use` Stage 2.5 | `.claude/agents/wiki-plan-reviewer.md` |
-| `wiki-curator` | Edit wiki khi code/evidence change — pattern/contract/service/ADR | Read, Edit, Write, Glob, Grep | sonnet | `/contextd-update`, `/contextd-rebase`, `/evidence-apply` | `.claude/agents/wiki-curator.md` |
-| `wiki-reviewer` | Đối chiếu code output vs context theo `validator-rules.md` (read-only) | Read, Grep, Glob | sonnet | `/contextd-use` Stage 4 (optional) | `.claude/agents/wiki-reviewer.md` |
+| `contextd-planner` | Phân tích task, xác định patterns/contracts/domain/components cần áp dụng | Read, Glob, Grep | sonnet | `/contextd-use` Stage 1 | `.claude/agents/contextd-planner.md` |
+| `contextd-context-selector` | Map intent JSON → file wiki cụ thể, slice section, ghi `current-task.md` | Read, Glob, Grep, Write | sonnet | `/contextd-use` Stage 2 | `.claude/agents/contextd-context-selector.md` |
+| `contextd-plan-reviewer` | Review intent + context retrieved, APPROVED/BLOCK gate | Read, Grep, Glob | sonnet | `/contextd-use` Stage 2.5 | `.claude/agents/contextd-plan-reviewer.md` |
+| `contextd-curator` | Edit wiki khi code/evidence change — pattern/contract/service/ADR | Read, Edit, Write, Glob, Grep | sonnet | `/contextd-update`, `/contextd-rebase`, `/evidence-apply` | `.claude/agents/contextd-curator.md` |
+| `contextd-reviewer` | Đối chiếu code output vs context theo `validator-rules.md` (read-only) | Read, Grep, Glob | sonnet | `/contextd-use` Stage 4 (optional) | `.claude/agents/contextd-reviewer.md` |
 
 ## Tools allowlist principle (observed, not yet contract — see G-009)
 
@@ -35,7 +35,7 @@ Catalog 5 sub-agents định nghĩa trong `.claude/agents/` của engine. Mỗi 
   Stage 4: reviewer (optional, read-only)
 
 /contextd-update, /contextd-rebase, /evidence-apply:
-  delegate to: wiki-curator
+  delegate to: contextd-curator
   fallback: --inline (main agent direct edit, mất 1 safety layer)
 ```
 
@@ -76,8 +76,8 @@ required_frontmatter_fields: [name, description, tools, model]
 | Sub-agent file missing required frontmatter | Linter reject; runtime invocation fail |
 | Tool used not in `tools` allowlist | Runtime error |
 | Sub-agent unavailable trong runtime | Calling command STOP với `CURATOR UNAVAILABLE` (or relevant) |
-| `wiki-context-selector` write outside `.claude/context/` | Tools scope violation |
-| `wiki-curator` write outside `{ws}/` | Workspace isolation violation |
+| `contextd-context-selector` write outside `.claude/context/` | Tools scope violation |
+| `contextd-curator` write outside `{ws}/` | Workspace isolation violation |
 
 ## Notes
 
@@ -91,7 +91,7 @@ required_frontmatter_fields: [name, description, tools, model]
 - Contract: [../../platform/contracts/sub-agent-frontmatter-schema.md](../../platform/contracts/sub-agent-frontmatter-schema.md)
 - Pattern: [../../platform/patterns/multi-stage-subagent-pipeline.md](../../platform/patterns/multi-stage-subagent-pipeline.md) (5-stage flow uses 4 of 5 sub-agents)
 - Service: [wiki-usage.md](wiki-usage.md) (`/contextd-use`, `/contextd-update`, `/contextd-rebase` invoke sub-agents)
-- Service: [evidence-pipeline.md](evidence-pipeline.md) (`/evidence-apply` invokes wiki-curator)
+- Service: [evidence-pipeline.md](evidence-pipeline.md) (`/evidence-apply` invokes contextd-curator)
 - Engine source: `.claude/agents/wiki-{planner,context-selector,plan-reviewer,curator,reviewer}.md`
 - Engine spec: `agents/pipeline/multi-agent-pipeline.md` (full I/O schema)
 - Source: F-017g, evidence `2026-05-08-engine-bootstrap-wiki-template`

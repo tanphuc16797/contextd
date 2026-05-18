@@ -245,17 +245,17 @@ User Task
    ↓
 [Stage 0] Main agent              → resolve workspace + wiki_root  (P-001)
    ↓
-[Stage 1] wiki-planner            → parse intent → intent JSON     (A-001)
+[Stage 1] contextd-planner            → parse intent → intent JSON     (A-001)
    ↓
-[Stage 2] wiki-context-selector   → retrieve + filter + slice      (A-002)
+[Stage 2] contextd-context-selector   → retrieve + filter + slice      (A-002)
                                   → ghi {project_dir}/.claude/context/current-task.md
    ↓
-[Stage 2.5] wiki-plan-reviewer    → APPROVED / BLOCK gate          (A-003)
+[Stage 2.5] contextd-plan-reviewer    → APPROVED / BLOCK gate          (A-003)
    ↓
 [Stage 3] Main agent (Builder)    → đọc current-task.md, code      (no subagent)
                                   → theo prompt-template.md
    ↓
-[Stage 4] wiki-reviewer (optional)→ check code vs context          (A-005)
+[Stage 4] contextd-reviewer (optional)→ check code vs context          (A-005)
                                   → theo validator-rules.md
    ↓
 Output

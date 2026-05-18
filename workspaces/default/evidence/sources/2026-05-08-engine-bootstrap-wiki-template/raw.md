@@ -18,7 +18,7 @@
   - `agents/` — System prompt, coding rules, constraints, pipeline (intent → retrieval → filter → validate). Engine defaults áp dụng mọi workspace. `(README.md:L29)`
   - `templates/` — Skeleton cho workspace mới và doc mới. `(README.md:L30)`
   - `.claude/commands/` — Slash commands cho workflow wiki-aware. `(.claude/commands/README.md:L1-L8)`
-  - `.claude/agents/` — Sub-agents (5 file: wiki-planner, wiki-context-selector, wiki-plan-reviewer, wiki-curator, wiki-reviewer).
+  - `.claude/agents/` — Sub-agents (5 file: contextd-planner, contextd-context-selector, contextd-plan-reviewer, contextd-curator, contextd-reviewer).
   - `workspaces/` — N workspaces, mỗi cái có platform/domains/projects/decisions/runbooks. `(README.md:L18-L19)`
   - `scripts/` — Python scripts (lint-wiki, render_trace, validate, install-to-claude, build-report-with-dialog). _(out of default scope)_
 - **Claude Code version target**: _(not stated)_
@@ -80,8 +80,8 @@ _(Configs skipped — rerun with --allow-configs to include)_
 | Name | Purpose | Inputs | Outputs | Mode | Citation |
 |------|---------|--------|---------|------|----------|
 | `/contextd-use` | Chạy 5-stage pipeline (planner → context-selector → plan-reviewer → main agent code → reviewer) trước khi viết bất kỳ code wiki-aware nào | task description | invokes 5 sub-agents; writes `.claude/context/current-task.md`; emits trace `.claude/runs/{run_id}/` | interactive | `(.claude/commands/contextd-use.md:L1)`, `(.claude/commands/README.md:L28)` |
-| `/contextd-update` | Sync wiki với code đã thay đổi (git diff → curator áp dụng) | optional `--scope` | edits files trong `{ws}/...` qua wiki-curator subagent | interactive | `(.claude/commands/contextd-update.md:L1)`, `(.claude/commands/README.md:L29)` |
-| `/contextd-rebase` | Quét wiki vs codebase thực tế để vá mọi chỗ wiki nói khác code chạy | none | edits files trong `{ws}/...` qua wiki-curator | interactive | `(.claude/commands/contextd-rebase.md:L1)`, `(.claude/commands/README.md:L30)` |
+| `/contextd-update` | Sync wiki với code đã thay đổi (git diff → curator áp dụng) | optional `--scope` | edits files trong `{ws}/...` qua contextd-curator subagent | interactive | `(.claude/commands/contextd-update.md:L1)`, `(.claude/commands/README.md:L29)` |
+| `/contextd-rebase` | Quét wiki vs codebase thực tế để vá mọi chỗ wiki nói khác code chạy | none | edits files trong `{ws}/...` qua contextd-curator | interactive | `(.claude/commands/contextd-rebase.md:L1)`, `(.claude/commands/README.md:L30)` |
 
 ### 4.3 Codebase analysis `(.claude/commands/README.md:L34-L40)`
 
@@ -127,11 +127,11 @@ _(Configs skipped — rerun with --allow-configs to include)_
 
 | Name | Role (1 line) | Tools allowed | When to use | Citation |
 |------|---------------|---------------|-------------|----------|
-| `wiki-planner` | Phân tích task của user và xác định patterns, contracts, domain, components cần áp dụng theo wiki | Read, Glob, Grep | DÙNG KHI bắt đầu một task mới (implement_feature, fix_bug, design, incident, review) trước bất kỳ retrieval hoặc code nào. KHÔNG DÙNG để sinh code hay đọc nhiều file. | `(.claude/agents/wiki-planner.md:L2-L5)` |
-| `wiki-context-selector` | Map intent JSON từ wiki-planner sang danh sách file wiki cụ thể, slice section liên quan, và ghi `.claude/context/current-task.md` | Read, Glob, Grep, Write | DÙNG NGAY SAU wiki-planner. KHÔNG DÙNG để phân tích task hay sinh code. | `(.claude/agents/wiki-context-selector.md:L2-L5)` |
-| `wiki-plan-reviewer` | Review intent JSON + context đã retrieve trước khi main agent code. Phát hiện sớm conflict/gap/pattern không tồn tại để chặn code sai | Read, Grep, Glob | DÙNG NGAY SAU wiki-context-selector và TRƯỚC khi main agent bắt đầu Implementation. KHÔNG DÙNG để review code đã sinh (đó là việc của wiki-reviewer). | `(.claude/agents/wiki-plan-reviewer.md:L2-L5)` |
-| `wiki-curator` | Cập nhật wiki sau khi code thay đổi — pattern mới, contract mới, service mới, ADR mới | Read, Edit, Write, Glob, Grep | DÙNG KHI user gọi /contextd-update hoặc khi cần đồng bộ wiki sau merge. KHÔNG DÙNG để chỉnh code project. | `(.claude/agents/wiki-curator.md:L2-L5)` |
-| `wiki-reviewer` | Đối chiếu output của builder/main agent với contracts, patterns, domain rules trong `.claude/context/current-task.md` và validator-rules.md | Read, Grep, Glob | DÙNG SAU KHI code đã được sinh, trước khi merge/commit. KHÔNG DÙNG để sửa code — chỉ báo cáo violation. | `(.claude/agents/wiki-reviewer.md:L2-L5)` |
+| `contextd-planner` | Phân tích task của user và xác định patterns, contracts, domain, components cần áp dụng theo wiki | Read, Glob, Grep | DÙNG KHI bắt đầu một task mới (implement_feature, fix_bug, design, incident, review) trước bất kỳ retrieval hoặc code nào. KHÔNG DÙNG để sinh code hay đọc nhiều file. | `(.claude/agents/contextd-planner.md:L2-L5)` |
+| `contextd-context-selector` | Map intent JSON từ contextd-planner sang danh sách file wiki cụ thể, slice section liên quan, và ghi `.claude/context/current-task.md` | Read, Glob, Grep, Write | DÙNG NGAY SAU contextd-planner. KHÔNG DÙNG để phân tích task hay sinh code. | `(.claude/agents/contextd-context-selector.md:L2-L5)` |
+| `contextd-plan-reviewer` | Review intent JSON + context đã retrieve trước khi main agent code. Phát hiện sớm conflict/gap/pattern không tồn tại để chặn code sai | Read, Grep, Glob | DÙNG NGAY SAU contextd-context-selector và TRƯỚC khi main agent bắt đầu Implementation. KHÔNG DÙNG để review code đã sinh (đó là việc của contextd-reviewer). | `(.claude/agents/contextd-plan-reviewer.md:L2-L5)` |
+| `contextd-curator` | Cập nhật wiki sau khi code thay đổi — pattern mới, contract mới, service mới, ADR mới | Read, Edit, Write, Glob, Grep | DÙNG KHI user gọi /contextd-update hoặc khi cần đồng bộ wiki sau merge. KHÔNG DÙNG để chỉnh code project. | `(.claude/agents/contextd-curator.md:L2-L5)` |
+| `contextd-reviewer` | Đối chiếu output của builder/main agent với contracts, patterns, domain rules trong `.claude/context/current-task.md` và validator-rules.md | Read, Grep, Glob | DÙNG SAU KHI code đã được sinh, trước khi merge/commit. KHÔNG DÙNG để sửa code — chỉ báo cáo violation. | `(.claude/agents/contextd-reviewer.md:L2-L5)` |
 
 > Tất cả 5 sub-agents declared `model: sonnet`.
 
@@ -156,11 +156,11 @@ Các file pipeline KHÔNG phải sub-agent invokable; chúng là **specs** cho s
 | Order | Stage | Role | Defined in | Citation |
 |-------|-------|------|------------|----------|
 | 0 | Main agent (Stage 0) | Resolve workspace + wiki_root | `agents/system-prompt.md` | `(agents/pipeline/README.md:L32)` |
-| 1 | wiki-planner | Parse intent → intent JSON | `.claude/agents/wiki-planner.md` + `agents/pipeline/intent-parser.md` (schema) | `(agents/pipeline/README.md:L34)`, `(agents/pipeline/intent-parser.md:L1)` |
-| 2 | wiki-context-selector | Retrieve + filter + slice; ghi `current-task.md` | `.claude/agents/wiki-context-selector.md` + `context-retrieval-map.md` + `context-filter.md` | `(agents/pipeline/README.md:L36-L37)` |
-| 2.5 | wiki-plan-reviewer | APPROVED / BLOCK gate | `.claude/agents/wiki-plan-reviewer.md` | `(agents/pipeline/README.md:L39)` |
+| 1 | contextd-planner | Parse intent → intent JSON | `.claude/agents/contextd-planner.md` + `agents/pipeline/intent-parser.md` (schema) | `(agents/pipeline/README.md:L34)`, `(agents/pipeline/intent-parser.md:L1)` |
+| 2 | contextd-context-selector | Retrieve + filter + slice; ghi `current-task.md` | `.claude/agents/contextd-context-selector.md` + `context-retrieval-map.md` + `context-filter.md` | `(agents/pipeline/README.md:L36-L37)` |
+| 2.5 | contextd-plan-reviewer | APPROVED / BLOCK gate | `.claude/agents/contextd-plan-reviewer.md` | `(agents/pipeline/README.md:L39)` |
 | 3 | Main agent (Builder) | Đọc current-task.md, code theo `prompt-template.md` | `agents/pipeline/prompt-template.md` | `(agents/pipeline/README.md:L41)`, `(agents/pipeline/prompt-template.md:L1)` |
-| 4 | wiki-reviewer (optional) | Check code vs context theo `validator-rules.md` | `.claude/agents/wiki-reviewer.md` + `validator-rules.md` | `(agents/pipeline/README.md:L43)`, `(agents/pipeline/validator-rules.md:L1)` |
+| 4 | contextd-reviewer (optional) | Check code vs context theo `validator-rules.md` | `.claude/agents/contextd-reviewer.md` + `validator-rules.md` | `(agents/pipeline/README.md:L43)`, `(agents/pipeline/validator-rules.md:L1)` |
 
 ### 6.2 Pipeline support docs `(agents/pipeline/README.md:L13-L23)`
 
@@ -171,7 +171,7 @@ Các file pipeline KHÔNG phải sub-agent invokable; chúng là **specs** cho s
 | `context-retrieval-map.md` | Map intent type/component → file wiki cụ thể (input cho Stage 2) | `(agents/pipeline/context-retrieval-map.md:L1)`, `(agents/pipeline/README.md:L18)` |
 | `context-filter.md` | Rank + slice + budget rules (input cho Stage 2) | `(agents/pipeline/context-filter.md:L1)`, `(agents/pipeline/README.md:L19)` |
 | `prompt-template.md` | Output template main agent dùng ở Stage 3 | `(agents/pipeline/prompt-template.md:L1)`, `(agents/pipeline/README.md:L20)` |
-| `validator-rules.md` | Rules cho Stage 4 (wiki-reviewer) — engine defaults + workspace override | `(agents/pipeline/validator-rules.md:L1)`, `(agents/pipeline/README.md:L21)` |
+| `validator-rules.md` | Rules cho Stage 4 (contextd-reviewer) — engine defaults + workspace override | `(agents/pipeline/validator-rules.md:L1)`, `(agents/pipeline/README.md:L21)` |
 | `PIPELINE-VISUAL.md` | Mermaid + cheat sheet cho pipeline tổng thể | `(agents/pipeline/PIPELINE-VISUAL.md:L1)` |
 
 ### 6.3 Evidence sub-pipeline (4 stages: ingest → analyze → qa → apply)

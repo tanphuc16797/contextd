@@ -33,11 +33,11 @@ Sample size (5) chưa đủ để formalize tools allowlist principle thành con
 ## Observed evidence
 
 5/5 sub-agents conform required fields:
-- ✅ `wiki-planner`: name, description (DÙNG KHI/KHÔNG DÙNG), tools=`Read, Glob, Grep`, model=sonnet `(.claude/agents/wiki-planner.md:L2-L5)`
-- ✅ `wiki-context-selector`: tools=`Read, Glob, Grep, Write` (write privilege cho current-task.md) `(.claude/agents/wiki-context-selector.md:L2-L5)`
-- ✅ `wiki-plan-reviewer`: `(.claude/agents/wiki-plan-reviewer.md:L2-L5)`
-- ✅ `wiki-curator`: tools=`Read, Edit, Write, Glob, Grep` (write role) `(.claude/agents/wiki-curator.md:L2-L5)`
-- ✅ `wiki-reviewer`: `(.claude/agents/wiki-reviewer.md:L2-L5)`
+- ✅ `contextd-planner`: name, description (DÙNG KHI/KHÔNG DÙNG), tools=`Read, Glob, Grep`, model=sonnet `(.claude/agents/contextd-planner.md:L2-L5)`
+- ✅ `contextd-context-selector`: tools=`Read, Glob, Grep, Write` (write privilege cho current-task.md) `(.claude/agents/contextd-context-selector.md:L2-L5)`
+- ✅ `contextd-plan-reviewer`: `(.claude/agents/contextd-plan-reviewer.md:L2-L5)`
+- ✅ `contextd-curator`: tools=`Read, Edit, Write, Glob, Grep` (write role) `(.claude/agents/contextd-curator.md:L2-L5)`
+- ✅ `contextd-reviewer`: `(.claude/agents/contextd-reviewer.md:L2-L5)`
 
 ## Counter-examples
 

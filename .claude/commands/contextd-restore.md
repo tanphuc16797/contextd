@@ -1,4 +1,4 @@
-# Wiki Restore
+# /contextd-restore — Restore Workspace From Backup
 
 Khôi phục dữ liệu Wiki trong `~/.claude/` từ backup gần nhất hoặc backup do user chỉ định.
 

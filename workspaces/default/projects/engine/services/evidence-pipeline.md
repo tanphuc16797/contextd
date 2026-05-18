@@ -106,7 +106,7 @@ apply_checkpoint_enabled: true               # resume support
 - Contract: [../../platform/contracts/raw-md-section-structure.md](../../platform/contracts/raw-md-section-structure.md)
 - Contract: [../../platform/contracts/citation-format.md](../../platform/contracts/citation-format.md)
 - Service: [codebase-analysis.md](codebase-analysis.md) (`/code-analyze` dưới capô gọi `/evidence-ingest`)
-- Service: [agents.md](agents.md) (`wiki-curator` invoked by `/evidence-apply`)
+- Service: [agents.md](agents.md) (`contextd-curator` invoked by `/evidence-apply`)
 - Engine source: `.claude/commands/evidence-{ingest,analyze,qa,apply}.md`, `obsidian-ingest.md`
 - Engine spec: `agents/pipeline/{evidence-lifecycle,raw-storage-conventions,critical-analysis-prompts,code-analysis-prompts,qa-batching}.md`
 - Templates: `evidence-source.yaml`, `evidence-index.md`, `evidence-qa-{recommendations,answers,todo}.{md,json}`, `evidence-pending-external.md`, `evidence-apply-checkpoint.json`, `evidence-manifest.yaml`

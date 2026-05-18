@@ -1,6 +1,6 @@
 {
   "stage": "observations",
-  "updated_at": "2026-05-18T09:22:56+00:00",
+  "updated_at": "2026-05-18T10:07:29+00:00",
   "last_hint_emitted_at": "",
   "clusters": [
     {
@@ -547,6 +547,70 @@
       "last_hinted_at": "",
       "members": [
         "2d14bffedfea0cf5"
+      ]
+    },
+    {
+      "id": "ideopenedfile-user-opened-367dd0",
+      "representative_tokens": [
+        "ide_opened_file",
+        "user",
+        "opened",
+        "file",
+        "tools",
+        "workspace",
+        "wiki",
+        "claude",
+        "md",
+        "ide",
+        "related",
+        "current",
+        "task",
+        "rã",
+        "soã",
+        "lá",
+        "tã",
+        "nh",
+        "nhá",
+        "quã"
+      ],
+      "count": 1,
+      "first_seen": "2026-05-18T09:48:49+00:00",
+      "last_seen": "2026-05-18T09:48:49+00:00",
+      "last_hinted_at": "",
+      "members": [
+        "74d7a2b5ef580a75"
+      ]
+    },
+    {
+      "id": "ideopenedfile-user-opened-4cf95c",
+      "representative_tokens": [
+        "ide_opened_file",
+        "user",
+        "opened",
+        "file",
+        "tools",
+        "workspace",
+        "wiki",
+        "claude",
+        "md",
+        "ide",
+        "related",
+        "current",
+        "task",
+        "rã",
+        "soã",
+        "cã",
+        "packs",
+        "bá",
+        "sung",
+        "viá"
+      ],
+      "count": 1,
+      "first_seen": "2026-05-18T10:07:29+00:00",
+      "last_seen": "2026-05-18T10:07:29+00:00",
+      "last_hinted_at": "",
+      "members": [
+        "0c160373771a466b"
       ]
     }
   ]

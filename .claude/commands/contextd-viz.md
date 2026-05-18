@@ -1,4 +1,4 @@
-# Wiki Viz
+# /contextd-viz — Visualize Pipeline Trace
 
 HTML viewer + run browser cho wiki pipeline trace. Render `.claude/runs/{run_id}/*.json` thành HTML để debug trực quan: timeline, retrieved-vs-used diff, hallucination panel, divergence heuristic. Có watch mode cho live trace khi pipeline đang chạy.
 

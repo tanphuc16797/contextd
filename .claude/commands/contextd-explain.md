@@ -1,4 +1,4 @@
-# Wiki Explain
+# /contextd-explain — Explain Wiki Concepts
 
 Giải thích một khái niệm wiki (pattern, contract, ADR, runbook, term) bằng **plain language**. Mục tiêu: non-tech reader hiểu được trong 2 phút.
 

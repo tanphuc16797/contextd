@@ -1,19 +1,19 @@
-# Sử dụng Wiki
+# /contextd-use — Sử dụng wiki cho task mới
 
 Chạy pipeline này trước khi viết bất kỳ dòng code nào. Pipeline delegate hai bước nặng (intent parsing + context retrieval) cho subagent chuyên biệt để giữ context window của main agent sạch và tránh agent chính tự "trượt" vai trò.
 
 ```
 [main]   Bước 0 — resolve workspace + wiki_root
    ↓
-[wiki-planner]            Bước 1 — phân tích task → intent JSON
+[contextd-planner]            Bước 1 — phân tích task → intent JSON
    ↓
-[wiki-context-selector]   Bước 2 — retrieve + slice + ghi current-task.md
+[contextd-context-selector]   Bước 2 — retrieve + slice + ghi current-task.md
    ↓
-[wiki-plan-reviewer]      Bước 2.5 — review plan, APPROVED hoặc BLOCK
+[contextd-plan-reviewer]      Bước 2.5 — review plan, APPROVED hoặc BLOCK
    ↓
 [main]   Bước 3 — verify gap, code theo prompt template
    ↓
-[wiki-reviewer]           Bước 4 — (manual/optional) review code đã sinh
+[contextd-reviewer]           Bước 4 — (manual/optional) review code đã sinh
 ```
 
 ---
@@ -29,9 +29,9 @@ KHÔNG retrieve hay đọc file pattern/contract ở bước này — đó là v
 
 ---
 
-## Bước 1 — Invoke `wiki-planner` (subagent)
+## Bước 1 — Invoke `contextd-planner` (subagent)
 
-Gọi Agent tool với `subagent_type=wiki-planner`. Prompt phải chứa:
+Gọi Agent tool với `subagent_type=contextd-planner`. Prompt phải chứa:
 
 - `user_task`: task gốc của user (nguyên văn)
 - `effective_wiki_root`: đường dẫn tuyệt đối
@@ -39,7 +39,7 @@ Gọi Agent tool với `subagent_type=wiki-planner`. Prompt phải chứa:
 - `project_dir`: project root (để planner ghi trace vào `.claude/runs/`)
 - `config_hint`: nội dung `.claude/wiki.json` (nếu có), hoặc "none"
 
-**Output mong đợi**: JSON intent đúng schema trong [agents/wiki-planner.md](.claude/agents/wiki-planner.md), kèm 1 dòng `Trace: ...`.
+**Output mong đợi**: JSON intent đúng schema trong [agents/contextd-planner.md](.claude/agents/contextd-planner.md), kèm 1 dòng `Trace: ...`.
 
 Nếu planner trả `MISSING INPUT` hoặc JSON có `missing_knowledge` không rỗng → review với user trước khi tiếp tục, KHÔNG tự đoán.
 
@@ -47,9 +47,9 @@ Lưu `intent_json` (bao gồm `run_id`) vào context của main agent. Mọi sta
 
 ---
 
-## Bước 2 — Invoke `wiki-context-selector` (subagent)
+## Bước 2 — Invoke `contextd-context-selector` (subagent)
 
-Gọi Agent tool với `subagent_type=wiki-context-selector`. Prompt phải chứa:
+Gọi Agent tool với `subagent_type=contextd-context-selector`. Prompt phải chứa:
 
 - `intent_json`: output JSON từ Bước 1
 - `effective_wiki_root`
@@ -68,9 +68,9 @@ Nếu confirm không xuất hiện hoặc file `current-task.md` không được
 
 ---
 
-## Bước 2.5 — Invoke `wiki-plan-reviewer` (subagent)
+## Bước 2.5 — Invoke `contextd-plan-reviewer` (subagent)
 
-Gọi Agent tool với `subagent_type=wiki-plan-reviewer`. Prompt phải chứa:
+Gọi Agent tool với `subagent_type=contextd-plan-reviewer`. Prompt phải chứa:
 
 - `intent_json`: output từ Bước 1 (chứa `run_id`, `patterns_verified`)
 - `context_file`: `{project_dir}/.claude/context/current-task.md`
@@ -127,7 +127,7 @@ Mọi quyết định kỹ thuật phải reference được vào 1 entry trong 
 
 ## Bước 5 — Review (subagent, tuỳ task)
 
-Sau khi code đã sinh và file đã sửa, **trước hết** ghi `04-builder.json` (xem [prompt-template.md](../../agents/pipeline/prompt-template.md) section "TRACE EMIT"). Sau đó gọi Agent tool với `subagent_type=wiki-reviewer`:
+Sau khi code đã sinh và file đã sửa, **trước hết** ghi `04-builder.json` (xem [prompt-template.md](../../agents/pipeline/prompt-template.md) section "TRACE EMIT"). Sau đó gọi Agent tool với `subagent_type=contextd-reviewer`:
 
 - `solution_files`: danh sách file vừa Edit/Write
 - `context_file`: `{project_dir}/.claude/context/current-task.md`

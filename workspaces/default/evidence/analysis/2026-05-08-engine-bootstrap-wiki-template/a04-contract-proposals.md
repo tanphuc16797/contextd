@@ -326,11 +326,11 @@ model: {haiku|sonnet|opus}          # default sonnet
 **`description` convention**: chứa 2 phần — "DÙNG KHI X" (positive trigger) + "KHÔNG DÙNG để Y" (negative trigger / scope constraint).
 
 ### Observed evidence
-- ✅ `wiki-planner` `(.claude/agents/wiki-planner.md:L2-L5)` — name, description (DÙNG KHI/KHÔNG DÙNG), tools=`Read, Glob, Grep`, model=sonnet
-- ✅ `wiki-context-selector` `(.claude/agents/wiki-context-selector.md:L2-L5)` — tools=`Read, Glob, Grep, Write` (write privilege cho current-task.md)
-- ✅ `wiki-plan-reviewer` `(.claude/agents/wiki-plan-reviewer.md:L2-L5)` — tools=`Read, Grep, Glob`
-- ✅ `wiki-curator` `(.claude/agents/wiki-curator.md:L2-L5)` — tools=`Read, Edit, Write, Glob, Grep` (write role)
-- ✅ `wiki-reviewer` `(.claude/agents/wiki-reviewer.md:L2-L5)` — tools=`Read, Grep, Glob`
+- ✅ `contextd-planner` `(.claude/agents/contextd-planner.md:L2-L5)` — name, description (DÙNG KHI/KHÔNG DÙNG), tools=`Read, Glob, Grep`, model=sonnet
+- ✅ `contextd-context-selector` `(.claude/agents/contextd-context-selector.md:L2-L5)` — tools=`Read, Glob, Grep, Write` (write privilege cho current-task.md)
+- ✅ `contextd-plan-reviewer` `(.claude/agents/contextd-plan-reviewer.md:L2-L5)` — tools=`Read, Grep, Glob`
+- ✅ `contextd-curator` `(.claude/agents/contextd-curator.md:L2-L5)` — tools=`Read, Edit, Write, Glob, Grep` (write role)
+- ✅ `contextd-reviewer` `(.claude/agents/contextd-reviewer.md:L2-L5)` — tools=`Read, Grep, Glob`
 
 ### Counter-examples
 _(none — 5/5 conform)_

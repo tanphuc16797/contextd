@@ -18,7 +18,7 @@ Feed `verified-facts.md` (+ optional `10-final-report.md`) vào logic của `/co
 | `--dry-run`          | optional | In list file sẽ sửa và diff dự kiến, KHÔNG ghi                     |
 | `--resume`           | optional | Pick up từ checkpoint `applied/{id}/checkpoint.json` (sau crash/Ctrl+C/expert pause) |
 | `--status`           | optional | Chỉ in checkpoint hiện tại (step nào đã done, đang ở đâu, file nào đã sửa). Read-only. |
-| `--inline`           | optional | Skip wiki-curator delegation, main agent edit trực tiếp. Chỉ dùng khi curator unavailable (test/CI). Mất 1 safety layer — xem Bước 5 "Curator delegation vs inline mode". |
+| `--inline`           | optional | Skip contextd-curator delegation, main agent edit trực tiếp. Chỉ dùng khi curator unavailable (test/CI). Mất 1 safety layer — xem Bước 5 "Curator delegation vs inline mode". |
 
 ---
 
@@ -137,7 +137,7 @@ Nếu thiếu → checkpoint mark sub-step `blocked`, `interrupted_reason = "cre
 
 ### Curator delegation vs inline mode
 
-Default flow: edit wiki delegate qua `wiki-curator` subagent (theo contextd-update.md Bước 3).
+Default flow: edit wiki delegate qua `contextd-curator` subagent (theo contextd-update.md Bước 3).
 
 **Fallback `--inline` flag** — khi curator subagent unavailable (vd test mode, subagent file bị xóa, môi trường không hỗ trợ Agent tool):
 

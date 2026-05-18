@@ -1,4 +1,4 @@
-# Wiki Backup
+# /contextd-backup — Backup Workspace
 
 Tạo bản sao lưu local cho dữ liệu Wiki trong `~/.claude/` trước khi upgrade.
 

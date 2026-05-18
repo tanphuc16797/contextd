@@ -1,6 +1,6 @@
-# Cập Nhật Wiki
+# /contextd-update — Cập nhật wiki sau khi code thay đổi
 
-Chạy skill này sau khi thay đổi code để giữ wiki **của workspace active** đồng bộ với thực tế. Phần ghi/sửa file wiki được delegate cho subagent `wiki-curator` — main agent chỉ làm khâu khám phá thay đổi và xác nhận.
+Chạy skill này sau khi thay đổi code để giữ wiki **của workspace active** đồng bộ với thực tế. Phần ghi/sửa file wiki được delegate cho subagent `contextd-curator` — main agent chỉ làm khâu khám phá thay đổi và xác nhận.
 
 ```
 [main]   Bước 0 — resolve workspace
@@ -9,7 +9,7 @@ Chạy skill này sau khi thay đổi code để giữ wiki **của workspace ac
    ↓
 [main]   Bước 2 — quyết định engine-level vs workspace-level
    ↓
-[wiki-curator]   Bước 3 — apply changes vào wiki
+[contextd-curator]   Bước 3 — apply changes vào wiki
    ↓
 [main]   Bước 4 — verify output, báo user
 ```
@@ -100,9 +100,9 @@ Quy tắc nhanh:
 
 ---
 
-## Bước 3 — Invoke `wiki-curator` (subagent)
+## Bước 3 — Invoke `contextd-curator` (subagent)
 
-Gọi Agent tool với `subagent_type=wiki-curator`. Prompt phải chứa:
+Gọi Agent tool với `subagent_type=contextd-curator`. Prompt phải chứa:
 
 - `change_summary`: nội dung Markdown từ Bước 1+2 (bao gồm `## Scope`)
 - `effective_wiki_root`
@@ -143,7 +143,7 @@ Nếu curator trả `OUT-OF-SCOPE EDIT BLOCKED` → STOP, báo user (đây là d
 
 ## Quy tắc cứng
 
-- KHÔNG ghi/sửa file wiki trực tiếp trong main agent — luôn delegate qua `wiki-curator`. Lý do: curator có template lookup + index update bắt buộc + self-check path trước mỗi Edit/Write. Lưu ý: enforcement path sandbox là **soft (prompt-based)** ở phía curator + **post-hoc verification** ở Bước 4 main agent — không có tool sandbox theo path. Đây là defense-in-depth, không phải single layer.
+- KHÔNG ghi/sửa file wiki trực tiếp trong main agent — luôn delegate qua `contextd-curator`. Lý do: curator có template lookup + index update bắt buộc + self-check path trước mỗi Edit/Write. Lưu ý: enforcement path sandbox là **soft (prompt-based)** ở phía curator + **post-hoc verification** ở Bước 4 main agent — không có tool sandbox theo path. Đây là defense-in-depth, không phải single layer.
 - KHÔNG copy pattern từ workspace khác. Mỗi workspace là sandbox độc lập — nếu cần pattern tương tự, brief curator tạo mới trong workspace hiện tại.
 - KHÔNG xóa file wiki. Nếu cần deprecate → brief curator đánh dấu `> Deprecated:` ở đầu file.
 - KHÔNG tự `git add` / `git commit` wiki — chỉ báo user file đã đổi để user tự quyết.

@@ -2,7 +2,7 @@
 # Schema: agents/pipeline/observability.md
 .claude/runs/
 
-# Per-codebase context written by wiki-context-selector (regenerated each task)
+# Per-codebase context written by contextd-context-selector (regenerated each task)
 .claude/context/
 
 # Manual evaluation results (per-workspace scorecards — chứa data nội bộ)

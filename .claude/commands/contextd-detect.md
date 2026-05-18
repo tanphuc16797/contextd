@@ -1,4 +1,4 @@
-# Wiki Detect
+# /contextd-detect — Detect contextd Install
 
 Skill này chạy tự động khi `/contextd-use` không tìm thấy `.claude/wiki.json` của codebase, hoặc gọi trực tiếp để kiểm tra trạng thái tích hợp wiki của dự án hiện tại.
 

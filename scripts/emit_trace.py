@@ -6,7 +6,7 @@ Reads hook payload from stdin (JSON), extracts trace JSON from a wiki-* subagent
 output, and writes it to {cwd}/.claude/runs/{run_id}/{stage}.json.
 
 Hook event: PostToolUse (matcher=Task).
-Subagents handled: wiki-planner, wiki-context-selector, wiki-plan-reviewer, wiki-reviewer.
+Subagents handled: contextd-planner, contextd-context-selector, contextd-plan-reviewer, contextd-reviewer.
 
 Behavior:
 - No-op (exit 0) if tool_name != Task or subagent not in allow-list.
@@ -33,10 +33,10 @@ from lib.atomic_write import (  # noqa: E402
 )
 
 ALLOWED_SUBAGENTS = {
-    "wiki-planner",
-    "wiki-context-selector",
-    "wiki-plan-reviewer",
-    "wiki-reviewer",
+    "contextd-planner",
+    "contextd-context-selector",
+    "contextd-plan-reviewer",
+    "contextd-reviewer",
 }
 
 VALID_STAGES = {

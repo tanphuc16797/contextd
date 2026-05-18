@@ -4,7 +4,7 @@ applied_at: "2026-05-08T00:00:00+07:00"
 applied_by: "lechihieu.ict@gmail.com"
 mode: "update"
 inline_apply: true   # main agent direct edit (curator delegation skipped — engine workspace bootstrap)
-inline_apply_reason: "Engine workspace bootstrap — wiki-curator subagent itself being documented; using inline mode with main agent path verification per Bước 5 fallback rule."
+inline_apply_reason: "Engine workspace bootstrap — contextd-curator subagent itself being documented; using inline mode with main agent path verification per Bước 5 fallback rule."
 
 inputs:
   verified_facts: "workspaces/default/evidence/qa/2026-05-08-engine-bootstrap-wiki-template/verified-facts.md"

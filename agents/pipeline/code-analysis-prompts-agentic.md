@@ -150,7 +150,7 @@ CORE-AGENTIC dispatch tới wiki target giống CORE-CODE (`{ws}/platform/patter
 
 ## Sub-agents (N total)
 
-### A-001 — wiki-curator  [NEW | EXISTS:{path}]
+### A-001 — contextd-curator  [NEW | EXISTS:{path}]
 - **type**: subagent
 - **role**: ...
 - **tools**: ...

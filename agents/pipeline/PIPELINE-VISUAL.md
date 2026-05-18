@@ -25,23 +25,23 @@ sequenceDiagram
     autonumber
     actor U as User
     participant M as Main Agent
-    participant P as wiki-planner
+    participant P as contextd-planner
     participant H as emit_trace.py<br/>(PostToolUse hook)
-    participant CS as wiki-context-selector
-    participant PR as wiki-plan-reviewer
-    participant R as wiki-reviewer
+    participant CS as contextd-context-selector
+    participant PR as contextd-plan-reviewer
+    participant R as contextd-reviewer
     participant FS as .claude/runs/{run_id}/
 
     U->>M: /contextd-use "implement X"
     M->>M: Resolve workspace từ<br/>.claude/wiki.json
-    M->>P: Task(subagent=wiki-planner)
+    M->>P: Task(subagent=contextd-planner)
     P-->>M: Intent JSON +<br/>```json trace block```
     H-->>FS: 01-planner.json
-    M->>CS: Task(subagent=wiki-context-selector)
+    M->>CS: Task(subagent=contextd-context-selector)
     CS->>FS: ghi current-task.md
     CS-->>M: confirm + trace block
     H-->>FS: 02-context.json
-    M->>PR: Task(subagent=wiki-plan-reviewer)
+    M->>PR: Task(subagent=contextd-plan-reviewer)
     PR-->>M: APPROVED / BLOCK + trace
     H-->>FS: 03-plan-review.json
     alt verdict = BLOCK
@@ -49,7 +49,7 @@ sequenceDiagram
     else verdict = APPROVED
         M->>M: đọc current-task.md<br/>→ Edit/Write code
         M->>FS: 04-builder.json (self-write)
-        M->>R: Task(subagent=wiki-reviewer)
+        M->>R: Task(subagent=contextd-reviewer)
         R-->>M: APPROVED / VIOLATIONS + trace
         H-->>FS: 05-review.json
         M-->>U: kết quả final
@@ -97,11 +97,11 @@ flowchart TD
 | Stage | Agent file | Input | Output (LLM) | Output (file) | Câu hỏi trả lời |
 |-------|-----------|-------|--------------|---------------|------------------|
 | 0 | Main agent | user task | resolved workspace | `.claude/wiki.json` đọc | Workspace nào active? |
-| 1 | [wiki-planner](../../.claude/agents/wiki-planner.md) | user_task, workspace | Intent JSON | [01-planner.json](../../templates/run-trace.schema.json#L36-L82) | Task cần pattern/contract nào? |
-| 2 | [wiki-context-selector](../../.claude/agents/wiki-context-selector.md) | intent JSON | confirm 1 dòng | [02-context.json](../../templates/run-trace.schema.json#L84-L118) + `.claude/context/current-task.md` | Wiki có gì để dùng? |
-| 3 | [wiki-plan-reviewer](../../.claude/agents/wiki-plan-reviewer.md) | intent + context_file | APPROVED/BLOCK | [03-plan-review.json](../../templates/run-trace.schema.json#L120-L152) | Plan đủ thông tin chưa? |
+| 1 | [contextd-planner](../../.claude/agents/contextd-planner.md) | user_task, workspace | Intent JSON | [01-planner.json](../../templates/run-trace.schema.json#L36-L82) | Task cần pattern/contract nào? |
+| 2 | [contextd-context-selector](../../.claude/agents/contextd-context-selector.md) | intent JSON | confirm 1 dòng | [02-context.json](../../templates/run-trace.schema.json#L84-L118) + `.claude/context/current-task.md` | Wiki có gì để dùng? |
+| 3 | [contextd-plan-reviewer](../../.claude/agents/contextd-plan-reviewer.md) | intent + context_file | APPROVED/BLOCK | [03-plan-review.json](../../templates/run-trace.schema.json#L120-L152) | Plan đủ thông tin chưa? |
 | 4 | Main agent (Builder) | current-task.md | code + Markdown sections | [04-builder.json](../../templates/run-trace.schema.json#L154-L174) (self-write) | Code thế nào dựa trên context? |
-| 5 | [wiki-reviewer](../../.claude/agents/wiki-reviewer.md) | code + context_file | APPROVED/VIOLATIONS | [05-review.json](../../templates/run-trace.schema.json#L176-L213) | Code có vi phạm contract? |
+| 5 | [contextd-reviewer](../../.claude/agents/contextd-reviewer.md) | code + context_file | APPROVED/VIOLATIONS | [05-review.json](../../templates/run-trace.schema.json#L176-L213) | Code có vi phạm contract? |
 | roll-up | hook | every stage | — | [run.json](../../templates/run-trace.schema.json#L215-L238) | Tổng kết run |
 
 **Các signal đáng debug** (xem nhanh trong trace JSON):

@@ -21,7 +21,7 @@ Slash command `/contextd-eval` aggregate runs. Slash command `/contextd-trace` v
 
 ## Run-id convention
 
-`run_id` được sinh bởi `wiki-planner` (Stage 1) ở **đầu pipeline**, format:
+`run_id` được sinh bởi `contextd-planner` (Stage 1) ở **đầu pipeline**, format:
 
 ```
 {YYYY-MM-DD}-{HHMMSS}-{slug}
@@ -39,11 +39,11 @@ Các stage sau **nhận `run_id` từ caller** (main agent hoặc `/contextd-use
 ```
 {project_dir}/.claude/runs/{run_id}/
   ├─ run.json              ← roll-up: hook update sau mỗi stage (stages_completed, totals)
-  ├─ 01-planner.json       ← hook ghi từ wiki-planner output
-  ├─ 02-context.json       ← hook ghi từ wiki-context-selector output
-  ├─ 03-plan-review.json   ← hook ghi từ wiki-plan-reviewer output
+  ├─ 01-planner.json       ← hook ghi từ contextd-planner output
+  ├─ 02-context.json       ← hook ghi từ contextd-context-selector output
+  ├─ 03-plan-review.json   ← hook ghi từ contextd-plan-reviewer output
   ├─ 04-builder.json       ← main agent self-write (no hook for non-Task tools)
-  ├─ 05-review.json        ← hook ghi từ wiki-reviewer output
+  ├─ 05-review.json        ← hook ghi từ contextd-reviewer output
   └─ scorecard.md          ← optional, manual chấm điểm
 ```
 
@@ -67,21 +67,21 @@ Worked example đầy đủ 5 stage cho 1 task: xem 1 run thực tế tại `{pr
 
 Path tới definition trong schema: `#/oneOf/{n}` (theo thứ tự dưới đây).
 
-### Stage 1 — `01-planner.json` (wiki-planner) → schema oneOf[0]
+### Stage 1 — `01-planner.json` (contextd-planner) → schema oneOf[0]
 
 **Purpose:** Parse user task → intent. Verify patterns/contracts trong `intent.patterns_needed`/`contracts_touched` có thực sự tồn tại trong `{ws}/platform/{patterns,contracts}/`.
 
 **Key fields:** `intent` (full schema xem [task-to-docs-map.md](task-to-docs-map.md)), `patterns_verified[]`, `contracts_verified[]`, `unverified_count`.
 
-**Hallucination gate:** `unverified_count > 0` → wiki-plan-reviewer PHẢI emit `verdict=BLOCK`.
+**Hallucination gate:** `unverified_count > 0` → contextd-plan-reviewer PHẢI emit `verdict=BLOCK`.
 
-### Stage 2 — `02-context.json` (wiki-context-selector) → schema oneOf[1]
+### Stage 2 — `02-context.json` (contextd-context-selector) → schema oneOf[1]
 
 **Purpose:** Map intent → file paths thực tế. Ghi `current-task.md`. Báo cáo gaps.
 
 **Key fields:** `context_file`, `referenced_docs[]` (mỗi entry: `{category, path, sections}`), `gaps[]`, `file_count`, `gap_count`, `total_chars`.
 
-### Stage 3 — `03-plan-review.json` (wiki-plan-reviewer) → schema oneOf[2]
+### Stage 3 — `03-plan-review.json` (contextd-plan-reviewer) → schema oneOf[2]
 
 **Purpose:** Gate trước Implementation. BLOCK nếu thiếu pattern/contract, conflict, blocking gap.
 
@@ -97,7 +97,7 @@ Path tới definition trong schema: `#/oneOf/{n}` (theo thứ tự dưới đây
 
 `self_check_passed`: builder xác nhận đã chạy "Constraints to check" trong [prompt-template.md](prompt-template.md).
 
-### Stage 5 — `05-review.json` (wiki-reviewer) → schema oneOf[4]
+### Stage 5 — `05-review.json` (contextd-reviewer) → schema oneOf[4]
 
 **Purpose:** Soi code thật vs context đã đưa. Phát hiện violation + hallucinated refs.
 
@@ -151,7 +151,7 @@ Delta `score_A − score_B` = wiki contribution. Nếu delta ≤ 1 (trên thang 
 
 ## Hook setup
 
-Trace emit cho 4 subagent (`wiki-planner`, `wiki-context-selector`, `wiki-plan-reviewer`, `wiki-reviewer`) chạy qua **PostToolUse hook** trên tool `Task`. Hook script: [scripts/emit_trace.py](../../scripts/emit_trace.py) (Python 3.9+).
+Trace emit cho 4 subagent (`contextd-planner`, `contextd-context-selector`, `contextd-plan-reviewer`, `contextd-reviewer`) chạy qua **PostToolUse hook** trên tool `Task`. Hook script: [scripts/emit_trace.py](../../scripts/emit_trace.py) (Python 3.9+).
 
 ### Trong wiki-template repo (self-test)
 
@@ -191,7 +191,7 @@ Hook nhận JSON qua stdin với format Claude Code chuẩn:
 ```json
 {
   "tool_name": "Task",
-  "tool_input": { "subagent_type": "wiki-planner", "prompt": "..." },
+  "tool_input": { "subagent_type": "contextd-planner", "prompt": "..." },
   "tool_response": "...subagent output text...",
   "cwd": "/path/to/codebase"
 }

@@ -1,4 +1,4 @@
-# Rebase Wiki
+# /contextd-rebase — Rebase Wiki Against Code
 
 Chạy skill này định kỳ hoặc khi nghi ngờ wiki **của workspace active** đã lỗi thời so với codebase thực tế.
 Mục tiêu: tìm và vá mọi chỗ wiki nói một kiểu, code chạy một kiểu.

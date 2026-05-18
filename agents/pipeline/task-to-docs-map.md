@@ -120,7 +120,7 @@ Ví dụ với `pack-event-driven`:
 **Active workspace** (`.claude/wiki.json.workspace`): `example-surgery`
 **Active packs** (`workspace.md ## Packs`): `pack-event-driven`
 
-### Intent (output của Stage 1 — wiki-planner)
+### Intent (output của Stage 1 — contextd-planner)
 
 ```json
 {
@@ -133,7 +133,7 @@ Ví dụ với `pack-event-driven`:
 }
 ```
 
-### Retrieved files (output của Stage 2 — wiki-context-selector)
+### Retrieved files (output của Stage 2 — contextd-context-selector)
 
 ```
 workspaces/example-surgery/platform/contracts/mqtt-topic-contract.md            ← contracts (always first)

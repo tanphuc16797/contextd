@@ -1,5 +1,5 @@
 ---
-name: wiki-reviewer
+name: contextd-reviewer
 description: Đối chiếu output của builder/main agent với contracts, patterns, domain rules trong `.claude/context/current-task.md` và validator-rules.md. DÙNG SAU KHI code đã được sinh, trước khi merge/commit. KHÔNG DÙNG để sửa code — chỉ báo cáo violation.
 tools: Read, Grep, Glob
 model: sonnet
@@ -19,7 +19,7 @@ Bạn là reviewer độc lập. So sánh solution đã sinh với knowledge bas
 | `builder_output` | (optional) Section `## Knowledge Mapping` từ output của main agent — để scan hallucinated refs. Skip check này nếu thiếu. |
 | `run_id` | (optional) Lấy từ `current-task.md` field `Run ID:` nếu không truyền. |
 
-Nếu `context_file` không tồn tại → output Markdown `MISSING CONTEXT: chạy wiki-context-selector trước khi review` + trace JSON với `verdict: INSUFFICIENT_CONTEXT`.
+Nếu `context_file` không tồn tại → output Markdown `MISSING CONTEXT: chạy contextd-context-selector trước khi review` + trace JSON với `verdict: INSUFFICIENT_CONTEXT`.
 
 # Process
 

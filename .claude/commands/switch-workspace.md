@@ -101,7 +101,7 @@ Config file:    <cwd>/.claude/wiki.json
 
 Nếu file `<cwd>/.claude/context/current-task.md` tồn tại, regenerate-warn nếu **bất kỳ** điều kiện đúng:
 
-1. Field `Workspace:` của file ≠ `{name}` (do `wiki-context-selector` ghi — xem [.claude/agents/wiki-context-selector.md](../agents/wiki-context-selector.md))
+1. Field `Workspace:` của file ≠ `{name}` (do `contextd-context-selector` ghi — xem [.claude/agents/contextd-context-selector.md](../agents/contextd-context-selector.md))
 2. Field `Packs:` của file ≠ `target_packs` (set so sánh — order-insensitive)
 3. mtime của `current-task.md` < mtime của `{wiki_root}/workspaces/{name}/workspace.md`
 

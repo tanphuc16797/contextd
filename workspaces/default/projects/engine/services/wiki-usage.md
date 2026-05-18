@@ -13,7 +13,7 @@
 ## Output
 
 - `/contextd-use`: invokes 5-stage pipeline; writes `.claude/context/current-task.md`; emits trace `.claude/runs/{run_id}/`; Builder produces code per task
-- `/contextd-update`, `/contextd-rebase`: edits files trong `{ws}/...` qua `wiki-curator` subagent
+- `/contextd-update`, `/contextd-rebase`: edits files trong `{ws}/...` qua `contextd-curator` subagent
 
 ## Flow
 
@@ -30,7 +30,7 @@ Applies platform pattern:
                                                             Stage 4 (reviewer, optional)
 
 /contextd-update, /contextd-rebase:
-  workspace resolve → detect changes → delegate to wiki-curator → main agent verify path
+  workspace resolve → detect changes → delegate to contextd-curator → main agent verify path
 ```
 
 ## Config
@@ -68,13 +68,13 @@ rebase_wiki:
 - `/contextd-update` vs `/contextd-rebase`:
   - `contextd-update`: incremental, dựa vào git diff → curator áp dụng changes.
   - `contextd-rebase`: full scan, wiki vs codebase, vá mọi drift.
-- Stage 4 (wiki-reviewer) là OPTIONAL — recommended cho task wiki-aware nhưng có thể skip cho rapid iteration.
+- Stage 4 (contextd-reviewer) là OPTIONAL — recommended cho task wiki-aware nhưng có thể skip cho rapid iteration.
 
 ## Related
 
 - Pattern: [../../platform/patterns/multi-stage-subagent-pipeline.md](../../platform/patterns/multi-stage-subagent-pipeline.md)
 - Pattern: [../../platform/patterns/workspace-resolve-step0.md](../../platform/patterns/workspace-resolve-step0.md)
-- Sub-agents doc: [agents.md](agents.md) (wiki-planner, wiki-context-selector, wiki-plan-reviewer, wiki-curator, wiki-reviewer)
+- Sub-agents doc: [agents.md](agents.md) (contextd-planner, contextd-context-selector, contextd-plan-reviewer, contextd-curator, contextd-reviewer)
 - Engine source: `.claude/commands/contextd-use.md`, `contextd-update.md`, `contextd-rebase.md`
 - Engine spec: `agents/pipeline/multi-agent-pipeline.md`, `prompt-template.md`, `validator-rules.md`
 - Source: F-017b, evidence `2026-05-08-engine-bootstrap-wiki-template`

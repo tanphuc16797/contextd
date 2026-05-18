@@ -28,7 +28,7 @@ Boundary rule:
 
 | Doc | Covers |
 |-----|--------|
-| [services/agents.md](services/agents.md) | wiki-planner, wiki-context-selector, wiki-plan-reviewer, wiki-curator, wiki-reviewer |
+| [services/agents.md](services/agents.md) | contextd-planner, contextd-context-selector, contextd-plan-reviewer, contextd-curator, contextd-reviewer |
 
 ## Patterns applied (workspace-level)
 

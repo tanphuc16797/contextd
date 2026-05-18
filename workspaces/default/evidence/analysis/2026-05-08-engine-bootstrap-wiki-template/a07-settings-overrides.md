@@ -22,7 +22,7 @@ Based on engine pattern P-007 (5-stage subagent pipeline), hooks **có thể** �
 
 | Event | Expected matcher | Inferred purpose | Citation |
 |-------|------------------|------------------|----------|
-| `PreToolUse` | Bash, Edit, Write | Validator before destructive ops (per Pattern P-007 Stage 4 / wiki-reviewer concept) | `(.claude/agents/wiki-reviewer.md:L2-L5)` |
+| `PreToolUse` | Bash, Edit, Write | Validator before destructive ops (per Pattern P-007 Stage 4 / contextd-reviewer concept) | `(.claude/agents/contextd-reviewer.md:L2-L5)` |
 | `PostToolUse` | Edit, Write | Trigger `/contextd-update` auto-sync? OR emit trace events | `(.claude/commands/contextd-update.md:L1)`, `(agents/pipeline/observability.md:L1)` |
 | `UserPromptSubmit` | (any) | Could enforce `/contextd-use` Stage 1 (planner) before main agent codes | `(.claude/commands/contextd-use.md:L1)` |
 | `Stop` | (any) | Could emit final trace event for `/contextd-trace` consumption | `(.claude/commands/contextd-trace.md:L1)` |
@@ -36,15 +36,15 @@ Engine recommends following permission patterns based on observed tool usage in 
 | Layer | Tools used | Inferred allowlist |
 |-------|-----------|---------------------|
 | Sub-agents (read-only) | Read, Glob, Grep | `Read(*)`, `Glob`, `Grep(*)` |
-| Sub-agent `wiki-context-selector` | + Write (current-task.md only) | + `Write(.claude/context/*.md)` |
-| Sub-agent `wiki-curator` | + Edit, Write | + `Edit(workspaces/**)`, `Write(workspaces/**)` |
+| Sub-agent `contextd-context-selector` | + Write (current-task.md only) | + `Write(.claude/context/*.md)` |
+| Sub-agent `contextd-curator` | + Edit, Write | + `Edit(workspaces/**)`, `Write(workspaces/**)` |
 | Slash commands (engine) | Bash (git ops in `/code-analyze`) | `Bash(git rev-parse:*)`, `Bash(git log:*)`, `Bash(git status:*)` |
 | Scripts | Python execution | `Bash(python:*)` for `scripts/*.py` |
 
 **Citations**:
-- `(.claude/agents/wiki-planner.md:L4)` tools=Read, Glob, Grep
-- `(.claude/agents/wiki-context-selector.md:L4)` tools=Read, Glob, Grep, Write
-- `(.claude/agents/wiki-curator.md:L4)` tools=Read, Edit, Write, Glob, Grep
+- `(.claude/agents/contextd-planner.md:L4)` tools=Read, Glob, Grep
+- `(.claude/agents/contextd-context-selector.md:L4)` tools=Read, Glob, Grep, Write
+- `(.claude/agents/contextd-curator.md:L4)` tools=Read, Edit, Write, Glob, Grep
 - `(.claude/commands/code-analyze.md:L43-L46)` git CLI usage
 
 ### Env vars expected

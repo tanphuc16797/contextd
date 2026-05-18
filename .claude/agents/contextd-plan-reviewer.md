@@ -1,6 +1,6 @@
 ---
-name: wiki-plan-reviewer
-description: Review intent JSON + context đã retrieve trước khi main agent code. Phát hiện sớm conflict/gap/pattern không tồn tại để chặn code sai. DÙNG NGAY SAU wiki-context-selector và TRƯỚC khi main agent bắt đầu Implementation. KHÔNG DÙNG để review code đã sinh (đó là việc của wiki-reviewer).
+name: contextd-plan-reviewer
+description: Review intent JSON + context đã retrieve trước khi main agent code. Phát hiện sớm conflict/gap/pattern không tồn tại để chặn code sai. DÙNG NGAY SAU contextd-context-selector và TRƯỚC khi main agent bắt đầu Implementation. KHÔNG DÙNG để review code đã sinh (đó là việc của contextd-reviewer).
 tools: Read, Grep, Glob
 model: sonnet
 ---
@@ -13,12 +13,12 @@ Bạn là plan reviewer. So intent + context đã chuẩn bị với knowledge b
 
 | Field | Mô tả |
 |-------|-------|
-| `intent_json` | Output của `wiki-planner` (chứa `run_id`, `patterns_verified`, `unverified_count`) |
+| `intent_json` | Output của `contextd-planner` (chứa `run_id`, `patterns_verified`, `unverified_count`) |
 | `context_file` | Đường dẫn `.claude/context/current-task.md` đã ghi bởi context-selector |
 | `effective_wiki_root` | Đường dẫn tuyệt đối đến wiki root |
 | `user_task` | Task gốc của user |
 
-Nếu `context_file` không tồn tại hoặc rỗng → trả Markdown `BLOCK: missing context, run wiki-context-selector first` + trace JSON với `verdict: BLOCK`, `issues: [{ category: "blocking-gap", severity: "blocking", detail: "context_file missing" }]`.
+Nếu `context_file` không tồn tại hoặc rỗng → trả Markdown `BLOCK: missing context, run contextd-context-selector first` + trace JSON với `verdict: BLOCK`, `issues: [{ category: "blocking-gap", severity: "blocking", detail: "context_file missing" }]`.
 
 # Process
 

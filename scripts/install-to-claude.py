@@ -198,6 +198,22 @@ def main() -> None:
         args.dry_run,
     )
 
+    # 2b. Migrate legacy wiki-* subagents (pre-contextd rename)
+    legacy_agents = {
+        "wiki-planner": "contextd-planner",
+        "wiki-context-selector": "contextd-context-selector",
+        "wiki-plan-reviewer": "contextd-plan-reviewer",
+        "wiki-curator": "contextd-curator",
+        "wiki-reviewer": "contextd-reviewer",
+    }
+    for legacy, new_name in legacy_agents.items():
+        legacy_path = global_agents / f"{legacy}.md"
+        if legacy_path.exists():
+            print(f"  [REMOVED]   {legacy}.md  (renamed → {new_name}.md)")
+            if not args.dry_run:
+                legacy_path.unlink()
+    print()
+
     # 3. wiki-global.json
     handle_global_config(wiki_root, global_config, args.force, args.dry_run)
 

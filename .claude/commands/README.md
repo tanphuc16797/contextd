@@ -5,7 +5,7 @@
 Quy tắc chung:
 - Mỗi command có Bước 0 resolve workspace + wiki_root trước khi làm bất cứ gì.
 - Mọi knowledge access scope CHỈ trong workspace active (không cross-workspace).
-- Command edit wiki (contextd-update, contextd-rebase, evidence-apply) delegate qua `wiki-curator` subagent + main agent verify path sau khi curator return.
+- Command edit wiki (contextd-update, contextd-rebase, evidence-apply) delegate qua `contextd-curator` subagent + main agent verify path sau khi curator return.
 
 ---
 

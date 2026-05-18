@@ -19,15 +19,15 @@ User Task
    ↓
 [Stage 0] Main agent       → resolve workspace + wiki_root từ <cwd>/.claude/wiki.json
    ↓
-[Stage 1] wiki-planner     → parse task → intent JSON
+[Stage 1] contextd-planner     → parse task → intent JSON
    ↓
-[Stage 2] wiki-context-selector → retrieve + slice → ghi current-task.md
+[Stage 2] contextd-context-selector → retrieve + slice → ghi current-task.md
    ↓
-[Stage 2.5] wiki-plan-reviewer → APPROVED hoặc BLOCK
+[Stage 2.5] contextd-plan-reviewer → APPROVED hoặc BLOCK
    ↓
 [Stage 3] Main agent (Builder) → đọc current-task.md → code theo prompt-template
    ↓
-[Stage 4] wiki-reviewer (optional) → review code đã sinh vs context
+[Stage 4] contextd-reviewer (optional) → review code đã sinh vs context
    ↓
 Final Output
 ```
@@ -36,9 +36,9 @@ Final Output
 
 ---
 
-## Stage 1 — `wiki-planner`
+## Stage 1 — `contextd-planner`
 
-**Subagent file**: [.claude/agents/wiki-planner.md](../../.claude/agents/wiki-planner.md)
+**Subagent file**: [.claude/agents/contextd-planner.md](../../.claude/agents/contextd-planner.md)
 
 **Input** (từ main agent):
 - `user_task`: task gốc của user (nguyên văn)
@@ -66,9 +66,9 @@ Nếu `missing_knowledge` không rỗng → main agent STOP, hỏi user, KHÔNG 
 
 ---
 
-## Stage 2 — `wiki-context-selector`
+## Stage 2 — `contextd-context-selector`
 
-**Subagent file**: [.claude/agents/wiki-context-selector.md](../../.claude/agents/wiki-context-selector.md)
+**Subagent file**: [.claude/agents/contextd-context-selector.md](../../.claude/agents/contextd-context-selector.md)
 
 **Input** (từ main agent):
 - `intent_json`: output của Stage 1
@@ -84,9 +84,9 @@ Subagent này có thể rule-based (deterministic lookup) — không cần LLM h
 
 ---
 
-## Stage 2.5 — `wiki-plan-reviewer`
+## Stage 2.5 — `contextd-plan-reviewer`
 
-**Subagent file**: [.claude/agents/wiki-plan-reviewer.md](../../.claude/agents/wiki-plan-reviewer.md)
+**Subagent file**: [.claude/agents/contextd-plan-reviewer.md](../../.claude/agents/contextd-plan-reviewer.md)
 
 **Input** (từ main agent):
 - `intent_json`: output của Stage 1
@@ -130,9 +130,9 @@ Mọi quyết định kỹ thuật phải reference được vào 1 entry trong 
 
 ---
 
-## Stage 4 — `wiki-reviewer` (optional)
+## Stage 4 — `contextd-reviewer` (optional)
 
-**Subagent file**: [.claude/agents/wiki-reviewer.md](../../.claude/agents/wiki-reviewer.md)
+**Subagent file**: [.claude/agents/contextd-reviewer.md](../../.claude/agents/contextd-reviewer.md)
 
 **Input** (từ main agent, sau khi đã Edit/Write file):
 - `solution_files`: danh sách file vừa sửa
@@ -155,11 +155,11 @@ Mỗi subagent **output 1 fenced ```json block** ở cuối response. **PostTool
 
 | Stage | File | Emit mechanism |
 |-------|------|----------------|
-| 1 | `01-planner.json` | hook trích từ wiki-planner output |
-| 2 | `02-context.json` | hook trích từ wiki-context-selector output |
-| 2.5 | `03-plan-review.json` | hook trích từ wiki-plan-reviewer output |
+| 1 | `01-planner.json` | hook trích từ contextd-planner output |
+| 2 | `02-context.json` | hook trích từ contextd-context-selector output |
+| 2.5 | `03-plan-review.json` | hook trích từ contextd-plan-reviewer output |
 | 3 | `04-builder.json` | main agent self-write (Write tool — main agent không qua hook Task tool) |
-| 4 | `05-review.json` | hook trích từ wiki-reviewer output |
+| 4 | `05-review.json` | hook trích từ contextd-reviewer output |
 | roll-up | `run.json` | hook update sau mỗi stage |
 
 Trace **KHÔNG block pipeline**: hook timeout 5s, parse fail → exit 0, log stderr. Trace là lớp đo lường tách rời.

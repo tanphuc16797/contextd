@@ -1,4 +1,4 @@
-# Wiki Upgrade
+# /contextd-upgrade — Upgrade contextd Install
 
 Nâng cấp contextd trên máy user lên bản mới nhất từ GitHub release.
 
