@@ -10,11 +10,10 @@
 | # | Câu hỏi | Stage trả lời |
 |---|---------|----------------|
 | 1 | Task này cần pattern/contract nào? | Stage 1 (Planner) |
-| 2 | Wiki có gì để dùng cho task này? | Stage 2 (Context Selector) |
-| 3 | Plan đủ thông tin để code chưa? | Stage 3 (Plan Reviewer) |
-| 4 | Code sinh ra có vi phạm contract không? | Stage 5 (Reviewer) |
+| 2 | Wiki có gì để dùng cho task này? + Plan đủ thông tin để code chưa? | Stage 2 (Context Selector — gồm cả verdict) |
+| 3 | Code sinh ra có vi phạm contract không? | Stage 4 (Reviewer) |
 
-Stage 4 (Builder) là main agent dùng kết quả 1-3 để code. Stage 6 (Trace) chạy ngầm, ghi JSON cho mọi stage.
+Stage 3 (Builder) là main agent dùng kết quả 1-2 để code. Trace chạy ngầm, ghi JSON cho mọi stage.
 
 ---
 
@@ -28,7 +27,6 @@ sequenceDiagram
     participant P as contextd-planner
     participant H as emit_trace.py<br/>(PostToolUse hook)
     participant CS as contextd-context-selector
-    participant PR as contextd-plan-reviewer
     participant R as contextd-reviewer
     participant FS as .claude/runs/{run_id}/
 
@@ -39,11 +37,8 @@ sequenceDiagram
     H-->>FS: 01-planner.json
     M->>CS: Task(subagent=contextd-context-selector)
     CS->>FS: ghi current-task.md
-    CS-->>M: confirm + trace block
+    CS-->>M: APPROVED / BLOCK + trace block (verdict)
     H-->>FS: 02-context.json
-    M->>PR: Task(subagent=contextd-plan-reviewer)
-    PR-->>M: APPROVED / BLOCK + trace
-    H-->>FS: 03-plan-review.json
     alt verdict = BLOCK
         M-->>U: STOP, báo issues
     else verdict = APPROVED
@@ -67,13 +62,12 @@ flowchart TD
     Start([User task]) --> S1[Stage 1: Planner<br/>parse intent, verify patterns/contracts exist]
     S1 --> Q1{unverified_count > 0?}
     Q1 -- yes --> Halluc1[Hallucination<br/>flag in 01-planner.json]
-    Q1 -- no --> S2[Stage 2: Context Selector<br/>retrieve docs, slice sections]
+    Q1 -- no --> S2[Stage 2: Context Selector<br/>retrieve + 5 checks → verdict]
     Halluc1 --> S2
-    S2 --> S3[Stage 3: Plan Reviewer<br/>4 checks against context]
-    S3 --> Q2{verdict?}
+    S2 --> Q2{verdict?}
     Q2 -- BLOCK --> Stop1([STOP<br/>báo user issues])
-    Q2 -- APPROVED --> S4[Stage 4: Main agent Builder<br/>read current-task.md, code]
-    S4 --> S5[Stage 5: Reviewer<br/>diff code vs context]
+    Q2 -- APPROVED --> S4[Stage 3: Main agent Builder<br/>read current-task.md, code]
+    S4 --> S5[Stage 4: Reviewer<br/>diff code vs context]
     S5 --> Q3{verdict?}
     Q3 -- VIOLATIONS --> Out1([báo violations<br/>+ hallucinated_refs])
     Q3 -- APPROVED --> Out2([final output])
@@ -87,8 +81,8 @@ flowchart TD
 ```
 
 **Hai gate quan trọng**:
-- **Plan Reviewer (Stage 3)** — chặn TRƯỚC khi tốn token cho Builder. Lý do: code đã viết sai → đắt để fix.
-- **Reviewer (Stage 5)** — chặn TRƯỚC khi user merge. Phát hiện cả violation lẫn hallucinated reference (code reference doc không có trong context).
+- **Context-Selector verdict (Stage 2)** — chặn TRƯỚC khi tốn token cho Builder. Lý do: code đã viết sai → đắt để fix.
+- **Reviewer (Stage 4)** — chặn TRƯỚC khi user merge. Phát hiện cả violation lẫn hallucinated reference (code reference doc không có trong context).
 
 ---
 
@@ -97,17 +91,16 @@ flowchart TD
 | Stage | Agent file | Input | Output (LLM) | Output (file) | Câu hỏi trả lời |
 |-------|-----------|-------|--------------|---------------|------------------|
 | 0 | Main agent | user task | resolved workspace | `.claude/wiki.json` đọc | Workspace nào active? |
-| 1 | [contextd-planner](../../.claude/agents/contextd-planner.md) | user_task, workspace | Intent JSON | [01-planner.json](../../templates/run-trace.schema.json#L36-L82) | Task cần pattern/contract nào? |
-| 2 | [contextd-context-selector](../../.claude/agents/contextd-context-selector.md) | intent JSON | confirm 1 dòng | [02-context.json](../../templates/run-trace.schema.json#L84-L118) + `.claude/context/current-task.md` | Wiki có gì để dùng? |
-| 3 | [contextd-plan-reviewer](../../.claude/agents/contextd-plan-reviewer.md) | intent + context_file | APPROVED/BLOCK | [03-plan-review.json](../../templates/run-trace.schema.json#L120-L152) | Plan đủ thông tin chưa? |
-| 4 | Main agent (Builder) | current-task.md | code + Markdown sections | [04-builder.json](../../templates/run-trace.schema.json#L154-L174) (self-write) | Code thế nào dựa trên context? |
-| 5 | [contextd-reviewer](../../.claude/agents/contextd-reviewer.md) | code + context_file | APPROVED/VIOLATIONS | [05-review.json](../../templates/run-trace.schema.json#L176-L213) | Code có vi phạm contract? |
-| roll-up | hook | every stage | — | [run.json](../../templates/run-trace.schema.json#L215-L238) | Tổng kết run |
+| 1 | [contextd-planner](../../.claude/agents/contextd-planner.md) | user_task, workspace | Intent JSON | `01-planner.json` | Task cần pattern/contract nào? |
+| 2 | [contextd-context-selector](../../.claude/agents/contextd-context-selector.md) | intent JSON | APPROVED/BLOCK + retrieval data | `02-context.json` (gồm `verdict`) + `.claude/context/current-task.md` | Wiki có gì để dùng? + Plan đủ thông tin chưa? |
+| 3 | Main agent (Builder) | current-task.md | code + Markdown sections | `04-builder.json` (self-write) | Code thế nào dựa trên context? |
+| 4 | [contextd-reviewer](../../.claude/agents/contextd-reviewer.md) | code + context_file | APPROVED/VIOLATIONS | `05-review.json` | Code có vi phạm contract? |
+| roll-up | hook | every stage | — | `run.json` | Tổng kết run |
 
 **Các signal đáng debug** (xem nhanh trong trace JSON):
 - `01-planner.unverified_count > 0` → planner đề xuất pattern không tồn tại trong wiki
 - `02-context.gaps[].blocking_hint == true` → wiki thiếu doc cần thiết
-- `03-plan-review.verdict == "BLOCK"` → plan không khả thi với wiki hiện có
+- `02-context.verdict == "BLOCK"` → plan không khả thi với wiki hiện có
 - `05-review.hallucinated_refs[]` không rỗng → builder reference doc không có trong context (= hallucination)
 - `04-builder.assumptions_count > 0` → builder phải tự đoán, dấu hiệu wiki còn gap
 
@@ -125,8 +118,7 @@ flowchart TD
 │       └── {run_id}/                   ← per-run trace dir
 │           ├── run.json                ← roll-up (hook tự update)
 │           ├── 01-planner.json
-│           ├── 02-context.json
-│           ├── 03-plan-review.json
+│           ├── 02-context.json         ← gồm verdict APPROVED|BLOCK
 │           ├── 04-builder.json         ← main agent self-write
 │           └── 05-review.json
 {wiki_root}/                            ← repo này (wiki-template)

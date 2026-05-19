@@ -6,6 +6,60 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Removed — Orphan pipeline stubs
+
+Deleted two migration stubs in `agents/pipeline/` that only existed to redirect historical evidence-snapshot citations:
+
+- `intent-parser.md` — redirected to `task-to-docs-map.md`.
+- `evidence-state-rules.md` — redirected to `evidence-lifecycle.md`.
+
+Both stubs were kept for backward-compatibility with the `2026-05-08-engine-bootstrap-wiki-template` evidence snapshot. That snapshot was removed in the `workspaces/default/` trim above, so the stubs serve no purpose. Removed the leftover breadcrumb in `task-to-docs-map.md` that referenced `intent-parser.md`.
+
+`concurrency-notes.md` was kept — it has a legitimate active reference in `observability.md:214`.
+
+### Changed — Single source of truth for engine constraints
+
+`agents/constraints.md` is now the only file that defines engine baseline rule text. Each rule has a stable ID (`engine-no-hardcoded-config`, `engine-no-new-workflow-state`, ...). Other files reference rules by ID instead of restating prose.
+
+- `agents/constraints.md` — added ID prefix convention (`engine-*` / `pack-{name}-*` / `ws-*`) and assigned IDs to all 12 engine baseline rules (3 Architecture, 2 Code, 3 Domain, 4 Knowledge). Reorganized as "Engine Rule Catalog".
+- `CLAUDE.md` — removed the 7-bullet "Engine baseline — never" prose list. Replaced with a one-paragraph pointer to `agents/constraints.md` and the conflict format.
+- `agents/pipeline/validator-rules.md` Layer 2 self-check — replaced the prose "Constraints to Check" section with rule-ID references (`engine-no-new-workflow-state`, `engine-no-unlisted-transition`, etc.) that load definitions from `agents/constraints.md`.
+- Pack `constraints.md` files reviewed — they add stack-specific rules (Kafka topic names, rate-limit values from config, ...) without restating engine baseline rules. No edits needed.
+
+Effect: changing a baseline rule now requires editing only one file. Pack/workspace layers stay additive on top.
+
+### Changed — Trim `workspaces/default/` from 64 → 28 files
+
+Workspace `default` was carrying three roles (seed library + engine-self-documentation + frozen evidence record), causing drift every time the engine changed. Reduced to a single role: seed library of generic platform patterns + contracts that new workspaces can copy.
+
+Removed:
+- `workspaces/default/projects/engine/` — entire subtree (services/*.md, THESIS.md, thesis-audit-report.md, knowledge-map.md). The engine spec already lives in `agents/`, `.claude/agents/`, `.claude/commands/`, `scripts/` — duplicating it as workspace content was the main drift source.
+- `workspaces/default/decisions/003-self-referential-engine-workspace.md` — ADR that defined the now-removed self-referential role.
+- `workspaces/default/platform/patterns/multi-stage-subagent-pipeline.md` — referenced the old 5-stage pipeline (outdated after the plan-reviewer merge).
+- `workspaces/default/reports/*.html` + frozen evidence snapshot `evidence/{sources,analysis,qa,applied}/2026-05-08-engine-bootstrap-wiki-template/` — historical artifacts from before the `wiki-template` → `contextd` rebrand.
+
+Kept (the seed library):
+- 7 generic platform patterns: citation-rule, evidence-state-machine, secrets-blocklist-gate, redaction-post-pass, askuser-confirm-preview, variant-discriminated-dispatcher, workspace-resolve-step0.
+- 8 generic platform contracts: citation-format, evid-id-format, evidence-file-layout, evidence-state-machine-transitions, raw-md-section-structure, slash-command-naming, source-yaml-schema, sub-agent-frontmatter-schema.
+- ADRs 001 (agentic-engine variant), 002 (monolithic code-analysis prompts), 004 (pattern-contract pairing).
+
+Updated `workspace.md`, `patterns-index.md`, `evidence/_index.md`, `reports/INDEX.md` to remove "workspace `wiki`" naming and annotate `default` as a seed library, not a self-documenting engine workspace.
+
+Existing `## Source` lines in remaining patterns/contracts still cite the removed evidence ID as textual provenance — this is intentional attribution, not a broken link.
+
+### Changed — Pipeline 5 → 4 stages (merge `contextd-plan-reviewer` into `contextd-context-selector`)
+
+`contextd-plan-reviewer` subagent and its trace stage `03-plan-review` have been removed. The five plan-review checks (planner verify carry-over, pattern/contract in Referenced Docs, component coverage, conflict, gap severity) now run inside `contextd-context-selector`, which already retrieves the docs and writes `current-task.md`. Selector emits `verdict: APPROVED|BLOCK` (plus `issues[]` + `checks_summary`) in the same `02-context.json` trace block.
+
+Rationale: planner + plan-reviewer were both verifying pattern existence (duplicate work); selector already knew what it had retrieved and what was missing. Merging saves one LLM call per `/contextd-use` task and removes ~150 lines of overlapping spec.
+
+Impact:
+- **Subagent deleted**: `.claude/agents/contextd-plan-reviewer.md`. `install-to-claude.{py,sh}` now remove it from existing `~/.claude/agents/` installs.
+- **Schema**: `templates/run-trace.schema.json` — `03-plan-review` stage removed from enum + oneOf; `02-context` extended with `verdict` (required), `issues[]`, `checks_summary` fields and `pitfalls` category in `referenced_docs`.
+- **Scripts**: `emit_trace.py`, `render_trace.py` no longer reference `contextd-plan-reviewer` / `03-plan-review.json`. Rollup detects BLOCK from `02-context.verdict`.
+- **Docs**: `agents/pipeline/{multi-agent-pipeline,README,PIPELINE-VISUAL,observability}.md`, `.claude/commands/{contextd-use,contextd-trace,contextd-eval,README}.md`, `templates/task-scorecard.md` updated to 4-stage pipeline.
+- **Workspace evidence/reports under `workspaces/default/`** still reference the old 5-stage layout (historical snapshots); will be reconciled via `/contextd-update` in a follow-up.
+
 ### Changed — Rebrand `workspace-wiki` → `contextd`
 
 This release rebrands the project. Project name and slash-command prefix change; the *content* layer (workspace knowledge base, still called "wiki") and several legacy filenames are kept for v0.x compatibility.

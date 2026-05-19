@@ -34,8 +34,7 @@ Set `run_dir = {runs_dir}/{resolved_run_id}/`.
 Đọc các file (skip nếu thiếu):
 - `run.json`
 - `01-planner.json`
-- `02-context.json`
-- `03-plan-review.json`
+- `02-context.json` (gồm cả plan-review verdict)
 - `04-builder.json`
 - `05-review.json`
 
@@ -54,7 +53,7 @@ Workspace: {workspace_at_run}
 Started: {ts_start}
 Ended: {ts_end or "(in progress)"}
 Task: {user_task}
-Stages completed: {n}/5
+Stages completed: {n}/4
 Final verdict: {final_verdict}
 
 ---
@@ -76,17 +75,19 @@ Final verdict: {final_verdict}
 | {name} | ✓ / ✗ | {path or "—"} |
 
 **Unverified count:** {n}
-{nếu > 0: "⚠ Hallucination detected — plan-reviewer should BLOCK."}
+{nếu > 0: "⚠ Hallucination detected — context-selector should BLOCK."}
 
 ---
 
-## Stage 2 — Context Selector
+## Stage 2 — Context Selector (+ Plan Review)
 
 ⏱ {ts}  ⌛ {duration_ms}ms
 
 Context file: `{context_file}`
 Docs retrieved: {file_count}
 Total chars: {total_chars}
+
+**Verdict:** {APPROVED / BLOCK}
 
 **Referenced Docs:**
 | # | Category | Path | Sections |
@@ -96,19 +97,9 @@ Total chars: {total_chars}
 | Category | Missing | Blocking? |
 |----------|---------|-----------|
 
----
-
-## Stage 3 — Plan Reviewer
-
-⏱ {ts}  ⌛ {duration_ms}ms
-
-**Verdict:** {APPROVED / BLOCK}
-
 **Issues:** {n}
 | ID | Category | Severity | Detail | Evidence |
 |----|----------|----------|--------|----------|
-
-**Warnings:** {n}
 
 **Checks summary:**
 - Patterns verified: {n}
@@ -119,7 +110,7 @@ Total chars: {total_chars}
 
 ---
 
-## Stage 4 — Builder
+## Stage 3 — Builder
 
 ⏱ {ts}
 
@@ -135,7 +126,7 @@ Total chars: {total_chars}
 
 ---
 
-## Stage 5 — Reviewer
+## Stage 4 — Reviewer
 
 ⏱ {ts}  ⌛ {duration_ms}ms
 
@@ -158,7 +149,7 @@ Total chars: {total_chars}
 (Auto-heuristic — chỉ render nếu có divergence)
 
 - Planner đề xuất pattern `{X}` nhưng context-selector không retrieve được → check `task-to-docs-map.md` mapping cho component `{Y}`.
-- Plan-reviewer APPROVED nhưng final reviewer thấy violations → check builder có ignore Referenced Docs không (xem stage 4 used_docs).
+- Context-selector APPROVED nhưng final reviewer thấy violations → check builder có ignore Referenced Docs không (xem stage 3 used_docs).
 - Builder reference `{Z}` không có trong context → hallucination, có thể wiki thiếu hoặc agent tự nghĩ.
 
 ---
@@ -177,7 +168,7 @@ Nếu `--out` có → Write file. Ngược lại in stdout.
 
 ```
 ✓ Trace: {run_id}
-  Stages: {n}/5  Final: {verdict}
+  Stages: {n}/4  Final: {verdict}
   Issues: {plan_block_issues} block, {warnings} warn
   Violations: {n}  Hallucinations: {n}
 ```

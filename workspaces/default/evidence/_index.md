@@ -1,4 +1,4 @@
-# Evidence Index — Workspace `wiki`
+# Evidence Index — Workspace `default`
 
 > Bảng này là single source of truth về state của mọi evidence set trong workspace.
 > Updated bởi `/evidence-{ingest,analyze,qa,apply,archive}`.
@@ -8,7 +8,7 @@
 
 | evid-id | source | label | state | created | last_updated | blocked_on | applied_to |
 |---------|--------|-------|-------|---------|--------------|------------|------------|
-| 2026-05-08-engine-bootstrap-wiki-template | code | bootstrap-wiki-template | applied | 2026-05-08 | 2026-05-08 | — | patterns-index.md, platform/patterns/ (8), platform/contracts/ (8), projects/engine/ (8), decisions/ (4) |
+| _(empty)_ |  |  |  |  |  |  |  |
 
 ## Archived
 

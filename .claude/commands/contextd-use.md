@@ -8,13 +8,14 @@ Chạy pipeline này trước khi viết bất kỳ dòng code nào. Pipeline de
 [contextd-planner]            Bước 1 — phân tích task → intent JSON
    ↓
 [contextd-context-selector]   Bước 2 — retrieve + slice + ghi current-task.md
-   ↓
-[contextd-plan-reviewer]      Bước 2.5 — review plan, APPROVED hoặc BLOCK
+                                       + emit verdict APPROVED|BLOCK
    ↓
 [main]   Bước 3 — verify gap, code theo prompt template
    ↓
 [contextd-reviewer]           Bước 4 — (manual/optional) review code đã sinh
 ```
+
+> **Lưu ý**: Plan-review (verdict APPROVED/BLOCK) đã được gộp vào `contextd-context-selector` ở Bước 2. Pipeline trước đây có thêm Bước 2.5 (`contextd-plan-reviewer`) — đã bị xoá để giảm 1 LLM call và loại trùng việc verify pattern (planner + plan-reviewer cùng check). Xem CHANGELOG.
 
 ---
 
@@ -59,35 +60,19 @@ Gọi Agent tool với `subagent_type=contextd-context-selector`. Prompt phải 
 Subagent sẽ:
 - Map intent → file wiki cụ thể theo `agents/pipeline/task-to-docs-map.md`
 - Slice section liên quan theo `agents/pipeline/context-filter.md`
-- Ghi đè `{project_dir}/.claude/context/current-task.md`
+- Ghi đè `{project_dir}/.claude/context/current-task.md` (gồm cả section `## Plan Review`)
+- **Chạy 5 check** (pattern/contract verify carry-over, pattern/contract có trong Referenced Docs, context đủ component, conflict nội tại, gap blocking severity) và emit `verdict: APPROVED|BLOCK` trong trace.
 - Emit trace `{project_dir}/.claude/runs/{run_id}/02-context.json`
 
-**Output mong đợi**: 2 dòng confirm `Context written: ...` và `Trace: ...`.
+**Output mong đợi**: 1 dòng `APPROVED` hoặc `BLOCK: {reason}` ở đầu output, kèm trace JSON cuối.
 
 Nếu confirm không xuất hiện hoặc file `current-task.md` không được tạo → STOP, báo lỗi cho user.
 
----
-
-## Bước 2.5 — Invoke `contextd-plan-reviewer` (subagent)
-
-Gọi Agent tool với `subagent_type=contextd-plan-reviewer`. Prompt phải chứa:
-
-- `intent_json`: output từ Bước 1 (chứa `run_id`, `patterns_verified`)
-- `context_file`: `{project_dir}/.claude/context/current-task.md`
-- `effective_wiki_root`
-- `project_dir`: để emit trace
-- `user_task`
-
-Subagent sẽ chạy 4 check (pattern/contract tồn tại, context đủ component, conflict nội tại, gap blocking) và trả:
-
-- `APPROVED` (có thể kèm `## Warnings`) → tiếp tục Bước 3
-- `BLOCK` kèm `## Issues` → STOP pipeline, báo user, KHÔNG tự sửa context
-
-**Nếu BLOCK do pattern/contract thiếu** → đề xuất user `/contextd-update` để tạo trước, hoặc brief lại task để dùng pattern đã có.
-
-**Nếu BLOCK do conflict nội tại** → cần update wiki để giải quyết conflict, KHÔNG tự bypass.
-
-**Nếu APPROVED kèm Warnings** → ghi warnings vào cuối `current-task.md` dưới section `## Plan Review Warnings` để main agent thấy khi đọc lại ở Bước 3.
+**Xử lý verdict**:
+- `APPROVED` → tiếp tục Bước 3. Nếu có `## Warnings` → đọc trước khi code.
+- `BLOCK` → STOP pipeline, báo user. KHÔNG tự sửa context.
+  - BLOCK do pattern/contract thiếu → đề xuất user `/contextd-update` để tạo trước, hoặc brief lại task.
+  - BLOCK do conflict nội tại → cần update wiki giải quyết conflict, KHÔNG tự bypass.
 
 ---
 

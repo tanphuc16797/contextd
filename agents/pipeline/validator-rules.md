@@ -74,31 +74,26 @@ Run this as a second LLM call on the agent's output. Use a small/fast model — 
 ```md
 # SELF-CHECK TASK
 
-Review the solution below and check it against the following constraints.
-For each violation found, describe: what it is, where it occurs, and how to fix it.
+Review the solution below against the engine constraint catalog + active pack constraints + workspace overrides.
+For each violation found, describe: rule ID, what it is, where it occurs, and how to fix.
 If no violations found, respond with: "PASS"
 
-## Constraints to Check
+## Constraint sources (load by ID, do not restate)
 
-### Domain
-- No workflow states added beyond: {list states from `{ws}/domains/{domain}/workflow.md`}
-- No transitions added beyond: {list transitions from `{ws}/domains/{domain}/workflow.md`}
-
-### General
-- No hardcoded config values (connection strings, timeouts, batch sizes, etc.)
-- Constructor injection used (not field injection)
-- Stateless service classes
-- Idempotent re-deliverable handlers
-
-### Pack-specific (append per active pack)
-{{pack_self_check_sections}}
+- Engine baseline: [agents/constraints.md](../constraints.md) — every `engine-*` rule applies.
+- Workspace `{ws}` domain pin-down (substitute concrete state list):
+  - `engine-no-new-workflow-state` → allowed states: {list from `{ws}/domains/{domain}/workflow.md`}
+  - `engine-no-unlisted-transition` → allowed transitions: {list from `{ws}/domains/{domain}/workflow.md`}
+- Coding conventions: [coding-rules.md](../coding-rules.md) (constructor injection, idempotent handlers, etc.)
+- Active packs (append): for each pack in `workspace.md ## Packs`, load `packs/{name}/agents/constraints.md` and `packs/{name}/agents/pipeline/prompt-overrides.md`.
+- Workspace overrides: `workspaces/{ws}/agents/constraints.md` (`ws-*` rules).
 
 ## Solution to Review
 
 {{agent_output}}
 ```
 
-Pack self-check sections come from each pack's `agents/pipeline/prompt-overrides.md`. E.g. `pack-event-driven` adds Kafka/MQTT checks (offset commit, DLQ, topic format, registered types).
+The self-check prompt loads rule definitions by ID from the files above. Do not duplicate rule prose here — single source of truth is [agents/constraints.md](../constraints.md). Pack self-check sections come from each pack's `agents/pipeline/prompt-overrides.md` (e.g. `pack-event-driven` adds Kafka/MQTT checks: offset commit, DLQ, topic format, registered types).
 
 ## Escalation
 

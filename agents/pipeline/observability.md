@@ -40,8 +40,7 @@ Các stage sau **nhận `run_id` từ caller** (main agent hoặc `/contextd-use
 {project_dir}/.claude/runs/{run_id}/
   ├─ run.json              ← roll-up: hook update sau mỗi stage (stages_completed, totals)
   ├─ 01-planner.json       ← hook ghi từ contextd-planner output
-  ├─ 02-context.json       ← hook ghi từ contextd-context-selector output
-  ├─ 03-plan-review.json   ← hook ghi từ contextd-plan-reviewer output
+  ├─ 02-context.json       ← hook ghi từ contextd-context-selector output (gồm verdict APPROVED|BLOCK)
   ├─ 04-builder.json       ← main agent self-write (no hook for non-Task tools)
   ├─ 05-review.json        ← hook ghi từ contextd-reviewer output
   └─ scorecard.md          ← optional, manual chấm điểm
@@ -59,7 +58,7 @@ Các stage sau **nhận `run_id` từ caller** (main agent hoặc `/contextd-use
 
 Common fields (mọi stage): `run_id`, `stage`, `ts`, `workspace_at_run`, `duration_ms` (optional).
 
-Worked example đầy đủ 5 stage cho 1 task: xem 1 run thực tế tại `{project_dir}/.claude/runs/{run_id}/` (sinh bởi `/contextd-use`).
+Worked example đầy đủ 4 stage cho 1 task: xem 1 run thực tế tại `{project_dir}/.claude/runs/{run_id}/` (sinh bởi `/contextd-use`).
 
 ---
 
@@ -73,21 +72,15 @@ Path tới definition trong schema: `#/oneOf/{n}` (theo thứ tự dưới đây
 
 **Key fields:** `intent` (full schema xem [task-to-docs-map.md](task-to-docs-map.md)), `patterns_verified[]`, `contracts_verified[]`, `unverified_count`.
 
-**Hallucination gate:** `unverified_count > 0` → contextd-plan-reviewer PHẢI emit `verdict=BLOCK`.
+**Hallucination gate:** `unverified_count > 0` → contextd-context-selector PHẢI emit `verdict=BLOCK` (carry-over check).
 
 ### Stage 2 — `02-context.json` (contextd-context-selector) → schema oneOf[1]
 
-**Purpose:** Map intent → file paths thực tế. Ghi `current-task.md`. Báo cáo gaps.
+**Purpose:** Map intent → file paths thực tế. Ghi `current-task.md`. Báo cáo gaps. **Gồm cả plan-review verdict** (gộp từ stage 03-plan-review cũ): chạy 5 check (planner carry-over, pattern/contract trong Referenced Docs, component coverage, conflict, gap severity) → BLOCK nếu thiếu pattern/contract, conflict, blocking gap.
 
-**Key fields:** `context_file`, `referenced_docs[]` (mỗi entry: `{category, path, sections}`), `gaps[]`, `file_count`, `gap_count`, `total_chars`.
+**Key fields:** `context_file`, `referenced_docs[]` (mỗi entry: `{category, path, sections}`), `gaps[]`, `file_count`, `gap_count`, `total_chars`, `verdict` (`APPROVED|BLOCK`), `issues[]` (mỗi entry: `{id, category, severity, detail, evidence}`), `checks_summary`.
 
-### Stage 3 — `03-plan-review.json` (contextd-plan-reviewer) → schema oneOf[2]
-
-**Purpose:** Gate trước Implementation. BLOCK nếu thiếu pattern/contract, conflict, blocking gap.
-
-**Key fields:** `verdict` (`APPROVED|BLOCK`), `issues[]` (mỗi entry: `{id, category, severity, detail, evidence}`), `checks_summary`.
-
-### Stage 4 — `04-builder.json` (main agent self-write) → schema oneOf[3]
+### Stage 3 — `04-builder.json` (main agent self-write) → schema oneOf[2]
 
 **Purpose:** Main agent tự ghi sau Implementation. KHÔNG có hook (hook chỉ chạy cho `Task` tool — main agent không phải subagent).
 
@@ -97,7 +90,7 @@ Path tới definition trong schema: `#/oneOf/{n}` (theo thứ tự dưới đây
 
 `self_check_passed`: builder xác nhận đã chạy "Constraints to check" trong [prompt-template.md](prompt-template.md).
 
-### Stage 5 — `05-review.json` (contextd-reviewer) → schema oneOf[4]
+### Stage 4 — `05-review.json` (contextd-reviewer) → schema oneOf[3]
 
 **Purpose:** Soi code thật vs context đã đưa. Phát hiện violation + hallucinated refs.
 
@@ -105,7 +98,7 @@ Path tới definition trong schema: `#/oneOf/{n}` (theo thứ tự dưới đây
 
 **Hallucinated ref:** path/pattern xuất hiện trong builder output (vd `## Knowledge Mapping`) NHƯNG không có trong `02-context.referenced_docs`.
 
-### `run.json` (roll-up) → schema oneOf[5]
+### `run.json` (roll-up) → schema oneOf[4]
 
 **Purpose:** Index cho 1 run. Planner ghi khi bắt đầu; `/contextd-trace` cập nhật khi view.
 
@@ -122,12 +115,12 @@ Metrics output:
 | Metric | Source | Formula |
 |--------|--------|---------|
 | Run count | dirs trong `.claude/runs/` | count |
-| Plan-block rate | `03-plan-review.verdict == BLOCK` | block / total |
+| Plan-block rate | `02-context.verdict == BLOCK` | block / total |
 | Hallucination rate (planner) | `01-planner.unverified_count > 0` | có / total |
 | Hallucination rate (builder) | `05-review.hallucination_count > 0` | có / total |
 | Avg gaps per run | sum `02-context.gap_count` / total | mean |
 | Top gaps | flatten `02-context.gaps[]`, count `missing` | top-N |
-| Top BLOCK reasons | flatten `03-plan-review.issues[].category` | top-N |
+| Top BLOCK reasons | flatten `02-context.issues[].category` | top-N |
 | Top violation rules | flatten `05-review.violations[].rule` | top-N |
 | Context utilization | `04-builder.used_docs.length / 02-context.referenced_docs.length` | mean |
 
@@ -151,7 +144,7 @@ Delta `score_A − score_B` = wiki contribution. Nếu delta ≤ 1 (trên thang 
 
 ## Hook setup
 
-Trace emit cho 4 subagent (`contextd-planner`, `contextd-context-selector`, `contextd-plan-reviewer`, `contextd-reviewer`) chạy qua **PostToolUse hook** trên tool `Task`. Hook script: [scripts/emit_trace.py](../../scripts/emit_trace.py) (Python 3.9+).
+Trace emit cho 3 subagent (`contextd-planner`, `contextd-context-selector`, `contextd-reviewer`) chạy qua **PostToolUse hook** trên tool `Task`. Hook script: [scripts/emit_trace.py](../../scripts/emit_trace.py) (Python 3.9+).
 
 ### Trong wiki-template repo (self-test)
 

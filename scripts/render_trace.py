@@ -32,7 +32,6 @@ STAGE_FILES = [
     "run.json",
     "01-planner.json",
     "02-context.json",
-    "03-plan-review.json",
     "04-builder.json",
     "05-review.json",
 ]
@@ -171,18 +170,15 @@ def mermaid_for_run(run: dict[str, Any]) -> str:
         "    participant M as Main Agent",
         "    participant P as contextd-planner",
         "    participant CS as contextd-context-selector",
-        "    participant PR as contextd-plan-reviewer",
         "    participant R as contextd-reviewer",
         f"    U->>M: {state('01-planner')} task",
         f"    M->>P: {state('01-planner')} parse intent",
         f"    P-->>M: 01-planner.json",
-        f"    M->>CS: {state('02-context')} retrieve context",
-        f"    CS-->>M: 02-context.json + current-task.md",
-        f"    M->>PR: {state('03-plan-review')} validate plan",
-        f"    PR-->>M: 03-plan-review.json",
+        f"    M->>CS: {state('02-context')} retrieve + verify plan",
+        f"    CS-->>M: 02-context.json (verdict) + current-task.md",
     ]
-    plan_review = run.get("03-plan-review", {})
-    if plan_review.get("verdict") == "BLOCK":
+    ctx = run.get("02-context", {})
+    if ctx.get("verdict") == "BLOCK":
         lines.append(f"    M-->>U: STOP — plan BLOCKED")
     else:
         lines += [
@@ -230,11 +226,14 @@ def render_stage_card(run: dict[str, Any], stage: str) -> str:
 
     elif stage == "02-context":
         gaps = data.get("gaps") or []
-        if any(g.get("blocking_hint") for g in gaps):
+        verdict = data.get("verdict")
+        if verdict == "BLOCK" or any(g.get("blocking_hint") for g in gaps):
             flags.append("danger")
-        elif gaps:
+        elif gaps or (data.get("issues") and any(i.get("severity") == "warning" for i in data.get("issues", []))):
             flags.append("warn")
+        issues = data.get("issues") or []
         body_html = f"""
+<p>Verdict: {verdict_badge(verdict)}</p>
 <dl class="kv">
   <dt>context_file</dt><dd><code>{esc(data.get('context_file'))}</code></dd>
   <dt>file_count</dt><dd>{esc(data.get('file_count'))}</dd>
@@ -245,16 +244,7 @@ def render_stage_card(run: dict[str, Any], stage: str) -> str:
 {render_docs_table(data.get('referenced_docs') or [])}
 <h4>Knowledge gaps</h4>
 {render_gaps_table(gaps)}
-"""
-
-    elif stage == "03-plan-review":
-        verdict = data.get("verdict")
-        if verdict == "BLOCK":
-            flags.append("danger")
-        issues = data.get("issues") or []
-        body_html = f"""
-<p>Verdict: {verdict_badge(verdict)}</p>
-{render_issues_table(issues)}
+{render_issues_table(issues) if issues else ''}
 {render_checks_summary(data.get('checks_summary') or {})}
 """
 
@@ -456,7 +446,6 @@ def render_divergence(run: dict) -> str:
     notes = []
     planner = run.get("01-planner") or {}
     ctx = run.get("02-context") or {}
-    plan_rev = run.get("03-plan-review") or {}
     builder = run.get("04-builder") or {}
     review = run.get("05-review") or {}
 
@@ -471,10 +460,10 @@ def render_divergence(run: dict) -> str:
             f"<code>02-context.referenced_docs</code> — kiểm <code>task-to-docs-map.md</code> mapping."
         )
 
-    # 2. Plan-reviewer APPROVED but final reviewer found violations
-    if plan_rev.get("verdict") == "APPROVED" and review.get("verdict") == "VIOLATIONS":
+    # 2. Context-selector APPROVED but final reviewer found violations
+    if ctx.get("verdict") == "APPROVED" and review.get("verdict") == "VIOLATIONS":
         notes.append(
-            "Plan-reviewer APPROVED nhưng final reviewer thấy <b>VIOLATIONS</b> — "
+            "Context-selector APPROVED nhưng final reviewer thấy <b>VIOLATIONS</b> — "
             "kiểm <code>04-builder.used_docs</code> xem builder có ignore Referenced Docs không."
         )
 
@@ -566,7 +555,7 @@ def render_per_run_html(run: dict, workspace_active: str | None, watch: bool = F
     Workspace: <code>{esc(rj.get('workspace_at_run') or '—')}</code> ·
     Started: {esc(fmt_ts(rj.get('ts_start')))} ·
     Ended: {esc(fmt_ts(rj.get('ts_end')))} ·
-    Stages: {esc(len(rj.get('stages_completed') or []))}/5 ·
+    Stages: {esc(len(rj.get('stages_completed') or []))}/4 ·
     Final: {verdict_badge(final_verdict)}
     {' · <span class="badge badge-warn">LIVE — auto-refresh 2s</span>' if watch else ''}
   </p>
@@ -612,14 +601,14 @@ def render_index_html(runs_data: list[dict], workspace_active: str | None, runs_
     for r in runs_data:
         rj = r.get("run") or {}
         review = r.get("05-review") or {}
-        plan_rev = r.get("03-plan-review") or {}
+        ctx_idx = r.get("02-context") or {}
         planner = r.get("01-planner") or {}
 
         war = rj.get("workspace_at_run") or "—"
         is_other_ws = workspace_active and war != workspace_active
 
         verdict = rj.get("final_verdict") or (
-            "BLOCKED" if plan_rev.get("verdict") == "BLOCK" else "INCOMPLETE"
+            "BLOCKED" if ctx_idx.get("verdict") == "BLOCK" else "INCOMPLETE"
         )
         halluc = (planner.get("unverified_count", 0) or 0) + (review.get("hallucination_count", 0) or 0)
         viol = review.get("violation_count", 0) or 0
@@ -637,7 +626,7 @@ def render_index_html(runs_data: list[dict], workspace_active: str | None, runs_
   <td>{esc(date)}</td>
   <td><code>{esc(war)}</code></td>
   <td>{esc(task)}</td>
-  <td>{stages_n}/5</td>
+  <td>{stages_n}/4</td>
   <td>{verdict_badge(verdict)}</td>
   <td class="{'danger' if halluc > 0 else ''}">{halluc}</td>
   <td class="{'danger' if viol > 0 else ''}">{viol}</td>
@@ -883,7 +872,7 @@ def watch_loop(run_dir: Path, workspace_active: str | None, out_path: Path) -> i
                 out_path.write_text(html_str, encoding="utf-8")
                 stages = len((run.get("run") or {}).get("stages_completed") or [])
                 final = (run.get("run") or {}).get("final_verdict") or "INCOMPLETE"
-                print(f"[watch] re-rendered ({stages}/5 stages, verdict={final})")
+                print(f"[watch] re-rendered ({stages}/4 stages, verdict={final})")
                 last_state = current
                 if final not in ("INCOMPLETE", None):
                     print(f"[watch] run finalized ({final}), exiting")

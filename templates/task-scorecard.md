@@ -43,7 +43,7 @@
 |--------|---|---|
 | `01-planner.unverified_count` | _ | _ |
 | `02-context.gap_count` | _ | _ |
-| `03-plan-review.verdict` | _ | _ |
+| `02-context.verdict` | _ | _ |
 | `04-builder.assumptions_count` | _ | _ |
 | `05-review.violation_count` | _ | _ |
 | `05-review.hallucination_count` | _ | _ |

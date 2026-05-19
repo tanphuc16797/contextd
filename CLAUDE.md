@@ -88,27 +88,9 @@ Run [agents/pipeline/validator-rules.md](agents/pipeline/validator-rules.md) + e
 
 ## Hard Constraints
 
-Full list: [agents/constraints.md](agents/constraints.md) (+ workspace/pack overrides). Cross-domain features → [agents/cross-cutting-principles.md](agents/cross-cutting-principles.md).
+Canonical list with stable rule IDs: **[agents/constraints.md](agents/constraints.md)** (engine baseline) + each active pack's `agents/constraints.md` + `workspaces/{ws}/agents/constraints.md` (workspace overrides). Cross-domain features → [agents/cross-cutting-principles.md](agents/cross-cutting-principles.md).
 
-Engine baseline — never:
-- Read/copy knowledge from a different workspace
-- Create APIs/schemas not in a contract
-- Add workflow states not in `{ws}/domains/{domain}/workflow.md`
-- Hardcode config values
-- Fill knowledge gaps with guesses
-- Apply evidence from a different workspace (`source.yaml#workspace_at_ingest` must match)
-- Mutate raw evidence after ingest (immutable)
-
-Pack-specific constraints → each pack's `agents/constraints.md`.
-
-When a constraint conflicts:
-
-```
-CONSTRAINT CONFLICT: {name}
-Workspace: {active}
-Reason: {why}
-Options: {update constraint | update knowledge base | document deviation}
-```
+Reference rules by ID (e.g. `engine-no-hardcoded-config`). Do not restate rule prose here — that creates drift. When a rule blocks the task, follow the conflict format in [agents/constraints.md#when-a-constraint-cannot-be-met](agents/constraints.md#when-a-constraint-cannot-be-met).
 
 ## Output Format
 

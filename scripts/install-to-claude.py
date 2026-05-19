@@ -202,16 +202,26 @@ def main() -> None:
     legacy_agents = {
         "wiki-planner": "contextd-planner",
         "wiki-context-selector": "contextd-context-selector",
-        "wiki-plan-reviewer": "contextd-plan-reviewer",
+        "wiki-plan-reviewer": "contextd-plan-reviewer (deprecated)",
         "wiki-curator": "contextd-curator",
         "wiki-reviewer": "contextd-reviewer",
     }
     for legacy, new_name in legacy_agents.items():
         legacy_path = global_agents / f"{legacy}.md"
         if legacy_path.exists():
-            print(f"  [REMOVED]   {legacy}.md  (renamed → {new_name}.md)")
+            print(f"  [REMOVED]   {legacy}.md  (renamed → {new_name})")
             if not args.dry_run:
                 legacy_path.unlink()
+
+    # 2c. Remove deprecated subagents (merged into other agents).
+    # contextd-plan-reviewer was merged into contextd-context-selector (pipeline 5→4 stages).
+    deprecated_agents = ["contextd-plan-reviewer"]
+    for agent_name in deprecated_agents:
+        dep_path = global_agents / f"{agent_name}.md"
+        if dep_path.exists():
+            print(f"  [REMOVED]   {agent_name}.md  (deprecated — merged into contextd-context-selector)")
+            if not args.dry_run:
+                dep_path.unlink()
     print()
 
     # 3. wiki-global.json

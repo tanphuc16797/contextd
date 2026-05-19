@@ -6,7 +6,7 @@ Reads hook payload from stdin (JSON), extracts trace JSON from a wiki-* subagent
 output, and writes it to {cwd}/.claude/runs/{run_id}/{stage}.json.
 
 Hook event: PostToolUse (matcher=Task).
-Subagents handled: contextd-planner, contextd-context-selector, contextd-plan-reviewer, contextd-reviewer.
+Subagents handled: contextd-planner, contextd-context-selector, contextd-reviewer.
 
 Behavior:
 - No-op (exit 0) if tool_name != Task or subagent not in allow-list.
@@ -35,14 +35,12 @@ from lib.atomic_write import (  # noqa: E402
 ALLOWED_SUBAGENTS = {
     "contextd-planner",
     "contextd-context-selector",
-    "contextd-plan-reviewer",
     "contextd-reviewer",
 }
 
 VALID_STAGES = {
     "01-planner",
     "02-context",
-    "03-plan-review",
     "04-builder",
     "05-review",
 }
@@ -121,11 +119,8 @@ def update_run_rollup(run_dir: Path, stage: str, trace: dict, cwd: Path) -> None
                     "VIOLATIONS" if trace.get("verdict") == "VIOLATIONS"
                     else "APPROVED"
                 )
-            elif "03-plan-review" in completed and stage == "03-plan-review":
-                if trace.get("verdict") == "BLOCK":
-                    rollup["final_verdict"] = "BLOCKED"
-                else:
-                    rollup.setdefault("final_verdict", "INCOMPLETE")
+            elif stage == "02-context" and trace.get("verdict") == "BLOCK":
+                rollup["final_verdict"] = "BLOCKED"
             else:
                 rollup.setdefault("final_verdict", "INCOMPLETE")
 

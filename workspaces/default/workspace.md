@@ -1,18 +1,14 @@
 # Workspace — default
 
+> Seed workspace ship kèm `contextd`. Mục đích: cung cấp một library generic platform patterns + contracts (citation, evidence-state-machine, secrets-blocklist, askuser-confirm, slash-command-naming, sub-agent-frontmatter-schema, ...) để workspace mới có thể tham khảo hoặc copy.
+> KHÔNG dùng workspace này để document engine internals — engine spec sống tại `agents/`, `.claude/agents/`, `.claude/commands/`, `scripts/`. Mỗi codebase nên tạo workspace riêng qua `/contextd-setup` hoặc `/new-workspace`.
+
 ## Identity
 
-- Company: TBD
-- Role: TBD
+- Company: (seed — không thuộc company nào)
+- Role: library workspace
 - Period: 2026-05 → present
-- Repo(s): TBD
-
-## Tech Stack
-
-- Languages: TBD
-- Messaging: TBD
-- Storage: TBD
-- Infra: TBD
+- Repo(s): contextd engine repo
 
 ## Packs
 

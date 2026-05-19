@@ -1,6 +1,6 @@
 # /contextd-eval — Evaluate Pipeline Effectiveness
 
-Aggregate trace JSON từ nhiều run dưới `{project_dir}/.claude/runs/` → 1 báo cáo Markdown đo **hiệu quả wiki**: coverage, hallucination rate, top knowledge gaps, plan-reviewer block rate, violation hotspots.
+Aggregate trace JSON từ nhiều run dưới `{project_dir}/.claude/runs/` → 1 báo cáo Markdown đo **hiệu quả wiki**: coverage, hallucination rate, top knowledge gaps, context-selector block rate, violation hotspots.
 
 > One-shot: 1 lệnh → 1 file Markdown trong `{ws}/reports/`. Read-only — KHÔNG sửa runs/.
 > Reference: [observability.md](../../agents/pipeline/observability.md), [run-trace.schema.json](../../templates/run-trace.schema.json).
@@ -34,7 +34,7 @@ Với mỗi run:
 2. Filter:
    - **Workspace lock**: bỏ qua run có `workspace_at_run != workspace_active` (KHÔNG leak cross-workspace metric).
    - **Date filter**: nếu `--since` có → bỏ run có `ts_start < since`.
-3. Đọc các file stage có (`01-planner.json`, `02-context.json`, `03-plan-review.json`, `04-builder.json`, `05-review.json`). Stage thiếu → bỏ qua field tương ứng, không fail.
+3. Đọc các file stage có (`01-planner.json`, `02-context.json`, `04-builder.json`, `05-review.json`). Stage thiếu → bỏ qua field tương ứng, không fail. (`03-plan-review.json` đã được gộp vào `02-context.json` từ pipeline v4-stage.)
 
 Nếu danh sách run sau filter = 0 → STOP `No runs match filter (workspace={ws}, since={since})`.
 
@@ -47,8 +47,8 @@ Nếu danh sách run sau filter = 0 → STOP `No runs match filter (workspace={w
 | Metric | Source | Formula |
 |--------|--------|---------|
 | Total runs | count run_ids đã filter | n |
-| Complete runs | `stages_completed.length == 5` | count |
-| Plan-block rate | `03-plan-review.verdict == "BLOCK"` | block / total |
+| Complete runs | `stages_completed.length == 4` | count |
+| Plan-block rate | `02-context.verdict == "BLOCK"` | block / total |
 | Final-violations rate | `05-review.verdict == "VIOLATIONS"` | viol / total |
 
 ### 2.2 Hallucination
@@ -72,8 +72,8 @@ Nếu danh sách run sau filter = 0 → STOP `No runs match filter (workspace={w
 
 | Metric | Source | Formula |
 |--------|--------|---------|
-| Top BLOCK categories | flatten `03-plan-review.issues[]` (severity=blocking) by `category` | top-N |
-| Top warnings | flatten `03-plan-review.warnings[]` by category | top-N |
+| Top BLOCK categories | flatten `02-context.issues[]` (severity=blocking) by `category` | top-N |
+| Top warnings | flatten `02-context.issues[]` (severity=warning) by `category` | top-N |
 
 ### 2.5 Code violations
 
@@ -124,7 +124,7 @@ Runs analyzed: {N} (since {since or "all"})
 | Metric | Value |
 |--------|-------|
 | Total runs | {n} |
-| Complete runs (5/5 stages) | {n} ({pct}%) |
+| Complete runs (4/4 stages) | {n} ({pct}%) |
 | Plan-block rate | {pct}% |
 | Final-violations rate | {pct}% |
 
@@ -213,7 +213,7 @@ Runs analyzed: {N} (since {since or "all"})
 
 | Run ID | Date | Task | Stages | Final Verdict |
 |--------|------|------|--------|---------------|
-| {run_id} | {date} | {task[:60]} | {n}/5 | {APPROVED/BLOCKED/VIOLATIONS/INCOMPLETE} |
+| {run_id} | {date} | {task[:60]} | {n}/4 | {APPROVED/BLOCKED/VIOLATIONS/INCOMPLETE} |
 ```
 
 ---

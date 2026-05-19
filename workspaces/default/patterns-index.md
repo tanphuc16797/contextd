@@ -1,8 +1,9 @@
-# Patterns Index — wiki
+# Patterns Index — default (seed library)
 
 Quick lookup table for AI agents. Find the pattern name, follow the link, read before generating code.
 
 > Paths are relative to this file (workspace root).
+> Đây là seed library cho workspace mới copy. KHÔNG document engine internals ở đây.
 
 ## Platform Patterns
 
@@ -11,7 +12,6 @@ Quick lookup table for AI agents. Find the pattern name, follow the link, read b
 | `askuser-confirm-preview` | Command có side effects filesystem (tạo evidence, edit wiki, scaffold workspace) — preview block + 3-option AskUserQuestion (continue/edit/cancel) | [platform/patterns/askuser-confirm-preview.md](platform/patterns/askuser-confirm-preview.md) |
 | `citation-rule` | Sinh analysis output / snapshot / report — mọi claim PHẢI có citation `({path}:L<start>-L<end>)` relative tới repo root. PAIR with `citation-format` contract. | [platform/patterns/citation-rule.md](platform/patterns/citation-rule.md) |
 | `evidence-state-machine` | Track evidence lifecycle (ingest → analyze → qa → apply) qua 7-state DAG. Storage: `{ws}/evidence/_index.md`. PAIR with `evidence-state-machine-transitions` contract. | [platform/patterns/evidence-state-machine.md](platform/patterns/evidence-state-machine.md) |
-| `multi-stage-subagent-pipeline` | Task wiki-aware code generation — 5-stage flow (planner → context-selector → plan-reviewer GATE → Builder → reviewer). Used by `/contextd-use`. | [platform/patterns/multi-stage-subagent-pipeline.md](platform/patterns/multi-stage-subagent-pipeline.md) |
 | `redaction-post-pass` | Sau build output — scan secrets (password/token/api-key/email/URL-with-creds) → STOP-on-secret. Companion với `secrets-blocklist-gate`. | [platform/patterns/redaction-post-pass.md](platform/patterns/redaction-post-pass.md) |
 | `secrets-blocklist-gate` | Pre-read config files — 5-tier defense (hard blocklist + AskUser gate + redaction + log + workspace override). Default block-all. | [platform/patterns/secrets-blocklist-gate.md](platform/patterns/secrets-blocklist-gate.md) |
 | `variant-discriminated-dispatcher` | (v1, single-instance) Command/pipeline phục vụ nhiều variants — discriminate qua field `variant`, dispatch internally. Hiện áp dụng cho `/code-analyze` `code_variant ∈ {code, agentic-engine}`. | [platform/patterns/variant-discriminated-dispatcher.md](platform/patterns/variant-discriminated-dispatcher.md) |
@@ -34,4 +34,4 @@ Quick lookup table for AI agents. Find the pattern name, follow the link, read b
 
 | Domain | Path |
 |--------|------|
-| _(none — workspace `wiki` is engine-level, no business domain workflows)_ | |
+| _(none — seed library workspace, không gắn với business domain cụ thể)_ | |

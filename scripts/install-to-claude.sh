@@ -173,6 +173,19 @@ for legacy in "${LEGACY_AGENTS[@]}"; do
     run rm -f "$legacy_path"
   fi
 done
+
+# --- 2c. remove deprecated subagents (merged into other agents) ---
+# contextd-plan-reviewer was merged into contextd-context-selector (pipeline 5→4 stages).
+DEPRECATED_AGENTS=(
+  contextd-plan-reviewer
+)
+for agent in "${DEPRECATED_AGENTS[@]}"; do
+  dep_path="$GLOBAL_AGENTS/${agent}.md"
+  if [[ -f "$dep_path" ]]; then
+    echo "  [REMOVED]   ${agent}.md  (deprecated — merged into contextd-context-selector)"
+    run rm -f "$dep_path"
+  fi
+done
 echo ""
 
 # --- 3. wiki-global.json ---

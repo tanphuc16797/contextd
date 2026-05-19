@@ -1,6 +1,6 @@
 # Task → Docs Map
 
-Single-stop spec cho 2 việc liên quan chặt: (1) parse user task thành **intent JSON**, và (2) map intent → **danh sách file wiki để retrieve**. Trước đây tách 2 file (`intent-parser.md` + `context-retrieval-map.md`) — gộp lại vì luôn đọc cùng nhau.
+Single-stop spec cho 2 việc liên quan chặt: (1) parse user task thành **intent JSON**, và (2) map intent → **danh sách file wiki để retrieve**.
 
 ---
 

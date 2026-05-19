@@ -25,7 +25,7 @@ Quy tắc chung:
 
 | Command | Purpose | When to use |
 |---------|---------|-------------|
-| [`/contextd-use`](contextd-use.md) | Chạy 5-stage pipeline (planner → context-selector → plan-reviewer → main agent code → reviewer) trước khi viết bất kỳ code wiki-aware nào | Trước MỌI task implement_feature / fix_bug / design / incident / review |
+| [`/contextd-use`](contextd-use.md) | Chạy 4-stage pipeline (planner → context-selector(+verdict) → main agent code → reviewer) trước khi viết bất kỳ code wiki-aware nào | Trước MỌI task implement_feature / fix_bug / design / incident / review |
 | [`/find`](find.md) `<keywords>` | Fuzzy search patterns + contracts + services + packs — top-5 với score. Skip planner ceremony | Quick lookup khi đã biết mình cần gì; trước khi mở `/contextd-use` đầy đủ |
 | [`/contextd-update`](contextd-update.md) | Sync wiki với code đã thay đổi (git diff → curator áp dụng) | Sau khi code merge để wiki không drift; tự detect engine vs workspace scope |
 | [`/contextd-rebase`](contextd-rebase.md) | Quét wiki vs codebase thực tế để vá mọi chỗ wiki nói khác code chạy | Định kỳ (hằng tuần/tháng) hoặc khi nghi wiki lỗi thời lớn |

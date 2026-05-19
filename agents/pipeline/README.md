@@ -24,7 +24,7 @@ Mô tả cách feed knowledge từ wiki cho LLM agent mà không bị hallucinat
 
 ---
 
-## Pipeline (5 stage)
+## Pipeline (4 stage)
 
 ```
 User Task
@@ -35,8 +35,7 @@ User Task
    ↓
 [Stage 2] contextd-context-selector   → retrieve + filter + slice (xem task-to-docs-map.md, context-filter.md)
                                   → ghi {project_dir}/.claude/context/current-task.md
-   ↓
-[Stage 2.5] contextd-plan-reviewer    → APPROVED / BLOCK
+                                  → emit verdict APPROVED|BLOCK (5 check)
    ↓
 [Stage 3] Main agent (Builder)    → đọc current-task.md, code theo prompt-template.md
    ↓
@@ -44,6 +43,8 @@ User Task
    ↓
 Output
 ```
+
+> Pipeline gộp từ 5 → 4 stage: `contextd-plan-reviewer` đã được merge vào `contextd-context-selector` (giảm trùng việc verify pattern). Xem CHANGELOG.
 
 Chi tiết I/O schema từng stage: xem [multi-agent-pipeline.md](multi-agent-pipeline.md).
 
@@ -55,7 +56,7 @@ Chi tiết I/O schema từng stage: xem [multi-agent-pipeline.md](multi-agent-pi
 |-------------|-------------|
 | Dump full wiki vào prompt | Noise, wasted tokens, agent ignore phần lớn |
 | Skip priority order | Agent chọn sai source khi docs conflict |
-| Skip Plan-Reviewer (Stage 2.5) | Sai sót lọt xuống Builder, fix tốn token gấp 5–10× |
+| Skip Context-Selector verdict (Stage 2) | Sai sót lọt xuống Builder, fix tốn token gấp 5–10× |
 | Skip Validator (Stage 4) | Cùng bug lặp lại qua nhiều generation |
 | Feed full doc thay vì slice section | Context overflow, signal bị loãng |
 | Main agent tự inline parse + retrieve | Context window bị bloat, lost track |
