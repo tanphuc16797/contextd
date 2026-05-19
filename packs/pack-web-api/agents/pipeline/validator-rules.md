@@ -8,6 +8,7 @@ Layer-1 rule. Implement: [`scripts/rules.py`](../../scripts/rules.py). Prefix `p
 | `pack-web-api-missing-valid`         | warn  | `@RequestBody Foo` parameter without `@Valid` / `@Validated` on the same parameter. |
 | `pack-web-api-hardcoded-base-url`    | warn  | Literal `http://` or `https://` URL in code, excluding `localhost`, `127.0.0.1`, `example.com`, test files. |
 | `pack-web-api-broad-exception-catch` | warn  | `catch (Exception e)` / `catch (Throwable t)` followed by no body / single log call (likely swallow). |
+| `pack-web-api-mass-assignment`       | error | `save(req.body)` / `save(payload)` — request body passed directly into persistence layer. |
 
 ## Layer-2 self-check
 

@@ -1,18 +1,26 @@
 name: pack-qc
-version: 0.1.0
-description: Quality control pack — test design/execution, defect triage, regression coverage, and release quality gates.
+version: 0.2.0
+description: Quality control + performance optimization pack — test design/execution, defect triage, regression coverage, release quality gates, baseline metrics, bottleneck profiling, safe optimization, regression guarding.
 
 components:
   - test-case-design
   - test-execution
   - defect-triage
   - regression-plan
+  - performance-profiling
+  - bottleneck-analysis
+  - optimization-safety
+  - regression-guard
 
 keywords:
   test-case-design: [test case, test design, testcase, scenario coverage, boundary test]
   test-execution: [test execution, smoke test, sanity test, test run, test result]
   defect-triage: [bug triage, defect triage, severity, priority, reproduce steps, bug report]
   regression-plan: [regression, regression plan, release readiness, quality gate, go no-go]
+  performance-profiling: [profiling, baseline metric, p95, throughput, latency]
+  bottleneck-analysis: [bottleneck, hotspot, root cause, flamegraph]
+  optimization-safety: [optimization, tuning, performance fix, safe rollout]
+  regression-guard: [regression guard, before after, benchmark, perf test]
 
 files:
   constraints: agents/constraints.md
@@ -21,5 +29,9 @@ files:
   validator_script: scripts/rules.py
   retrieval_map: agents/pipeline/retrieval-map.md
   prompt_overrides: agents/pipeline/prompt-overrides.md
+  common_pitfalls: agents/common-pitfalls.md
 
 conflicts_with: []
+
+absorbed:
+  - pack-optimize (merged in v0.2.0)

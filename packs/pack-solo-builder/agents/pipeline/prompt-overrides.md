@@ -70,3 +70,14 @@ Khi user explicit yêu cầu implement:
 - Code follow đúng Tech Stack table — KHÔNG đổi library tự ý
 - Write Build Log section vào spec sau mỗi milestone
 - Acceptance Criteria checkbox tick từng cái khi pass test thủ công
+
+## Common Pitfalls (Top 10)
+
+Mỗi task PHẢI rà soát anti-patterns trong [`../common-pitfalls.md`](../common-pitfalls.md):
+
+```md
+### Common Pitfalls — check trước khi commit
+- Không vi phạm bất kỳ P01..P10 trong common-pitfalls.md (rule/why/detect/severity)
+- Pitfall regex-detectable: confirm Layer-1 validator PASS
+- Pitfall design-only: tick từng item ở Layer-2 self-check
+```

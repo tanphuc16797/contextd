@@ -29,3 +29,5 @@
 - **Token usage logged per request** — input tokens, output tokens, cache_hit_tokens, model. Aggregate per user/feature/day.
 - **Cost alarm** khi spike (>2x baseline).
 - **Trace** mỗi LLM call: prompt hash, model, latency, status. KHÔNG log raw prompt body.
+
+> Anti-patterns lặp lại trong domain này: xem [common-pitfalls.md](common-pitfalls.md) (Top 10 với rule/why/detect/severity).

@@ -90,6 +90,10 @@ Engine baseline (`agents/constraints.md`, `agents/coding-rules.md`) luôn load c
 
 > *Baseline — tracked nhưng out-of-budget per [context-filter.md](context-filter.md#baseline-out-of-budget-docs).*
 
+### Pack common-pitfalls (mọi intent)
+
+Mọi pack active luôn cung cấp `packs/{name}/agents/common-pitfalls.md` (Top 10 anti-pattern). Pipeline PHẢI include file này vào retrieval cho **mọi intent** (`implement_feature | fix_bug | design | incident | review`), surface section "Common Pitfalls" trong `.claude/context/current-task.md`. Mỗi pitfall có Layer-1 rule ID (regex-detectable) hoặc Layer-2 self-check (design-only).
+
 ### By component (pack-driven)
 
 Engine KHÔNG hardcode `component → file` map. Mỗi pack khai báo trong `packs/{name}/agents/pipeline/retrieval-map.md`. Pipeline merge map của tất cả pack active.

@@ -1,18 +1,26 @@
 name: pack-security
-version: 0.1.0
-description: Security engineering pack — threat modeling, secure design review, vulnerability management, and control verification.
+version: 0.2.0
+description: Security engineering + authorized pentest pack — threat modeling, secure design review, vulnerability management, control verification, scope discipline, evidence-based findings, risk rating, and remediation reporting.
 
 components:
   - threat-modeling
   - secure-design-review
   - vulnerability-management
   - security-controls
+  - attack-surface-mapping
+  - finding-validation
+  - exploit-safety
+  - reporting-remediation
 
 keywords:
   threat-modeling: [threat model, abuse case, threat scenario, attack path, trust boundary]
   secure-design-review: [secure design, security review, authz boundary, least privilege]
   vulnerability-management: [vulnerability management, triage, cve, patching, remediation tracking]
   security-controls: [security control, logging redaction, encryption, key management, secret handling]
+  attack-surface-mapping: [attack surface, scope mapping, in-scope, out-of-scope, target inventory]
+  finding-validation: [finding validation, reproduce, verification, false positive, evidence]
+  exploit-safety: [exploit safety, safe test, non-destructive test, test guardrail]
+  reporting-remediation: [pentest report, remediation, risk rating, verification step, retest]
 
 files:
   constraints: agents/constraints.md
@@ -21,5 +29,9 @@ files:
   validator_script: scripts/rules.py
   retrieval_map: agents/pipeline/retrieval-map.md
   prompt_overrides: agents/pipeline/prompt-overrides.md
+  common_pitfalls: agents/common-pitfalls.md
 
 conflicts_with: []
+
+absorbed:
+  - pack-pentest (merged in v0.2.0)

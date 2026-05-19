@@ -1,29 +1,33 @@
 # pack-security
 
-Pack cho security engineering: chuẩn hóa threat modeling, secure design review, vulnerability management, và security controls.
+Security engineering **+ authorized pentest** pack. Threat modeling, secure design review, vulnerability management, security controls **and** scope discipline, evidence-based findings, risk rating, remediation reporting.
+
+> **v0.2.0 absorbs `pack-pentest`** — workspaces that previously listed `- pack-pentest` should switch to `- pack-security`.
 
 ## When to enable
 
 Workspace opts in by adding `- pack-security` under `## Packs` in `workspaces/{ws}/workspace.md`.
 
-Enable when workspace cần:
-- Chuẩn hóa yêu cầu security-by-design trước khi triển khai
-- Đồng bộ chất lượng tài liệu security review, triage, và control verification
+Enable when workspace needs:
+- Security-by-design before implementation
+- Consistent quality for security review/triage/control verification
+- Standardized pentest output (fewer false positives, evidence-backed findings)
+- Actionable remediation for engineering team
 
 ## What it adds
 
-- **Constraints** (`pack-security/agents/constraints.md`) - hard rules cho security workflow
-- **Coding rules** (`pack-security/agents/coding-rules.md`) - conventions cho docs/checklists security
-- **Validator rules** (`pack-security/agents/pipeline/validator-rules.md` + `scripts/rules.py`) - automated gates
-- **Retrieval map** (`pack-security/agents/pipeline/retrieval-map.md`) - mapping component security -> knowledge docs
-- **Prompt overrides** (`pack-security/agents/pipeline/prompt-overrides.md`) - self-check bổ sung cho security tasks
+- **Constraints** (`agents/constraints.md`) — hard rules for security + pentest workflow (two sections)
+- **Coding rules** (`agents/coding-rules.md`) — conventions for docs/checklists/findings/reports
+- **Validator rules** (`agents/pipeline/validator-rules.md` + `scripts/rules.py`) — automated gates
+- **Retrieval map** (`agents/pipeline/retrieval-map.md`) — component → knowledge docs mapping
+- **Prompt overrides** (`agents/pipeline/prompt-overrides.md`) — security + pentest self-check
+- **Common pitfalls** (`agents/common-pitfalls.md`) — Top 10 security + Top 10 pentest
 
 ## Components declared
 
-- `threat-modeling`
-- `secure-design-review`
-- `vulnerability-management`
-- `security-controls`
+Security engineering: `threat-modeling`, `secure-design-review`, `vulnerability-management`, `security-controls`
+
+Pentest workflow: `attack-surface-mapping`, `finding-validation`, `exploit-safety`, `reporting-remediation`
 
 ## Conflicts with
 
@@ -31,5 +35,5 @@ Enable when workspace cần:
 
 ## Related
 
-- Pack mechanism: [`packs/README.md`](../README.md)
-- Cross-cutting principles: [`agents/cross-cutting-principles.md`](../../agents/cross-cutting-principles.md)
+- Pack mechanism: [packs/README.md](../README.md)
+- Cross-cutting principles: [agents/cross-cutting-principles.md](../../agents/cross-cutting-principles.md)

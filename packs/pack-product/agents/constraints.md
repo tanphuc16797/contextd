@@ -34,3 +34,5 @@ Hard rules cho product/business documentation. Additive trên engine constraints
 
 - **Brief KHÔNG được dictate implementation** — không viết "use Postgres", "build REST API", "deploy on AWS". Implementation là quyết định của engineering dựa trên contracts/patterns.
 - **Brief CÓ THỂ ràng buộc constraint**: response time, data residency, compliance, cost ceiling — đó là requirement, không phải implementation.
+
+> Anti-patterns lặp lại trong domain này: xem [common-pitfalls.md](common-pitfalls.md) (Top 10 với rule/why/detect/severity).

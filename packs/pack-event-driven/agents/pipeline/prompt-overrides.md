@@ -35,3 +35,14 @@ Section bổ sung vào `agents/pipeline/prompt-template.md` self-check khi pack 
 ## Inclusion logic
 
 Pack loader (`scripts/pack_loader.py`) merge nội dung file này vào prompt context khi build `current-task.md` cho `/contextd-use`.
+
+## Common Pitfalls (Top 10)
+
+Mỗi task PHẢI rà soát anti-patterns trong [`../common-pitfalls.md`](../common-pitfalls.md):
+
+```md
+### Common Pitfalls — check trước khi commit
+- Không vi phạm bất kỳ P01..P10 trong common-pitfalls.md (rule/why/detect/severity)
+- Pitfall regex-detectable: confirm Layer-1 validator PASS
+- Pitfall design-only: tick từng item ở Layer-2 self-check
+```

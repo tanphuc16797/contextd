@@ -14,6 +14,7 @@ Creates:
     ├── agents/
     │   ├── constraints.md                 (stub)
     │   ├── coding-rules.md                (stub)
+    │   ├── common-pitfalls.md             (stub — Top 10 anti-patterns)
     │   └── pipeline/
     │       ├── prompt-overrides.md        (stub)
     │       ├── retrieval-map.md           (stub)
@@ -149,6 +150,34 @@ Idioms + preferred patterns. Less strict than constraints - these are convention
 ## {{Category 2}}
 
 - {{Convention}}.
+""",
+        encoding="utf-8",
+    )
+
+    # 5b. agents/common-pitfalls.md
+    (pack_dir / "agents" / "common-pitfalls.md").write_text(
+        f"""# {name} — Top 10 Common Pitfalls
+
+Anti-pattern lặp lại trong domain pack này. Additive trên [constraints.md](constraints.md).
+Mỗi item: rule (NG → OK), why, detect (regex/manual), severity.
+
+## P01 — {{short title}}
+- **NG**: {{anti-pattern}}
+- **OK**: {{recommended}}
+- **Why**: {{1-2 dòng — incident/cost/security/UX rationale}}
+- **Detect**: {{regex pattern | layer-2 LLM check | manual review}}
+- **Severity**: error | warn | info
+
+## P02 — ...
+
+(P03 ... P10)
+
+## Mapping to validator
+
+| Pitfall | Layer-1 rule ID | Layer-2 self-check |
+|---|---|---|
+| P01 | {name}-{{rule-id}} (or `—` for design-only) | ✓ |
+| P02 | — | ✓ |
 """,
         encoding="utf-8",
     )
@@ -290,6 +319,7 @@ RULES: List = [
         "pack.yaml",
         "agents/constraints.md",
         "agents/coding-rules.md",
+        "agents/common-pitfalls.md",
         "agents/pipeline/prompt-overrides.md",
         "agents/pipeline/retrieval-map.md",
         "agents/pipeline/validator-rules.md",

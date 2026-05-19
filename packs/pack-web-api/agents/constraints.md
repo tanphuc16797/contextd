@@ -28,3 +28,5 @@ Hard rules cho REST/GraphQL/gRPC API. Additive trên engine constraints.
 
 - **Public endpoints have rate limit** — per IP/per token. Limit values from config, not hardcoded.
 - **Heavy endpoints have circuit breaker** to downstream — avoid thundering herd on outage.
+
+> Anti-patterns lặp lại trong domain này: xem [common-pitfalls.md](common-pitfalls.md) (Top 10 với rule/why/detect/severity).

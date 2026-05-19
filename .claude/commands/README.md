@@ -86,8 +86,26 @@ Dành cho **chuyên gia ngành khác** (cơ khí, kế toán, y tế, luật, gi
 |---------|---------|-------------|
 | [`/contextd-trace`](contextd-trace.md) `{run_id}` | Render Markdown timeline 1 run pipeline (5 stage) từ trace JSON dưới `.claude/runs/{run_id}/` | Khi output `/contextd-use` sai — debug stage nào divergence |
 | [`/contextd-eval`](contextd-eval.md) | Aggregate trace nhiều run → báo cáo Markdown: hallucination rate, top knowledge gaps, plan-block rate, violation hotspots | Định kỳ review hiệu quả wiki, sau update wiki lớn, hoặc khi nghi pattern không được follow |
+| [`/contextd-viz`](contextd-viz.md) | HTML viewer + live watch cho pipeline traces | Khi muốn inspect nhiều trace cùng lúc trong browser |
 
 > Schema + design: [observability.md](../../agents/pipeline/observability.md). Manual A/B đánh giá: `{ws}/eval/golden-tasks/README.md` (per-workspace) + [task-scorecard template](../../templates/task-scorecard.md).
+
+---
+
+## Engine admin & diagnostics
+
+Meta-commands operating **on contextd itself** (install / backup / version / upgrade / detect). Nếu không biết cần lệnh nào, đọc [`/contextd-admin`](contextd-admin.md) trước — đó là index để route.
+
+| Command | Purpose |
+|---------|---------|
+| [`/contextd-admin`](contextd-admin.md) | **Index** — bảng tra route sang các lệnh admin bên dưới |
+| [`/contextd-version`](contextd-version.md) | In version + release tag đã cài |
+| [`/contextd-detect`](contextd-detect.md) | Kiểm tra contextd có cài chưa + resolve `wiki_root` |
+| [`/contextd-upgrade`](contextd-upgrade.md) | Upgrade lên release mới |
+| [`/contextd-backup`](contextd-backup.md) | Snapshot workspace active sang archive |
+| [`/contextd-restore`](contextd-restore.md) | Restore workspace từ backup |
+| [`/contextd-report`](contextd-report.md) | Sinh HTML report toàn workspace (xem section Reporting ở trên) |
+| [`/contextd-explain`](contextd-explain.md) | Plain-language explainer cho 1 wiki concept |
 
 ---
 

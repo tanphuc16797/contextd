@@ -123,9 +123,27 @@ def rule_broad_exception_catch(file_path: Path, lines: List[str], ctx: Dict) -> 
     return out
 
 
+MASS_ASSIGN = re.compile(r"\bsave\s*\(\s*(req(uest)?\.\s*body|ctx\.\s*body|payload|body)\b")
+
+
+def rule_mass_assignment(file_path: Path, lines: List[str], ctx: Dict) -> List[Dict]:
+    """save(req.body) / save(payload) pattern — likely mass assignment without DTO whitelist."""
+    out = []
+    for i, raw in enumerate(lines, start=1):
+        line = _strip_line_comment(raw)
+        if MASS_ASSIGN.search(line):
+            out.append(_vio(
+                "pack-web-api-mass-assignment", "error", file_path, i, raw,
+                "Saving request body/payload directly — mass-assignment risk. "
+                "Map to a request DTO with whitelisted fields."
+            ))
+    return out
+
+
 RULES = [
     rule_print_stack_trace,
     rule_missing_valid,
     rule_hardcoded_base_url,
     rule_broad_exception_catch,
+    rule_mass_assignment,
 ]

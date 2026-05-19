@@ -47,3 +47,5 @@ Hard rules cho tool-design workflow của non-tech expert. Additive trên engine
 ## Domain Knowledge Reuse
 
 - **TRƯỚC khi spec mention công thức / standard ngành nghề** (vd "moment uốn", "VAT 10%", "ICD-10"), check `{ws}/domains/{field}/glossary.md`. Nếu đã có → reference, không paraphrase. Nếu chưa có → đề xuất user add vào glossary trước.
+
+> Anti-patterns lặp lại trong domain này: xem [common-pitfalls.md](common-pitfalls.md) (Top 10 với rule/why/detect/severity).

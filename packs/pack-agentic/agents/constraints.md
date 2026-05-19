@@ -37,3 +37,5 @@
 - **Per-step trace required** — log mỗi agent step: step_n, action (tool call / message), latency, status. Persist tới structured store.
 - **Trace ID propagated** xuyên subagent handoff.
 - **Cost per task tracked** — total tokens + tool latency aggregated.
+
+> Anti-patterns lặp lại trong domain này: xem [common-pitfalls.md](common-pitfalls.md) (Top 10 với rule/why/detect/severity).

@@ -33,3 +33,14 @@ Khi dịch engineering doc sang business view, ưu tiên context theo thứ tự
 6. `{ws}/platform/patterns/` — chỉ 1 câu "how it's built", KHÔNG copy chi tiết
 
 Output `/business-view` luôn end with footnote: `> Technical reference: {list of source files}` để engineer track được nguồn.
+
+## Common Pitfalls (Top 10)
+
+Mỗi task PHẢI rà soát anti-patterns trong [`../common-pitfalls.md`](../common-pitfalls.md):
+
+```md
+### Common Pitfalls — check trước khi commit
+- Không vi phạm bất kỳ P01..P10 trong common-pitfalls.md (rule/why/detect/severity)
+- Pitfall regex-detectable: confirm Layer-1 validator PASS
+- Pitfall design-only: tick từng item ở Layer-2 self-check
+```

@@ -25,6 +25,7 @@ files:
   validator_script: scripts/rules.py
   retrieval_map: agents/pipeline/retrieval-map.md
   prompt_overrides: agents/pipeline/prompt-overrides.md
+  common_pitfalls: agents/common-pitfalls.md
 
 # Packs không thể bật chung. Loader fail-fast nếu cùng workspace bật cả hai.
 conflicts_with: []

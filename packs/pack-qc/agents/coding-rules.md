@@ -1,13 +1,108 @@
 # pack-qc — Coding Rules
 
-Quy tắc viết/chuẩn hóa tài liệu QC.
+Idioms cho QC writing — test case, bug report, regression plan, release gate. Less strict than constraints — đây là convention.
 
-## Clarity
+## Test Case Format
 
-- Ưu tiên format checklist ngắn, testable, tránh mô tả mơ hồ.
-- Mỗi acceptance/test item nên có điều kiện vào + kết quả mong đợi.
+- Cấu trúc: **ID → Preconditions → Steps → Expected → Actual → Status** — 6 element bắt buộc.
+- Ưu tiên format checklist ngắn, testable; tránh mô tả mơ hồ ("works correctly").
+- 1 test case = 1 verification path; chia khi gặp `and`/`or` composite.
+- Test ID stable (`TC-{epic}-{nn}`); link tới requirement ID `R-...`.
+- Test name mô tả intent: `test_login_fails_when_password_expired`, KHÔNG `test_1`/`test_user`.
 
-## Defect Language
+## Acceptance & Test Item Wording
 
-- Dùng thuật ngữ nhất quán: `severity`, `priority`, `reproducible`, `blocked`, `ready for retest`.
-- Với release recommendation, luôn nêu rõ residual risk còn lại.
+- Mỗi acceptance/test item có **điều kiện vào + kết quả mong đợi** rõ ràng.
+- Negative case có riêng (input invalid, permission denied, timeout) — không gộp vào happy path.
+- Boundary case enumerate: empty, null, max, unicode, concurrent.
+- Assertion specific: `expect(x).toBe(42)` thay vì `expect(x).toBeTruthy()`.
+
+## Bug Report Format
+
+- Cấu trúc: **Summary → Environment → Repro steps → Expected → Actual → Severity → Priority → Attachments**.
+- Severity (impact) tách khỏi Priority (urgency) — không gộp.
+- Repro steps: numbered, deterministic, từ clean state.
+- Attachment: log, screenshot, HAR, video — redact PII trước upload.
+- Defect language nhất quán: `severity`, `priority`, `reproducible`, `blocked`, `ready for retest`, `closed/won't fix`.
+
+## Regression Plan
+
+- Regression suite = test critical path + tests for fixed bugs (regression-of) + smoke.
+- Tag test theo scope: `smoke|regression|critical-path|edge`.
+- Cadence: smoke per build, regression per release, full per major version.
+- Coverage matrix: feature × test type — gap section liệt kê chưa cover.
+
+## Release Quality Gate
+
+- Gate có entry criteria + exit criteria rõ; checklist signed-off mới release.
+- Release recommendation luôn nêu **residual risk** còn lại + mitigation tạm thời.
+- Go/No-go decision có owner; reason + evidence ghi log permanent.
+- Hot-fix process tách khỏi standard release — fast lane định nghĩa trước.
+
+## Test Data Management
+
+- Test data từ factory/builder/fixture; KHÔNG hardcode env-specific (vd `userId=12345` của staging).
+- Sensitive test data masked/synthetic; tuyệt đối không production PII trong test env.
+- Cleanup sau test (teardown); fixture scope tối thiểu để tránh leak state.
+
+## Automation Idioms
+
+- Test order-independent: `--shuffle` chạy không gãy.
+- Flaky test tracker: log occurrence, owner, quarantine deadline; không silent `@retry`.
+- Snapshot test có manual review + approval; auto-update là smell.
+- CI phase tách: unit (fast) → integration → e2e; fail fast.
+
+## Communication
+
+- Defect triage meeting: dùng severity + priority matrix; SLA per tier.
+- Status report cho stakeholder: pass/fail count + trend + blocker — không chỉ raw number.
+- Khi report kết quả flaky/inconclusive, ghi rõ thay vì làm tròn pass.
+
+---
+
+# Performance Optimization
+
+## Measurement Loop
+
+- Trình bày theo vòng: **before → change → after** với cùng workload + same instrument.
+- Ghi rõ tradeoff: **latency / throughput / cost / memory / dev complexity** — không chỉ 1 chiều.
+- Mỗi metric: name, unit, percentile (nếu latency), sample size, time window, env.
+
+## Profile-First
+
+- Profile trước khi guess: pprof / async-profiler / py-spy / clinic.js — share artifact link.
+- Optimize top-N hotspot (Pareto), không chase micro-improvement < 5% trừ khi hot path.
+- Document hypothesis trước khi đo: "expect 30% giảm CPU on path X vì Y".
+
+## Benchmark Design
+
+- Bench harness reproducible: seed, dataset version, warm-up iterations, statistical method (median + stddev).
+- Run nhiều iterations, drop outlier theo Tukey fence; report distribution không chỉ mean.
+- Avoid micro-bench artifact: dead-code elimination, JIT warm-up, cache hit ảo.
+
+## Cache Pattern
+
+- Cache key format: `{tenant}:{entity}:{version}:{params_hash}` — version để invalidate bulk.
+- TTL > 0 + jitter (±10%) để tránh thundering herd khi expire đồng loạt.
+- Negative cache: TTL ngắn hơn (vd 1/10) để recover nhanh khi upstream fix.
+- Stale-while-revalidate khi tolerable cho UX nhưng critical cho availability.
+
+## Hot Path Idioms
+
+- Allocate ngoài loop (pre-size collection, reuse buffer); avoid boxing/unboxing.
+- Batch I/O — N+1 query là worst offender; SIMD/vectorize khi data-parallel.
+- Async/await: tránh `await trong for-loop` khi không có dependency — `Promise.all`/`asyncio.gather`.
+- String concat trong loop → builder; map lookup hot → array index nếu key bounded.
+
+## Reporting (perf)
+
+- Format: **Problem → Hypothesis → Measurement → Change → Result → Tradeoff**.
+- Result: before/after table với delta + confidence interval; chart nếu time-series.
+- Tradeoff section bắt buộc — nêu cost (storage, complexity, ops burden).
+- Link tới ticket/incident gốc và follow-up monitoring dashboard.
+
+## Sequencing
+
+- Quick win trước (config tuning, index, query rewrite) → architectural change sau.
+- 1 change per measurement window — multi-variable confound impossible to attribute.
+- Document order of operations + dependencies in rollout plan.

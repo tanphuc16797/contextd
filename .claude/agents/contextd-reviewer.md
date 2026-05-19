@@ -39,6 +39,9 @@ Nếu `context_file` không tồn tại → output Markdown `MISSING CONTEXT: ch
      - MQTT type không có trong contract
      - Pattern bị reimplement thay vì reuse
      - Project override không được tôn trọng
+   - **Layer 2b — Common pitfalls per pack**:
+     - Đối với mỗi pack active (xem `Packs:` header của `context_file`), đối chiếu output với `## P01..P10` trong `packs/{name}/agents/common-pitfalls.md` đã được retrieve.
+     - Mỗi pitfall vi phạm → ghi violation với `rule = pack-{name}-P{NN}` và severity theo bảng mapping cuối file. Pitfall đã có Layer-1 rule ID → ưu tiên dùng rule ID đó.
 5. **Hallucination check**: nếu có `builder_output`, parse `## Knowledge Mapping` → trích các path/pattern names. So với `## Referenced Docs` của `context_file`. Mỗi ref KHÔNG có trong context → ghi vào `hallucinated_refs[]`.
 
 # Output

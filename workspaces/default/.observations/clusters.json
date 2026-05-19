@@ -1,7 +1,7 @@
 {
   "stage": "observations",
-  "updated_at": "2026-05-18T10:07:29+00:00",
-  "last_hint_emitted_at": "",
+  "updated_at": "2026-05-19T02:16:09+00:00",
+  "last_hint_emitted_at": "2026-05-19T02:16:09+00:00",
   "clusters": [
     {
       "id": "ideopenedfile-user-opened-66ce16",
@@ -611,6 +611,108 @@
       "last_hinted_at": "",
       "members": [
         "0c160373771a466b"
+      ]
+    },
+    {
+      "id": "ideopenedfile-user-opened-91288c",
+      "representative_tokens": [
+        "ide_opened_file",
+        "user",
+        "opened",
+        "file",
+        "tools",
+        "workspace",
+        "wiki",
+        "claude",
+        "commands",
+        "contextd",
+        "viz",
+        "md",
+        "ide",
+        "related",
+        "current",
+        "task",
+        "tá",
+        "change",
+        "log",
+        "luã",
+        "agents",
+        "readme"
+      ],
+      "count": 3,
+      "first_seen": "2026-05-18T10:16:20+00:00",
+      "last_seen": "2026-05-19T02:16:09+00:00",
+      "last_hinted_at": "2026-05-19T02:16:09+00:00",
+      "members": [
+        "3d9451bd3c0036a8",
+        "fb5eb56c72ccf603",
+        "d8cc83c3d5632571"
+      ]
+    },
+    {
+      "id": "ideopenedfile-user-opened-622194",
+      "representative_tokens": [
+        "ide_opened_file",
+        "user",
+        "opened",
+        "file",
+        "tools",
+        "workspace",
+        "wiki",
+        "readme",
+        "md",
+        "ide",
+        "related",
+        "current",
+        "task",
+        "nh",
+        "giã",
+        "xem",
+        "dá",
+        "cã",
+        "ang",
+        "quã"
+      ],
+      "count": 1,
+      "first_seen": "2026-05-18T10:26:45+00:00",
+      "last_seen": "2026-05-18T10:26:45+00:00",
+      "last_hinted_at": "",
+      "members": [
+        "a6e7d6c003b19fe1"
+      ]
+    },
+    {
+      "id": "ideopenedfile-user-opened-08c87f",
+      "representative_tokens": [
+        "ide_opened_file",
+        "user",
+        "opened",
+        "file",
+        "tools",
+        "workspace",
+        "wiki",
+        "claude",
+        "agents",
+        "contextd",
+        "plan",
+        "reviewer",
+        "md",
+        "ide",
+        "related",
+        "current",
+        "task",
+        "rã",
+        "soã",
+        "vã",
+        "xem"
+      ],
+      "count": 2,
+      "first_seen": "2026-05-18T10:39:52+00:00",
+      "last_seen": "2026-05-19T02:03:14+00:00",
+      "last_hinted_at": "",
+      "members": [
+        "f678125e27d2da06",
+        "e7a8e50892046564"
       ]
     }
   ]

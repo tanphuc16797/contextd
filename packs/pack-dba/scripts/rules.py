@@ -39,4 +39,20 @@ def rule_no_restore_verification(file_path: Path, lines: List[str], ctx: Dict) -
         return []
     return [_vio('pack-dba-no-restore-verification','warn',file_path,1,lines[0] if lines else '','Backup strategy should include periodic restore verification.')]
 
-RULES=[rule_migration_no_rollback,rule_query_no_evidence,rule_backup_no_rpo_rto,rule_no_restore_verification]
+import re as _re
+
+SELECT_STAR = _re.compile(r'\bSELECT\s+\*\s+FROM\s+\w', _re.IGNORECASE)
+
+def rule_select_star(file_path: Path, lines: List[str], ctx: Dict) -> List[Dict]:
+    # Skip migration/ad-hoc folders; skip COUNT(*)
+    p = file_path.as_posix().lower()
+    if any(x in p for x in ('/migrations/', '/migration/', '/scripts/', '/seed', '/fixture')):
+        return []
+    out = []
+    for i, l in enumerate(lines, 1):
+        if SELECT_STAR.search(l):
+            out.append(_vio('pack-dba-select-star','warn',file_path,i,l,
+                            "SELECT * — list columns explicitly; payload bloat, breaks when schema changes, prevents index-only scan."))
+    return out
+
+RULES=[rule_migration_no_rollback,rule_query_no_evidence,rule_backup_no_rpo_rto,rule_no_restore_verification,rule_select_star]

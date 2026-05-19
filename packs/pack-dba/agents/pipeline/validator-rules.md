@@ -8,6 +8,7 @@ Layer-1 rule. Prefix `pack-dba-`.
 | `pack-dba-query-no-evidence` | warn | Query optimization thiếu evidence (plan/metric/slow query data) |
 | `pack-dba-backup-no-rpo-rto` | error | Backup/DR doc thiếu RPO hoặc RTO |
 | `pack-dba-no-restore-verification` | warn | Backup strategy thiếu restore test/verification cadence |
+| `pack-dba-select-star` | warn | `SELECT *` trong production query (ngoài migration/script) — payload bloat, schema-fragile |
 
 ## Layer-2 self-check
 

@@ -24,3 +24,5 @@ Hard rules đặc thù event-driven (Kafka/MQTT/broker). Pack này được load
 - Engine baseline: [`agents/constraints.md`](../../../agents/constraints.md)
 - Pack validator rules: [pipeline/validator-rules.md](pipeline/validator-rules.md)
 - Pack coding rules: [coding-rules.md](coding-rules.md)
+
+> Anti-patterns lặp lại trong domain này: xem [common-pitfalls.md](common-pitfalls.md) (Top 10 với rule/why/detect/severity).

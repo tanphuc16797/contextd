@@ -35,3 +35,5 @@
 - **No expensive computation in render body** — `useMemo` cho derived state đắt, `useCallback` cho callback truyền xuống memoized component.
 - **Don't over-memoize** — `useMemo` trên scalar/cheap value tệ hơn không có.
 - **Stable keys for list items** — `key={item.id}`, KHÔNG `key={index}` trừ khi list immutable.
+
+> Anti-patterns lặp lại trong domain này: xem [common-pitfalls.md](common-pitfalls.md) (Top 10 với rule/why/detect/severity).

@@ -13,12 +13,13 @@ packs/{pack-name}/
 ├── pack.yaml                          # manifest
 ├── README.md                          # docs
 ├── agents/
-│   ├── constraints.md                 # additive constraints
+│   ├── constraints.md                 # additive constraints (hard rules)
 │   ├── coding-rules.md                # additive coding rules
+│   ├── common-pitfalls.md             # Top 10 anti-patterns (rule/why/detect/severity)
 │   └── pipeline/
 │       ├── validator-rules.md         # rule table (prefix pack-{name}-)
 │       ├── retrieval-map.md           # component → file map
-│       └── prompt-overrides.md        # self-check additions
+│       └── prompt-overrides.md        # self-check additions (refs common-pitfalls.md)
 └── scripts/
     └── rules.py                       # Layer-1 rule functions for validate.py
 ```
@@ -79,11 +80,9 @@ This generates all 8 files (pack.yaml, README, 5 agent docs, scripts/rules.py wi
 | [pack-agentic](pack-agentic/) | stable (v1.0) | Agent loops, tool use, MCP, multi-agent — bounded steps, idempotent tools, human-in-the-loop |
 | [pack-claude-plugin-dev](pack-claude-plugin-dev/) | stable (v1.0) | Build Claude Code plugins — plugin manifest, slash commands, subagents, skills, hooks, MCP servers per Anthropic standards |
 | [pack-product](pack-product/) | beta (v0.1) | Product/business knowledge — briefs, OKRs, roadmap, personas, journeys, metrics. For **non-technical contributors** (PM, business). Pairs with `/product-brief`, `/business-view`, `/contextd-explain` |
-| [pack-qc](pack-qc/) | beta (v0.1) | Quality control knowledge — test case design, test execution, defect triage, regression & release quality gates. For **QC/Tester** users needing evidence-driven quality workflows |
+| [pack-qc](pack-qc/) | beta (v0.2) | Quality control + performance optimization — test design/execution, defect triage, regression & release gates, baseline metrics, bottleneck profiling, safe optimization, regression guards. Absorbs former `pack-optimize` |
 | [pack-ba](pack-ba/) | beta (v0.1) | Business analysis knowledge — requirements modeling, acceptance criteria, process mapping, stakeholder alignment. For **BA** users needing requirement clarity/testability |
-| [pack-pentest](pack-pentest/) | beta (v0.1) | Authorized pentest knowledge — scope boundaries, evidence-based findings, risk rating, remediation reporting. Reduces false positives and missing evidence |
-| [pack-security](pack-security/) | beta (v0.1) | Security engineering knowledge — threat modeling, authz boundaries, secret hygiene, logging redaction guidance |
-| [pack-optimize](pack-optimize/) | beta (v0.1) | Performance optimization knowledge — baseline/target metrics, bottleneck-first tuning, regression guardrails |
+| [pack-security](pack-security/) | beta (v0.2) | Security engineering + authorized pentest — threat modeling, authz boundaries, secret hygiene, logging redaction, scope discipline, evidence-based findings, risk rating, remediation reporting. Absorbs former `pack-pentest` |
 | [pack-dba](pack-dba/) | beta (v0.1) | Database administration knowledge — migration rollback safety, query evidence, backup/restore readiness, DB operational guardrails |
 | [pack-solo-builder](pack-solo-builder/) | beta (v0.1) | For **non-technical domain experts** (mechanical, accounting, healthcare, ...) using Claude Code as a "no-code IDE" — tool design coach + cross-platform tech recipe library (Linux native + Windows Docker). Pairs with `/tool-design`, `/tool-list`, `/tool-extend` |
 
@@ -143,19 +142,18 @@ Roadmap (Phase 3+): `pack-mobile-react-native`, `pack-mobile-flutter`, `pack-mob
 - pack-security
 ```
 
-**Defensive validation flow**:
+**Defensive validation flow** (security + pentest now combined):
 ```md
 ## Packs
 
 - pack-security
-- pack-pentest
 ```
 
-**Performance hardening flow**:
+**Performance hardening flow** (qc + optimize now combined):
 ```md
 ## Packs
 
 - pack-web-api
-- pack-optimize
+- pack-qc
 - pack-security
 ```

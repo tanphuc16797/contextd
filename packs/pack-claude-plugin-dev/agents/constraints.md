@@ -57,3 +57,5 @@ Hard rules cho plugin Claude Code theo chuẩn Anthropic.
 - **CHANGELOG.md** cho mỗi version với breaking changes flagged.
 - **README.md** với install instructions + minimum Claude Code version.
 - **License rõ ràng** — `LICENSE` file ở root.
+
+> Anti-patterns lặp lại trong domain này: xem [common-pitfalls.md](common-pitfalls.md) (Top 10 với rule/why/detect/severity).

@@ -60,6 +60,12 @@ Với mỗi component trong `intent_json.components`:
 
 **Fail condition**: phát hiện conflict không được giải thích — category `conflict`.
 
+## Check 3b — Pack common-pitfalls có trong context
+
+Với mỗi pack active (`Packs:` header của `context_file`):
+- Verify `packs/{name}/agents/common-pitfalls.md` xuất hiện trong `## Referenced Docs` (category `pitfalls`)
+- Nếu thiếu → category `missing-pitfalls`, severity `warning` (không blocking, nhưng cần ghi nhận để reviewer ở Stage 4 đối chiếu được)
+
 ## Check 4 — Gap có blocking không
 
 - Gap thuộc Contracts → BLOCKING

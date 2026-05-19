@@ -26,6 +26,7 @@ Nếu thiếu `run_id` → output trace với `run_id: "unknown"` và log warnin
 2. Đọc `{effective_wiki_root}/agents/pipeline/context-filter.md` để biết quy tắc slice/rank.
 3. Tính `{ws} = workspaces/{intent.workspace}/`.
 4. Theo intent type và components → liệt kê các file cần đọc (chỉ trong `{ws}/`, KHÔNG fallback workspace khác).
+4b. **Pack common-pitfalls** (mọi intent): với mỗi pack active trong `intent.active_packs`, include `packs/{name}/agents/common-pitfalls.md` (nếu tồn tại) vào Referenced Docs với category `pitfalls`. Slice toàn bộ section `## P01..P10` + bảng mapping cuối file.
 5. Với mỗi file: kiểm tra tồn tại bằng Glob. Không tồn tại → ghi vào `## Knowledge Gaps`, KHÔNG bịa nội dung.
 6. Đọc và slice section liên quan (Flow, Config, Failure, Rules, Config Overrides, Failure Handling).
 7. Sắp xếp theo priority: **Contracts → Patterns → Project → Domain**. Tối đa 7 file.

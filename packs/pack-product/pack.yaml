@@ -25,5 +25,6 @@ files:
   validator_script: scripts/rules.py
   retrieval_map: agents/pipeline/retrieval-map.md
   prompt_overrides: agents/pipeline/prompt-overrides.md
+  common_pitfalls: agents/common-pitfalls.md
 
 conflicts_with: []
